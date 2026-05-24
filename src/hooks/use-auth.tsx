@@ -15,6 +15,7 @@ type Profile = {
   id_document_path: string | null;
   average_rating: number | null;
   total_transactions: number;
+  verification_notes: string | null;
 };
 
 type AuthCtx = {
