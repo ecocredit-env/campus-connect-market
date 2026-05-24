@@ -14,16 +14,223 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      interest_requests: {
+        Row: {
+          buyer_id: string
+          created_at: string
+          id: string
+          initial_message: string | null
+          listing_id: string
+          responded_at: string | null
+          response_message: string | null
+          seller_id: string
+          status: Database["public"]["Enums"]["interest_status"]
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string
+          id?: string
+          initial_message?: string | null
+          listing_id: string
+          responded_at?: string | null
+          response_message?: string | null
+          seller_id: string
+          status?: Database["public"]["Enums"]["interest_status"]
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string
+          id?: string
+          initial_message?: string | null
+          listing_id?: string
+          responded_at?: string | null
+          response_message?: string | null
+          seller_id?: string
+          status?: Database["public"]["Enums"]["interest_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interest_requests_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          brand: string | null
+          category: Database["public"]["Enums"]["listing_category"]
+          condition: Database["public"]["Enums"]["listing_condition"]
+          created_at: string
+          delivery_fee: number | null
+          delivery_option: string
+          description: string
+          expires_at: string
+          id: string
+          location: string | null
+          manufacturing_year: number | null
+          model: string | null
+          original_price: number | null
+          photos: string[]
+          price: number
+          seller_id: string
+          status: Database["public"]["Enums"]["listing_status"]
+          subcategory: string | null
+          title: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          brand?: string | null
+          category: Database["public"]["Enums"]["listing_category"]
+          condition: Database["public"]["Enums"]["listing_condition"]
+          created_at?: string
+          delivery_fee?: number | null
+          delivery_option?: string
+          description: string
+          expires_at?: string
+          id?: string
+          location?: string | null
+          manufacturing_year?: number | null
+          model?: string | null
+          original_price?: number | null
+          photos?: string[]
+          price: number
+          seller_id: string
+          status?: Database["public"]["Enums"]["listing_status"]
+          subcategory?: string | null
+          title: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          brand?: string | null
+          category?: Database["public"]["Enums"]["listing_category"]
+          condition?: Database["public"]["Enums"]["listing_condition"]
+          created_at?: string
+          delivery_fee?: number | null
+          delivery_option?: string
+          description?: string
+          expires_at?: string
+          id?: string
+          location?: string | null
+          manufacturing_year?: number | null
+          model?: string | null
+          original_price?: number | null
+          photos?: string[]
+          price?: number
+          seller_id?: string
+          status?: Database["public"]["Enums"]["listing_status"]
+          subcategory?: string | null
+          title?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          average_rating: number | null
+          bio: string | null
+          college_email: string | null
+          created_at: string
+          department: string | null
+          full_name: string
+          id: string
+          id_document_path: string | null
+          phone: string | null
+          profile_photo: string | null
+          registration_number: string | null
+          total_transactions: number
+          updated_at: string
+          verification_notes: string | null
+          verification_status: Database["public"]["Enums"]["verification_status"]
+          verified_at: string | null
+          year_of_study: string | null
+        }
+        Insert: {
+          average_rating?: number | null
+          bio?: string | null
+          college_email?: string | null
+          created_at?: string
+          department?: string | null
+          full_name: string
+          id: string
+          id_document_path?: string | null
+          phone?: string | null
+          profile_photo?: string | null
+          registration_number?: string | null
+          total_transactions?: number
+          updated_at?: string
+          verification_notes?: string | null
+          verification_status?: Database["public"]["Enums"]["verification_status"]
+          verified_at?: string | null
+          year_of_study?: string | null
+        }
+        Update: {
+          average_rating?: number | null
+          bio?: string | null
+          college_email?: string | null
+          created_at?: string
+          department?: string | null
+          full_name?: string
+          id?: string
+          id_document_path?: string | null
+          phone?: string | null
+          profile_photo?: string | null
+          registration_number?: string | null
+          total_transactions?: number
+          updated_at?: string
+          verification_notes?: string | null
+          verification_status?: Database["public"]["Enums"]["verification_status"]
+          verified_at?: string | null
+          year_of_study?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      interest_status: "pending" | "approved" | "rejected" | "blocked"
+      listing_category: "cycles" | "coolers" | "electronics"
+      listing_condition: "new" | "like_new" | "good" | "fair" | "poor"
+      listing_status: "active" | "sold" | "archived" | "pending_review"
+      verification_status: "pending" | "approved" | "rejected" | "suspended"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +357,13 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      interest_status: ["pending", "approved", "rejected", "blocked"],
+      listing_category: ["cycles", "coolers", "electronics"],
+      listing_condition: ["new", "like_new", "good", "fair", "poor"],
+      listing_status: ["active", "sold", "archived", "pending_review"],
+      verification_status: ["pending", "approved", "rejected", "suspended"],
+    },
   },
 } as const
