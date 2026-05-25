@@ -60,7 +60,7 @@ function MePage() {
     const counterpartyIds = Array.from(new Set([
       ...receivedRows.map((row) => row.buyer_id).filter(Boolean),
       ...sentRows.map((row) => row.seller_id).filter(Boolean),
-    ]));
+    ])) as string[];
 
     const profileMap = new Map<string, Req["buyer"]>();
 
