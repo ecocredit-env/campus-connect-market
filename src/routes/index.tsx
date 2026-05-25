@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, Bike, Cpu, Snowflake, ArrowRight } from "lucide-react";
+import mnnitLogo from "@/assets/mnnit-logo.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,11 +31,18 @@ function Index() {
                 Verified students only
               </span>
 
-              <h1 className="display text-[clamp(3rem,7vw,6.5rem)] leading-[0.92] text-primary">
-                The campus<br />
-                <span className="text-accent">marketplace</span><br />
-                built on trust.
-              </h1>
+              <div className="flex items-start gap-6">
+                <h1 className="display text-[clamp(3rem,7vw,6.5rem)] leading-[0.92] text-primary">
+                  The campus<br />
+                  <span className="text-accent">marketplace</span><br />
+                  built on trust.
+                </h1>
+                <img
+                  src={mnnitLogo}
+                  alt="Motilal Nehru National Institute of Technology, Allahabad"
+                  className="hidden h-32 w-32 shrink-0 object-contain sm:block lg:h-40 lg:w-40"
+                />
+              </div>
 
               <p className="max-w-lg text-lg text-muted-foreground">
                 Cycles, coolers, laptops, headphones — buy and sell with classmates whose
