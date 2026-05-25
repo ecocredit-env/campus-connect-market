@@ -19,6 +19,8 @@ type Req = {
   status: string;
   initial_message: string | null;
   created_at: string;
+  buyer_id?: string;
+  seller_id?: string;
   listing: { id: string; title: string; price: number; photos: string[] } | null;
   buyer: { id: string; full_name: string; phone: string | null; college_email: string | null } | null;
   seller: { id: string; full_name: string; phone: string | null; college_email: string | null } | null;
@@ -41,15 +43,54 @@ function MePage() {
     const [a, b, c] = await Promise.all([
       supabase.from("listings").select("id,title,price,category,condition,photos,location").eq("seller_id", user.id).order("created_at", { ascending: false }),
       supabase.from("interest_requests")
-        .select("id,status,initial_message,created_at,listing:listings(id,title,price,photos),buyer:profiles!interest_requests_buyer_id_fkey(id,full_name,phone,college_email)")
+        .select("id,status,initial_message,created_at,buyer_id,seller_id,listing:listings(id,title,price,photos)")
         .eq("seller_id", user.id).order("created_at", { ascending: false }),
       supabase.from("interest_requests")
-        .select("id,status,initial_message,created_at,listing:listings(id,title,price,photos),seller:profiles!interest_requests_seller_id_fkey(id,full_name,phone,college_email)")
+        .select("id,status,initial_message,created_at,buyer_id,seller_id,listing:listings(id,title,price,photos)")
         .eq("buyer_id", user.id).order("created_at", { ascending: false }),
     ]);
+
+    if (a.error || b.error || c.error) {
+      toast.error(a.error?.message ?? b.error?.message ?? c.error?.message ?? "Could not load your dashboard");
+      return;
+    }
+
+    const receivedRows = ((b.data ?? []) as Req[]);
+    const sentRows = ((c.data ?? []) as Req[]);
+    const counterpartyIds = Array.from(new Set([
+      ...receivedRows.map((row) => row.buyer_id).filter(Boolean),
+      ...sentRows.map((row) => row.seller_id).filter(Boolean),
+    ]));
+
+    const profileMap = new Map<string, Req["buyer"]>();
+
+    if (counterpartyIds.length > 0) {
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id,full_name,phone,college_email")
+        .in("id", counterpartyIds);
+
+      if (profilesError) {
+        toast.error(profilesError.message);
+        return;
+      }
+
+      for (const profile of profiles ?? []) {
+        profileMap.set(profile.id, profile);
+      }
+    }
+
     setMyListings((a.data ?? []) as ListingCardItem[]);
-    setReceived((b.data ?? []) as unknown as Req[]);
-    setSent((c.data ?? []) as unknown as Req[]);
+    setReceived(receivedRows.map((row) => ({
+      ...row,
+      buyer: row.buyer_id ? profileMap.get(row.buyer_id) ?? null : null,
+      seller: null,
+    })));
+    setSent(sentRows.map((row) => ({
+      ...row,
+      buyer: null,
+      seller: row.seller_id ? profileMap.get(row.seller_id) ?? null : null,
+    })));
   };
 
   const respond = async (id: string, status: "approved" | "rejected" | "blocked") => {
