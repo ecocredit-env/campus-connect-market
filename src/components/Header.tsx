@@ -55,6 +55,11 @@ export function Header() {
             </>
           ) : (
             <>
+              <Link to="/admin-login" className="hidden sm:inline-flex">
+                <Button size="sm" variant="ghost" className="gap-1.5 text-muted-foreground">
+                  <Shield className="h-3.5 w-3.5" /> Admin
+                </Button>
+              </Link>
               <Link to="/login">
                 <Button size="sm" variant="ghost">Sign in</Button>
               </Link>

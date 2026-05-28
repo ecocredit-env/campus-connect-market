@@ -7,8 +7,6 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
-import { useServerFn } from "@tanstack/react-start";
-import { bootstrapAdminAccount } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in · UltraOver" }] }),
@@ -17,7 +15,6 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const nav = useNavigate();
-  const makeAdmin = useServerFn(bootstrapAdminAccount);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -46,24 +43,6 @@ function LoginPage() {
     nav({ to: "/browse" });
   };
 
-  const handleBootstrapAdmin = async () => {
-    setBusy(true);
-    try {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
-        toast.error("Sign in first, then use the admin setup button.");
-        return;
-      }
-
-      const result = await makeAdmin();
-      toast.success(result.message);
-      nav({ to: "/me" });
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not create the admin account");
-    } finally {
-      setBusy(false);
-    }
-  };
 
   return (
     <div className="min-h-screen">
@@ -103,12 +82,11 @@ function LoginPage() {
           </Link>
         </p>
 
-        <div className="rounded-lg border border-border bg-card p-4 text-sm text-muted-foreground">
-          <p className="font-medium text-foreground">Need the first admin account?</p>
-          <p className="mt-1">Sign in with your chosen owner account, then use this one-time setup.</p>
-          <Button type="button" variant="outline" className="mt-3 w-full" disabled={busy} onClick={handleBootstrapAdmin}>
-            Make this account admin
-          </Button>
+        <div className="rounded-lg border border-dashed border-border bg-muted/30 p-4 text-center text-sm">
+          <p className="text-muted-foreground">Are you a platform administrator?</p>
+          <Link to="/admin-login" className="mt-1 inline-block font-medium text-primary underline-offset-4 hover:underline">
+            Go to the Admin Portal →
+          </Link>
         </div>
       </div>
     </div>
