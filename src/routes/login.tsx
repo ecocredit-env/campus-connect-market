@@ -7,8 +7,6 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
-import { useServerFn } from "@tanstack/react-start";
-import { bootstrapAdminAccount } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in · UltraOver" }] }),
