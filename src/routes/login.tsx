@@ -103,12 +103,11 @@ function LoginPage() {
           </Link>
         </p>
 
-        <div className="rounded-lg border border-border bg-card p-4 text-sm text-muted-foreground">
-          <p className="font-medium text-foreground">Need the first admin account?</p>
-          <p className="mt-1">Sign in with your chosen owner account, then use this one-time setup.</p>
-          <Button type="button" variant="outline" className="mt-3 w-full" disabled={busy} onClick={handleBootstrapAdmin}>
-            Make this account admin
-          </Button>
+        <div className="rounded-lg border border-dashed border-border bg-muted/30 p-4 text-center text-sm">
+          <p className="text-muted-foreground">Are you a platform administrator?</p>
+          <Link to="/admin-login" className="mt-1 inline-block font-medium text-primary underline-offset-4 hover:underline">
+            Go to the Admin Portal →
+          </Link>
         </div>
       </div>
     </div>
