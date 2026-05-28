@@ -15,7 +15,6 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const nav = useNavigate();
-  const makeAdmin = useServerFn(bootstrapAdminAccount);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -44,24 +43,6 @@ function LoginPage() {
     nav({ to: "/browse" });
   };
 
-  const handleBootstrapAdmin = async () => {
-    setBusy(true);
-    try {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
-        toast.error("Sign in first, then use the admin setup button.");
-        return;
-      }
-
-      const result = await makeAdmin();
-      toast.success(result.message);
-      nav({ to: "/me" });
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not create the admin account");
-    } finally {
-      setBusy(false);
-    }
-  };
 
   return (
     <div className="min-h-screen">
