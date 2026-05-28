@@ -119,6 +119,7 @@ function Index() {
 
       {/* HOW IT WORKS */}
       <section className="border-b border-border py-20">
+        <div className="mx-auto max-w-7xl px-6">
           <div className="mb-12 flex items-end justify-between gap-4">
             <h2 className="display max-w-xl text-4xl text-primary sm:text-5xl">
               How a safe sale<br />happens here.
