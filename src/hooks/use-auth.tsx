@@ -22,6 +22,7 @@ type AuthCtx = {
   session: Session | null;
   user: User | null;
   profile: Profile | null;
+  isAdmin: boolean;
   loading: boolean;
   refreshProfile: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -32,15 +33,16 @@ const Ctx = createContext<AuthCtx | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const loadProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", userId)
-      .maybeSingle();
-    setProfile((data as Profile) ?? null);
+    const [{ data: prof }, { data: roles }] = await Promise.all([
+      supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
+      supabase.from("user_roles").select("role").eq("user_id", userId),
+    ]);
+    setProfile((prof as Profile) ?? null);
+    setIsAdmin((roles ?? []).some((r) => r.role === "admin"));
   };
 
   useEffect(() => {
@@ -50,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setTimeout(() => void loadProfile(s.user.id), 0);
       } else {
         setProfile(null);
+        setIsAdmin(false);
       }
     });
 
@@ -66,6 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session,
     user: session?.user ?? null,
     profile,
+    isAdmin,
     loading,
     refreshProfile: async () => {
       if (session?.user) await loadProfile(session.user.id);

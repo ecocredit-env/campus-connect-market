@@ -22,8 +22,10 @@ function Index() {
       <Header />
 
       {/* HERO — split */}
-      <section className="border-b border-border bg-background">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-0 lg:grid-cols-[1.05fr_1fr]">
+      <section className="relative overflow-hidden border-b border-border bg-background">
+        <span className="blob h-72 w-72 -left-20 top-32 bg-accent/40" />
+        <span className="blob h-96 w-96 right-[-100px] top-10 bg-secondary/30" style={{ animationDelay: "-6s" }} />
+        <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-0 lg:grid-cols-[1.05fr_1fr]">
           <div className="flex flex-col justify-between px-6 py-16 sm:px-10 lg:py-24">
             <div className="space-y-8">
               <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -93,6 +95,24 @@ function Index() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MARQUEE */}
+      <section className="border-b border-border bg-primary py-8 text-primary-foreground overflow-hidden">
+        <div className="marquee">
+          <div className="marquee-track display text-5xl sm:text-7xl">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <span key={i} className="flex shrink-0 items-center gap-12">
+                <span>VERIFIED ONLY</span>
+                <span className="marquee-stroke text-accent">CYCLES</span>
+                <span>COOLERS</span>
+                <span className="marquee-stroke text-accent">ELECTRONICS</span>
+                <span>MEET ON CAMPUS</span>
+                <span className="marquee-stroke text-accent">ZERO FEES</span>
+              </span>
+            ))}
           </div>
         </div>
       </section>
