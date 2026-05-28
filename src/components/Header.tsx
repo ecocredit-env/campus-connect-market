@@ -2,10 +2,10 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShieldCheck, Plus, User as UserIcon } from "lucide-react";
+import { ShieldCheck, Plus, User as UserIcon, Shield } from "lucide-react";
 
 export function Header() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -25,6 +25,11 @@ export function Header() {
           )}
           {user && (
             <Link to="/me" className="rounded-md px-3 py-2 text-sm font-medium hover:bg-muted">My Stuff</Link>
+          )}
+          {isAdmin && (
+            <Link to="/admin" className="rounded-md px-3 py-2 text-sm font-medium text-accent hover:bg-muted">
+              <span className="inline-flex items-center gap-1"><Shield className="h-3.5 w-3.5" /> Admin</span>
+            </Link>
           )}
         </nav>
 
