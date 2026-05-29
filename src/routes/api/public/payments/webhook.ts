@@ -56,8 +56,7 @@ async function handleCheckoutCompleted(session: any) {
   );
 
   // Mark the listing as sold so it disappears from browse.
-  await admin
-    .from("listings")
+  await (admin.from("listings") as any)
     .update({ status: "sold" })
     .eq("id", listingId);
 }
