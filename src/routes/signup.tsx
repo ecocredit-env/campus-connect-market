@@ -88,9 +88,21 @@ function SignupPage() {
           </p>
         </div>
 
-        <Button variant="outline" size="lg" disabled={busy} onClick={handleGoogle}>
-          Continue with Google
-        </Button>
+        <div className="grid gap-2">
+          <Button variant="outline" size="lg" disabled={busy} onClick={handleGoogle}>
+            Continue with Google
+          </Button>
+          <Button variant="outline" size="lg" disabled={busy} onClick={async () => {
+            setBusy(true);
+            const result = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin });
+            if (result.error) { setBusy(false); toast.error(result.error.message); return; }
+            if (result.redirected) return;
+            nav({ to: "/verify" });
+          }}>
+             Continue with Apple
+          </Button>
+        </div>
+
 
         <div className="flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
           <div className="h-px flex-1 bg-border" /> or <div className="h-px flex-1 bg-border" />
