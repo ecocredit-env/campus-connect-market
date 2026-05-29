@@ -26,21 +26,32 @@ export function BuyDialog({
   deliveryNote: string | null;
 }) {
   const [step, setStep] = useState<"details" | "pay">("details");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [hostel, setHostel] = useState("");
+  const [room, setRoom] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
+  const [agree, setAgree] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const fn = useServerFn(createListingCheckout);
 
   const proceed = async () => {
-    if (address.trim().length < 5) return toast.error("Enter delivery details");
-    if (phone.trim().length < 6) return toast.error("Enter a contact number");
+    if (fullName.trim().length < 2) return toast.error("Enter your full name");
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return toast.error("Enter a valid email");
+    if (hostel.trim().length < 2) return toast.error("Enter your hostel");
+    if (room.trim().length < 1) return toast.error("Enter your room number");
+    if (address.trim().length < 5) return toast.error("Enter delivery address / landmark");
+    if (!/^[+\d][\d\s-]{6,}$/.test(phone.trim())) return toast.error("Enter a valid contact number");
+    if (!agree) return toast.error("Please accept the buyer terms to continue");
     setBusy(true);
     try {
+      const fullAddress = `${fullName.trim()} — Hostel ${hostel.trim()}, Room ${room.trim()}. ${address.trim()} (email: ${email.trim()})`;
       const res = await fn({
         data: {
           listingId,
-          deliveryAddress: address.trim(),
+          deliveryAddress: fullAddress,
           contactPhone: phone.trim(),
           returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
           environment: getStripeEnvironment(),
