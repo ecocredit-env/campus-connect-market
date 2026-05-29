@@ -67,8 +67,7 @@ async function handleRefunded(charge: any) {
       ? charge.payment_intent
       : charge.payment_intent?.id;
   if (!pi) return;
-  await getAdmin()
-    .from("orders")
+  await (getAdmin().from("orders") as any)
     .update({ status: "refunded", payout_status: "hold" })
     .eq("stripe_payment_intent", pi);
 }
