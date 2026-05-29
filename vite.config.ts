@@ -12,4 +12,13 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  vite: {
+    optimizeDeps: {
+      // Pre-bundle Stripe libs so the first request to a checkout route doesn't
+      // trigger a Vite re-optimize + reload (which surfaces as a transient SSR
+      // "rendering failed" blip during dev/preview cold starts).
+      include: ["@stripe/stripe-js", "@stripe/react-stripe-js", "stripe"],
+    },
+  },
 });
+
