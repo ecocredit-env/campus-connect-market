@@ -84,27 +84,49 @@ export function BuyDialog({
         </DialogHeader>
 
         {step === "details" && (
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <Label>Hostel / delivery address</Label>
-              <Textarea
-                rows={3}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="e.g. Hostel Block C, Room 214"
-              />
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Full name</Label>
+                <Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="As on college ID" />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Email (for receipt)</Label>
+                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@college.edu" />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Hostel</Label>
+                <Input value={hostel} onChange={(e) => setHostel(e.target.value)} placeholder="e.g. Hall 5 / Block C" />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Room no.</Label>
+                <Input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="e.g. 214" />
+              </div>
+              <div className="space-y-1.5 sm:col-span-2">
+                <Label>Landmark / extra delivery instructions</Label>
+                <Textarea rows={2} value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Near mess gate, hand over to security…" />
+              </div>
+              <div className="space-y-1.5 sm:col-span-2">
+                <Label>Contact phone</Label>
+                <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 9xxxxxxxxx" />
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <Label>Contact phone</Label>
-              <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 9xxxxxxxxx" />
-            </div>
+
             {deliveryNote && (
               <p className="text-xs text-muted-foreground">
-                Seller's delivery note: {deliveryNote}
+                Seller's delivery note: <strong>{deliveryNote}</strong>
               </p>
             )}
+
+            <label className="flex items-start gap-2 rounded-md border border-border bg-muted/40 p-3 text-xs">
+              <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-0.5" />
+              <span>
+                I confirm the details above are correct and accept UltraOver's buyer terms: inspect the item on delivery, refunds only via manual admin review, and contact details will be shared with the seller for handover.
+              </span>
+            </label>
+
             <Button onClick={proceed} disabled={busy} className="w-full">
-              {busy ? "Starting…" : "Continue to payment"}
+              {busy ? "Starting…" : "Continue to secure payment"}
             </Button>
           </div>
         )}
