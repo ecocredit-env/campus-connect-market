@@ -43,10 +43,11 @@ function ListingPage() {
     const { data: l } = await supabase.from("listings").select("*").eq("id", id).maybeSingle();
     if (!l) { setLoading(false); return; }
     setListing(l as Listing);
-    const { data: s } = await supabase.from("profiles")
+    const { data: s } = await supabase.from("public_profiles" as never)
       .select("full_name,verification_status,total_transactions,average_rating")
       .eq("id", l.seller_id).maybeSingle();
     setSeller(s as Seller);
+
     if (user && user.id !== l.seller_id) {
       const { data: ir } = await supabase.from("interest_requests")
         .select("id,status").eq("listing_id", id).eq("buyer_id", user.id).maybeSingle();
