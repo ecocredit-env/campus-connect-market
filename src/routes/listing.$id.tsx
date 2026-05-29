@@ -46,7 +46,7 @@ function ListingPage() {
     const { data: s } = await supabase.from("public_profiles" as never)
       .select("full_name,verification_status,total_transactions,average_rating")
       .eq("id", l.seller_id).maybeSingle();
-    setSeller(s as Seller);
+    setSeller(s as unknown as Seller);
 
     if (user && user.id !== l.seller_id) {
       const { data: ir } = await supabase.from("interest_requests")
