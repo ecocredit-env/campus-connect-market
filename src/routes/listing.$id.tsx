@@ -145,8 +145,21 @@ function ListingPage() {
             </dl>
 
             <div>
-              <h3 className="mb-1 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Description</h3>
-              <p className="whitespace-pre-wrap text-sm leading-relaxed">{listing.description}</p>
+              <h3 className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Description</h3>
+              <p className="line-clamp-4 whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">{listing.description}</p>
+            </div>
+
+            {/* Delivery info */}
+            <div className="rounded-lg border border-border bg-mist/50 p-3 text-xs">
+              <p className="font-semibold uppercase tracking-wider text-muted-foreground">Delivery</p>
+              {listing.category === "coolers" ? (
+                <p className="mt-1">
+                  Variable delivery charge to hostel — paid by buyer.
+                  {listing.delivery_charge_note && <> Seller's estimate: <strong>{listing.delivery_charge_note}</strong></>}
+                </p>
+              ) : (
+                <p className="mt-1">✓ Free delivery to your hostel</p>
+              )}
             </div>
 
             {seller && (
