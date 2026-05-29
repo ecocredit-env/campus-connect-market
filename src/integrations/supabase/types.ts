@@ -133,6 +133,69 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          amount_paid: number
+          buyer_contact_email: string | null
+          buyer_contact_phone: string | null
+          buyer_id: string
+          commission_amount: number
+          created_at: string
+          currency: string
+          delivery_address: string | null
+          id: string
+          listing_id: string
+          payout_note: string | null
+          payout_status: string
+          seller_id: string
+          seller_payout_amount: number
+          status: string
+          stripe_payment_intent: string | null
+          stripe_session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_paid: number
+          buyer_contact_email?: string | null
+          buyer_contact_phone?: string | null
+          buyer_id: string
+          commission_amount?: number
+          created_at?: string
+          currency?: string
+          delivery_address?: string | null
+          id?: string
+          listing_id: string
+          payout_note?: string | null
+          payout_status?: string
+          seller_id: string
+          seller_payout_amount: number
+          status?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_paid?: number
+          buyer_contact_email?: string | null
+          buyer_contact_phone?: string | null
+          buyer_id?: string
+          commission_amount?: number
+          created_at?: string
+          currency?: string
+          delivery_address?: string | null
+          id?: string
+          listing_id?: string
+          payout_note?: string | null
+          payout_status?: string
+          seller_id?: string
+          seller_payout_amount?: number
+          status?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           average_rating: number | null
@@ -207,6 +270,53 @@ export type Database = {
           year_of_study?: string | null
         }
         Relationships: []
+      }
+      refund_requests: {
+        Row: {
+          admin_notes: string | null
+          buyer_id: string
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          id: string
+          order_id: string
+          reason: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          buyer_id: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          order_id: string
+          reason: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          buyer_id?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          order_id?: string
+          reason?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refund_requests_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
