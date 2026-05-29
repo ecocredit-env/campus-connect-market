@@ -19,6 +19,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ListingIdRouteImport } from './routes/listing.$id'
+import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const VerifyRoute = VerifyRouteImport.update({
@@ -71,6 +72,11 @@ const ListingIdRoute = ListingIdRouteImport.update({
   path: '/listing/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
+  id: '/checkout/return',
+  path: '/checkout/return',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/listing/$id': typeof ListingIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/listing/$id': typeof ListingIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/listing/$id': typeof ListingIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/sell'
     | '/signup'
     | '/verify'
+    | '/checkout/return'
     | '/listing/$id'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/sell'
     | '/signup'
     | '/verify'
+    | '/checkout/return'
     | '/listing/$id'
     | '/api/public/payments/webhook'
   id:
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/sell'
     | '/signup'
     | '/verify'
+    | '/checkout/return'
     | '/listing/$id'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   SellRoute: typeof SellRoute
   SignupRoute: typeof SignupRoute
   VerifyRoute: typeof VerifyRoute
+  CheckoutReturnRoute: typeof CheckoutReturnRoute
   ListingIdRoute: typeof ListingIdRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -246,6 +259,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/return': {
+      id: '/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof CheckoutReturnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -266,9 +286,20 @@ const rootRouteChildren: RootRouteChildren = {
   SellRoute: SellRoute,
   SignupRoute: SignupRoute,
   VerifyRoute: VerifyRoute,
+  CheckoutReturnRoute: CheckoutReturnRoute,
   ListingIdRoute: ListingIdRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
