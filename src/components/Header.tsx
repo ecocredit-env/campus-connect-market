@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShieldCheck, Plus, User as UserIcon, Shield } from "lucide-react";
+import ultraLogo from "@/assets/ultra-logo.jpeg";
 
 export function Header() {
   const { user, profile, isAdmin, signOut } = useAuth();
@@ -12,11 +13,10 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2">
-          <div className="grid h-8 w-8 place-items-center rounded-sm bg-primary text-primary-foreground">
-            <span className="display text-sm">U</span>
-          </div>
+          <img src={ultraLogo} alt="UltraOver" className="h-9 w-9 rounded-md object-cover" />
           <span className="display text-lg tracking-tight">ULTRAOVER<span className="text-accent">.</span></span>
         </Link>
+
 
         <nav className="hidden items-center gap-1 md:flex">
           <Link to="/browse" className="rounded-md px-3 py-2 text-sm font-medium hover:bg-muted">Browse</Link>
