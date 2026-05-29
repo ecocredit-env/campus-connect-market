@@ -20,6 +20,7 @@ type Listing = {
   brand: string | null; model: string | null; manufacturing_year: number | null;
   original_price: number | null; price: number; photos: string[];
   location: string | null; delivery_option: string; status: string; created_at: string;
+  delivery_charge_note: string | null;
 };
 
 type Seller = { full_name: string; verification_status: string; total_transactions: number; average_rating: number | null };
