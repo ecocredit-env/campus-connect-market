@@ -141,6 +141,7 @@ function MePage() {
             <TabsTrigger value="listings">My listings ({myListings.length})</TabsTrigger>
             <TabsTrigger value="received">Received interest ({received.length})</TabsTrigger>
             <TabsTrigger value="sent">Sent interest ({sent.length})</TabsTrigger>
+            <TabsTrigger value="payout"><Wallet className="mr-1 h-3.5 w-3.5" />Payout</TabsTrigger>
           </TabsList>
 
           <TabsContent value="listings" className="mt-6">
@@ -164,9 +165,101 @@ function MePage() {
               <ReqCard key={r.id} req={r} side="buyer" />
             ))}
           </TabsContent>
+
+          <TabsContent value="payout" className="mt-6">
+            <PayoutForm />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
+  );
+}
+
+function PayoutForm() {
+  const { user, profile, refreshProfile } = useAuth();
+  const [busy, setBusy] = useState(false);
+  const [form, setForm] = useState({
+    payout_account_holder: profile?.payout_account_holder ?? "",
+    payout_bank_name: profile?.payout_bank_name ?? "",
+    payout_account_number: profile?.payout_account_number ?? "",
+    payout_ifsc: profile?.payout_ifsc ?? "",
+    payout_upi_id: profile?.payout_upi_id ?? "",
+  });
+
+  useEffect(() => {
+    setForm({
+      payout_account_holder: profile?.payout_account_holder ?? "",
+      payout_bank_name: profile?.payout_bank_name ?? "",
+      payout_account_number: profile?.payout_account_number ?? "",
+      payout_ifsc: profile?.payout_ifsc ?? "",
+      payout_upi_id: profile?.payout_upi_id ?? "",
+    });
+  }, [profile]);
+
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    if (!form.payout_account_holder.trim()) return toast.error("Account holder name is required");
+    if (!form.payout_upi_id.trim() && !form.payout_account_number.trim()) {
+      return toast.error("Enter at least UPI ID or bank account number");
+    }
+    setBusy(true);
+    const { error } = await supabase.from("profiles").update({
+      payout_account_holder: form.payout_account_holder.trim(),
+      payout_bank_name: form.payout_bank_name.trim() || null,
+      payout_account_number: form.payout_account_number.trim() || null,
+      payout_ifsc: form.payout_ifsc.trim().toUpperCase() || null,
+      payout_upi_id: form.payout_upi_id.trim() || null,
+    }).eq("id", user.id);
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Payout details saved");
+    await refreshProfile();
+  };
+
+  return (
+    <form onSubmit={save} className="max-w-xl space-y-4 rounded-xl border border-border bg-card p-6">
+      <div>
+        <h2 className="display text-2xl text-primary">Seller payout details</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          We send your earnings here after a sale. Provide at least UPI <em>or</em> bank account.
+        </p>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label>Account holder name *</Label>
+        <Input value={form.payout_account_holder} onChange={(e) => setForm({ ...form, payout_account_holder: e.target.value })} required maxLength={120} />
+      </div>
+
+      <div className="space-y-1.5">
+        <Label>UPI ID</Label>
+        <Input value={form.payout_upi_id} onChange={(e) => setForm({ ...form, payout_upi_id: e.target.value })} placeholder="yourname@okhdfc" maxLength={80} />
+      </div>
+
+      <div className="relative my-2 flex items-center gap-3 text-xs text-muted-foreground">
+        <span className="h-px flex-1 bg-border" /> OR bank account <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <div className="space-y-1.5">
+        <Label>Bank name</Label>
+        <Input value={form.payout_bank_name} onChange={(e) => setForm({ ...form, payout_bank_name: e.target.value })} placeholder="e.g. HDFC Bank" maxLength={80} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1.5">
+          <Label>Account number</Label>
+          <Input value={form.payout_account_number} onChange={(e) => setForm({ ...form, payout_account_number: e.target.value })} maxLength={30} />
+        </div>
+        <div className="space-y-1.5">
+          <Label>IFSC code</Label>
+          <Input value={form.payout_ifsc} onChange={(e) => setForm({ ...form, payout_ifsc: e.target.value.toUpperCase() })} maxLength={11} />
+        </div>
+      </div>
+
+      <Button type="submit" disabled={busy} className="w-full">
+        {busy ? "Saving…" : "Save payout details"}
+      </Button>
+    </form>
   );
 }
 
