@@ -121,6 +121,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AuthInvalidator />
+        <PaymentTestModeBanner />
         <Outlet />
         <Toaster />
       </AuthProvider>
