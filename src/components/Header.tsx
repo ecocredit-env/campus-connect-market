@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShieldCheck, Plus, User as UserIcon, Shield } from "lucide-react";
 import ultraLogo from "@/assets/ultra-logo.jpeg";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Header() {
   const { user, profile, isAdmin, signOut } = useAuth();
@@ -12,10 +13,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={ultraLogo} alt="UltraOver" className="h-9 w-9 rounded-md object-cover" />
-          <span className="display text-lg tracking-tight">ULTRAOVER<span className="text-accent">.</span></span>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2">
+            <img src={ultraLogo} alt="UltraOver" className="h-9 w-9 rounded-md object-cover" />
+            <span className="display text-lg tracking-tight">ULTRAOVER<span className="text-accent">.</span></span>
+          </Link>
+          <ThemeToggle />
+        </div>
 
 
         <nav className="hidden items-center gap-1 md:flex">
