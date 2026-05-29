@@ -63,7 +63,7 @@ export const createListingCheckout = createServerFn({ method: "POST" })
           },
         ],
         mode: "payment",
-        ui_mode: "embedded",
+        ui_mode: "embedded_page",
         return_url: data.returnUrl,
         ...(buyerEmail && { customer_email: buyerEmail }),
         payment_intent_data: {
