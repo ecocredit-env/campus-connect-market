@@ -16,6 +16,11 @@ type Profile = {
   average_rating: number | null;
   total_transactions: number;
   verification_notes: string | null;
+  payout_account_holder: string | null;
+  payout_bank_name: string | null;
+  payout_account_number: string | null;
+  payout_ifsc: string | null;
+  payout_upi_id: string | null;
 };
 
 type AuthCtx = {

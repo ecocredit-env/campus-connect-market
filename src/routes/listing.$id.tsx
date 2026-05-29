@@ -20,6 +20,7 @@ type Listing = {
   brand: string | null; model: string | null; manufacturing_year: number | null;
   original_price: number | null; price: number; photos: string[];
   location: string | null; delivery_option: string; status: string; created_at: string;
+  delivery_charge_note: string | null;
 };
 
 type Seller = { full_name: string; verification_status: string; total_transactions: number; average_rating: number | null };
@@ -144,8 +145,21 @@ function ListingPage() {
             </dl>
 
             <div>
-              <h3 className="mb-1 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Description</h3>
-              <p className="whitespace-pre-wrap text-sm leading-relaxed">{listing.description}</p>
+              <h3 className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Description</h3>
+              <p className="line-clamp-4 whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">{listing.description}</p>
+            </div>
+
+            {/* Delivery info */}
+            <div className="rounded-lg border border-border bg-mist/50 p-3 text-xs">
+              <p className="font-semibold uppercase tracking-wider text-muted-foreground">Delivery</p>
+              {listing.category === "coolers" ? (
+                <p className="mt-1">
+                  Variable delivery charge to hostel — paid by buyer.
+                  {listing.delivery_charge_note && <> Seller's estimate: <strong>{listing.delivery_charge_note}</strong></>}
+                </p>
+              ) : (
+                <p className="mt-1">✓ Free delivery to your hostel</p>
+              )}
             </div>
 
             {seller && (

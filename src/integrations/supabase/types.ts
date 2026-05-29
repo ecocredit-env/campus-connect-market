@@ -64,6 +64,7 @@ export type Database = {
           category: Database["public"]["Enums"]["listing_category"]
           condition: Database["public"]["Enums"]["listing_condition"]
           created_at: string
+          delivery_charge_note: string | null
           delivery_fee: number | null
           delivery_option: string
           description: string
@@ -87,6 +88,7 @@ export type Database = {
           category: Database["public"]["Enums"]["listing_category"]
           condition: Database["public"]["Enums"]["listing_condition"]
           created_at?: string
+          delivery_charge_note?: string | null
           delivery_fee?: number | null
           delivery_option?: string
           description: string
@@ -110,6 +112,7 @@ export type Database = {
           category?: Database["public"]["Enums"]["listing_category"]
           condition?: Database["public"]["Enums"]["listing_condition"]
           created_at?: string
+          delivery_charge_note?: string | null
           delivery_fee?: number | null
           delivery_option?: string
           description?: string
@@ -140,6 +143,11 @@ export type Database = {
           full_name: string
           id: string
           id_document_path: string | null
+          payout_account_holder: string | null
+          payout_account_number: string | null
+          payout_bank_name: string | null
+          payout_ifsc: string | null
+          payout_upi_id: string | null
           phone: string | null
           profile_photo: string | null
           registration_number: string | null
@@ -159,6 +167,11 @@ export type Database = {
           full_name: string
           id: string
           id_document_path?: string | null
+          payout_account_holder?: string | null
+          payout_account_number?: string | null
+          payout_bank_name?: string | null
+          payout_ifsc?: string | null
+          payout_upi_id?: string | null
           phone?: string | null
           profile_photo?: string | null
           registration_number?: string | null
@@ -178,6 +191,11 @@ export type Database = {
           full_name?: string
           id?: string
           id_document_path?: string | null
+          payout_account_holder?: string | null
+          payout_account_number?: string | null
+          payout_bank_name?: string | null
+          payout_ifsc?: string | null
+          payout_upi_id?: string | null
           phone?: string | null
           profile_photo?: string | null
           registration_number?: string | null
