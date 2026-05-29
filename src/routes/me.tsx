@@ -66,8 +66,8 @@ function MePage() {
 
     if (counterpartyIds.length > 0) {
       const { data: profiles, error: profilesError } = await supabase
-        .from("profiles")
-        .select("id,full_name,phone,college_email")
+        .from("public_profiles" as never)
+        .select("id,full_name")
         .in("id", counterpartyIds);
 
       if (profilesError) {
@@ -75,8 +75,22 @@ function MePage() {
         return;
       }
 
-      for (const profile of profiles ?? []) {
-        profileMap.set(profile.id, profile);
+      for (const profile of (profiles ?? []) as Array<{ id: string; full_name: string }>) {
+        profileMap.set(profile.id, { id: profile.id, full_name: profile.full_name, phone: null, college_email: null });
+      }
+
+      // For approved requests, fetch contact info via gated RPC
+      const approvedCounterparties = Array.from(new Set([
+        ...receivedRows.filter((r) => r.status === "approved").map((r) => r.buyer_id),
+        ...sentRows.filter((r) => r.status === "approved").map((r) => r.seller_id),
+      ])).filter(Boolean) as string[];
+
+      for (const otherId of approvedCounterparties) {
+        const { data: contact } = await supabase.rpc("get_counterparty_contact" as never, { _other_user: otherId } as never);
+        const row = Array.isArray(contact) ? contact[0] : null;
+        if (row) {
+          profileMap.set(otherId, { id: otherId, full_name: row.full_name, phone: row.phone, college_email: row.college_email });
+        }
       }
     }
 
@@ -92,6 +106,7 @@ function MePage() {
       seller: row.seller_id ? profileMap.get(row.seller_id) ?? null : null,
     })));
   };
+
 
   const respond = async (id: string, status: "approved" | "rejected" | "blocked") => {
     const { error } = await supabase.from("interest_requests")
