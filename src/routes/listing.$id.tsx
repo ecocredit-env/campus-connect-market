@@ -7,7 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { MapPin, Check, Clock, ArrowLeft } from "lucide-react";
+import { MapPin, Check, Clock, ArrowLeft, ShoppingBag } from "lucide-react";
+import { BuyDialog } from "@/components/BuyDialog";
 
 export const Route = createFileRoute("/listing/$id")({
   head: () => ({ meta: [{ title: "Listing · UltraOver" }] }),
@@ -36,6 +37,7 @@ function ListingPage() {
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [buyOpen, setBuyOpen] = useState(false);
 
   useEffect(() => { void load(); }, [id, user]);
 
@@ -196,14 +198,25 @@ function ListingPage() {
               </div>
             ) : (
               <div className="space-y-2">
-                <Textarea placeholder="Optional message (max 500 chars)" maxLength={500} value={msg} onChange={(e) => setMsg(e.target.value)} />
-                <Button size="lg" className="w-full" onClick={expressInterest} disabled={busy}>
-                  {busy ? "Sending…" : "I'm interested"}
+                <Button size="lg" className="w-full gap-2" onClick={() => setBuyOpen(true)} disabled={listing.status !== "active"}>
+                  <ShoppingBag className="h-4 w-4" /> Buy now · ₹{Number(listing.price).toLocaleString("en-IN")}
+                </Button>
+                <Textarea placeholder="Or send a message first (optional, max 500 chars)" maxLength={500} value={msg} onChange={(e) => setMsg(e.target.value)} />
+                <Button size="lg" variant="outline" className="w-full" onClick={expressInterest} disabled={busy}>
+                  {busy ? "Sending…" : "I'm interested (chat first)"}
                 </Button>
               </div>
             )}
           </div>
         </div>
+        <BuyDialog
+          open={buyOpen}
+          onOpenChange={setBuyOpen}
+          listingId={listing.id}
+          listingTitle={listing.title}
+          price={Number(listing.price)}
+          deliveryNote={listing.category === "coolers" ? listing.delivery_charge_note : null}
+        />
       </div>
     </div>
   );
