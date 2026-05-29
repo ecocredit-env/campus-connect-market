@@ -37,6 +37,7 @@ function ListingPage() {
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [buyOpen, setBuyOpen] = useState(false);
 
   useEffect(() => { void load(); }, [id, user]);
 
