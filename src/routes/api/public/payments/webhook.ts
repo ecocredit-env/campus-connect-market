@@ -32,7 +32,7 @@ async function handleCheckoutCompleted(session: any) {
   const commission = Math.round(amountPaid * COMMISSION_RATE * 100) / 100;
   const payout = Math.round((amountPaid - commission) * 100) / 100;
 
-  await admin.from("orders").upsert(
+  await (admin.from("orders") as any).upsert(
     {
       listing_id: listingId,
       buyer_id: buyerId,
