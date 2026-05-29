@@ -87,11 +87,12 @@ function MePage() {
 
       for (const otherId of approvedCounterparties) {
         const { data: contact } = await supabase.rpc("get_counterparty_contact" as never, { _other_user: otherId } as never);
-        const row = Array.isArray(contact) ? contact[0] : null;
+        const row = (Array.isArray(contact) ? contact[0] : null) as { full_name: string; phone: string | null; college_email: string | null } | null;
         if (row) {
           profileMap.set(otherId, { id: otherId, full_name: row.full_name, phone: row.phone, college_email: row.college_email });
         }
       }
+
     }
 
     setMyListings((a.data ?? []) as ListingCardItem[]);
