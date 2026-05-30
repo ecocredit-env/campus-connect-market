@@ -7,8 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { MapPin, Check, Clock, ArrowLeft, ShoppingBag } from "lucide-react";
-import { BuyDialog } from "@/components/BuyDialog";
+import { MapPin, Check, Clock, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/listing/$id")({
   head: () => ({ meta: [{ title: "Listing · UltraOver" }] }),
@@ -37,7 +36,6 @@ function ListingPage() {
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
-  const [buyOpen, setBuyOpen] = useState(false);
 
   useEffect(() => { void load(); }, [id, user]);
 
@@ -198,38 +196,20 @@ function ListingPage() {
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={expressInterest}
-                    disabled={busy}
-                    className="flex flex-col items-center justify-center rounded-lg border-2 border-border bg-card px-4 py-3 text-center transition hover:border-primary hover:shadow-md disabled:opacity-50"
-                  >
-                    <span className="text-sm font-bold text-foreground">Chat with seller</span>
-                    <span className="text-xs text-muted-foreground">Ask before you buy</span>
-                  </button>
-                  <button
-                    onClick={() => setBuyOpen(true)}
-                    disabled={listing.status !== "active"}
-                    className="flex flex-col items-center justify-center rounded-lg bg-[#ffc200] px-4 py-3 text-center text-[#1a1a1a] shadow-sm transition hover:bg-[#ffb700] hover:shadow-md disabled:opacity-50"
-                  >
-                    <span className="text-sm font-bold">Buy now</span>
-                    <span className="text-xs font-semibold">at ₹{Number(listing.price).toLocaleString("en-IN")}</span>
-                  </button>
-                </div>
+                <button
+                  onClick={expressInterest}
+                  disabled={busy}
+                  className="flex w-full flex-col items-center justify-center rounded-lg border-2 border-border bg-card px-4 py-3 text-center transition hover:border-primary hover:shadow-md disabled:opacity-50"
+                >
+                  <span className="text-sm font-bold text-foreground">Chat with seller</span>
+                  <span className="text-xs text-muted-foreground">Ask before you buy</span>
+                </button>
                 <Textarea placeholder="Optional message to seller (max 500 chars)" maxLength={500} value={msg} onChange={(e) => setMsg(e.target.value)} />
               </div>
             )}
 
           </div>
         </div>
-        <BuyDialog
-          open={buyOpen}
-          onOpenChange={setBuyOpen}
-          listingId={listing.id}
-          listingTitle={listing.title}
-          price={Number(listing.price)}
-          deliveryNote={listing.category === "coolers" ? listing.delivery_charge_note : null}
-        />
       </div>
     </div>
   );
