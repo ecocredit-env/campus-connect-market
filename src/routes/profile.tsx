@@ -144,7 +144,7 @@ function ProfilePage() {
               <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+91 9XXXXXXXXX" maxLength={20} />
             </Field>
             <Field label="College email">
-              <Input value={profile.college_email ?? ""} disabled />
+              <Input value={user.email ?? ""} disabled />
             </Field>
             <Field label="Registration number">
               <Input value={form.registration_number} onChange={(e) => setForm({ ...form, registration_number: e.target.value })} maxLength={40} />
