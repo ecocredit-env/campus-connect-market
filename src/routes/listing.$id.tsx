@@ -7,8 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { MapPin, Check, Clock, ArrowLeft, ShoppingBag } from "lucide-react";
-import { BuyDialog } from "@/components/BuyDialog";
+import { MapPin, Check, Clock, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/listing/$id")({
   head: () => ({ meta: [{ title: "Listing · UltraOver" }] }),
