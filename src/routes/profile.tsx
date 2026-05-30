@@ -101,7 +101,7 @@ function ProfilePage() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h1 className="display text-4xl text-primary">My Profile</h1>
-            <p className="mt-1 text-muted-foreground">{profile.college_email}</p>
+            <p className="mt-1 text-muted-foreground">{user.email}</p>
           </div>
           <div className="flex items-center gap-2">
             <StatusBadge status={status} />
