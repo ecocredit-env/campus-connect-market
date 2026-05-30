@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SellRouteImport } from './routes/sell'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MeRouteImport } from './routes/me'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as BrowseRouteImport } from './routes/browse'
@@ -35,6 +36,11 @@ const SignupRoute = SignupRouteImport.update({
 const SellRoute = SellRouteImport.update({
   id: '/sell',
   path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeRoute = MeRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/browse': typeof BrowseRoute
   '/login': typeof LoginRoute
   '/me': typeof MeRoute
+  '/profile': typeof ProfileRoute
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/browse': typeof BrowseRoute
   '/login': typeof LoginRoute
   '/me': typeof MeRoute
+  '/profile': typeof ProfileRoute
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/browse': typeof BrowseRoute
   '/login': typeof LoginRoute
   '/me': typeof MeRoute
+  '/profile': typeof ProfileRoute
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/browse'
     | '/login'
     | '/me'
+    | '/profile'
     | '/sell'
     | '/signup'
     | '/verify'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/browse'
     | '/login'
     | '/me'
+    | '/profile'
     | '/sell'
     | '/signup'
     | '/verify'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/browse'
     | '/login'
     | '/me'
+    | '/profile'
     | '/sell'
     | '/signup'
     | '/verify'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   BrowseRoute: typeof BrowseRoute
   LoginRoute: typeof LoginRoute
   MeRoute: typeof MeRoute
+  ProfileRoute: typeof ProfileRoute
   SellRoute: typeof SellRoute
   SignupRoute: typeof SignupRoute
   VerifyRoute: typeof VerifyRoute
@@ -208,6 +221,13 @@ declare module '@tanstack/react-router' {
       path: '/sell'
       fullPath: '/sell'
       preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/me': {
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   BrowseRoute: BrowseRoute,
   LoginRoute: LoginRoute,
   MeRoute: MeRoute,
+  ProfileRoute: ProfileRoute,
   SellRoute: SellRoute,
   SignupRoute: SignupRoute,
   VerifyRoute: VerifyRoute,
