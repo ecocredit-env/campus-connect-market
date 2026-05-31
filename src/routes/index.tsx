@@ -1,16 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, Bike, Cpu, Snowflake, ArrowRight } from "lucide-react";
-import mnnitLogo from "@/assets/mnnit-logo.webp";
+import { ShieldCheck, Bike, Cpu, Snowflake, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "UltraOver — Campus marketplace for verified students" },
-      { name: "description", content: "Buy & sell used cycles, coolers and electronics on campus. Every seller is a verified student." },
-      { property: "og:title", content: "UltraOver — Campus marketplace for verified students" },
-      { property: "og:description", content: "Trust built on college ID. No scammers, just classmates." },
+      { title: "UltraOver — The premium campus marketplace" },
+      { name: "description", content: "A cinematic, verified-only marketplace for students. Buy & sell cycles, electronics and coolers with classmates you can trust." },
+      { property: "og:title", content: "UltraOver — The premium campus marketplace" },
+      { property: "og:description", content: "Verified students. Cinematic experience. Zero fees." },
     ],
   }),
   component: Index,
@@ -18,98 +17,96 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-hidden">
       <Header />
 
-      {/* HERO — split */}
-      <section className="relative overflow-hidden border-b border-border bg-background">
-        <span className="blob h-72 w-72 -left-20 top-32 bg-accent/40" />
-        <span className="blob h-96 w-96 right-[-100px] top-10 bg-secondary/30" style={{ animationDelay: "-6s" }} />
-        <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-0 lg:grid-cols-[1.05fr_1fr]">
-          <div className="flex flex-col justify-between px-6 py-16 sm:px-10 lg:py-24">
-            <div className="space-y-8">
-              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                <ShieldCheck className="h-3.5 w-3.5 text-accent" />
-                Verified students only
-              </span>
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="relative">
+        <span className="blob h-[420px] w-[420px] -left-32 top-20 bg-[oklch(0.72_0.18_255/0.55)]" />
+        <span className="blob h-[520px] w-[520px] right-[-160px] top-40 bg-[oklch(0.68_0.18_295/0.4)]" style={{ animationDelay: "-6s" }} />
 
-              <div className="flex items-start gap-6">
-                <h1 className="display text-[clamp(3rem,7vw,6.5rem)] leading-[0.92] text-primary">
-                  The campus<br />
-                  <span className="text-accent">marketplace</span><br />
-                  built on trust.
-                </h1>
-                <img
-                  src={mnnitLogo}
-                  alt="Motilal Nehru National Institute of Technology, Allahabad"
-                  className="hidden h-32 w-32 shrink-0 object-contain sm:block lg:h-40 lg:w-40"
-                />
-              </div>
-
-              <p className="max-w-lg text-lg text-muted-foreground">
-                Cycles, coolers, laptops, headphones — buy and sell with classmates whose
-                college ID has been verified. Meet at safe zones. No middlemen, no scams.
-              </p>
-
-              <div className="flex flex-wrap gap-3">
-                <Link to="/signup">
-                  <Button size="lg" className="gap-2">
-                    Join with college ID <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link to="/browse">
-                  <Button size="lg" variant="outline">Browse listings</Button>
-                </Link>
-              </div>
-            </div>
-
-            <div className="mt-16 grid grid-cols-3 gap-6 border-t border-border pt-8">
-              <Stat n="ID" label="Verified by admin" />
-              <Stat n="0₹" label="Platform fee" />
-              <Stat n="3" label="Categories live" />
-            </div>
+        <div className="relative mx-auto max-w-7xl px-6 pb-32 pt-24 sm:pt-32 lg:pb-44 lg:pt-40">
+          <div className="reveal mx-auto mb-8 inline-flex w-full justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground backdrop-blur-xl">
+              <Sparkles className="h-3 w-3 text-accent" />
+              Verified students · Zero fees · Campus only
+            </span>
           </div>
 
-          {/* Right panel — bold typographic / category tower */}
-          <div className="relative grain bg-primary text-primary-foreground">
-            <div className="absolute inset-0 opacity-30 [background:radial-gradient(circle_at_30%_20%,oklch(0.62_0.09_200/0.4),transparent_55%)]" />
-            <div className="relative flex h-full flex-col justify-between p-8 sm:p-12">
-              <div className="space-y-1">
-                <p className="text-xs uppercase tracking-[0.3em] text-accent">/ Live categories</p>
-              </div>
+          <h1 className="reveal reveal-delay-1 mx-auto max-w-5xl text-center text-[clamp(2.75rem,9vw,7.5rem)] font-bold leading-[0.9] tracking-[-0.04em]">
+            <span className="text-gradient">The marketplace</span>
+            <br />
+            <span className="text-gradient-accent">built on trust.</span>
+          </h1>
 
-              <div className="space-y-3 py-12">
-                <CatRow icon={<Bike className="h-7 w-7" />} label="CYCLES" count="MTB · Road · BMX" />
-                <div className="h-px bg-primary-foreground/15" />
-                <CatRow icon={<Cpu className="h-7 w-7" />} label="ELECTRONICS" count="Laptops · Phones · Audio" />
-                <div className="h-px bg-primary-foreground/15" />
-                <CatRow icon={<Snowflake className="h-7 w-7" />} label="COOLERS" count="Portable · Insulated" />
-              </div>
+          <p className="reveal reveal-delay-2 mx-auto mt-8 max-w-xl text-center text-base text-muted-foreground sm:text-lg">
+            Cycles, electronics, coolers — bought and sold by classmates whose college ID is verified. Cinematic. Minimal. Engineered for campus.
+          </p>
 
-              <div className="space-y-2">
-                <p className="display text-3xl leading-tight text-accent sm:text-4xl">
-                  Reuse on<br />campus.
-                </p>
-                <p className="text-sm text-primary-foreground/70">
-                  Built by students, for students.
-                </p>
+          <div className="reveal reveal-delay-3 mt-10 flex flex-wrap justify-center gap-3">
+            <Link to="/signup">
+              <Button size="lg" className="btn-glass group h-12 gap-2 rounded-full bg-foreground px-7 text-background hover:bg-foreground">
+                Join with college ID
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Button>
+            </Link>
+            <Link to="/browse">
+              <Button size="lg" variant="outline" className="btn-glass h-12 rounded-full border-white/15 bg-white/[0.04] px-7 text-foreground hover:bg-white/[0.08]">
+                Browse listings
+              </Button>
+            </Link>
+          </div>
+
+          {/* Floating product showcase glass card */}
+          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-24 max-w-5xl">
+            <div className="glass-strong glow-ring relative overflow-hidden rounded-3xl p-1.5">
+              <div className="rounded-[1.25rem] bg-gradient-to-b from-white/[0.04] to-transparent p-8 sm:p-14">
+                <div className="grid grid-cols-3 gap-6 text-center">
+                  <Metric value="ID" label="Admin verified" />
+                  <Metric value="0₹" label="Platform fee" />
+                  <Metric value="3" label="Live categories" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* MARQUEE */}
-      <section className="border-b border-border bg-primary py-8 text-primary-foreground overflow-hidden">
+      {/* ── CATEGORY SHOWCASE ─────────────────────────────── */}
+      <section className="relative border-t border-white/5 py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+            <div>
+              <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ Categories</span>
+              <h2 className="mt-4 max-w-2xl text-4xl font-bold tracking-tight sm:text-6xl">
+                <span className="text-gradient">Curated for</span><br />
+                <span className="text-gradient-accent">campus life.</span>
+              </h2>
+            </div>
+            <p className="max-w-xs text-sm text-muted-foreground">
+              Three categories. Every listing reviewed. Every seller verified.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <CategoryCard icon={<Bike className="h-7 w-7" />} title="Cycles" desc="MTB · Road · BMX · Hybrid" tone="from-[oklch(0.72_0.18_255/0.25)]" />
+            <CategoryCard icon={<Cpu className="h-7 w-7" />} title="Electronics" desc="Laptops · Phones · Audio · Tablets" tone="from-[oklch(0.68_0.18_295/0.25)]" />
+            <CategoryCard icon={<Snowflake className="h-7 w-7" />} title="Coolers" desc="Portable · Insulated · Personal" tone="from-[oklch(0.72_0.14_200/0.25)]" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── MARQUEE ─────────────────────────────────────── */}
+      <section className="relative border-y border-white/5 py-10 overflow-hidden">
         <div className="marquee">
-          <div className="marquee-track display text-5xl sm:text-7xl">
+          <div className="marquee-track text-5xl font-bold tracking-tighter sm:text-7xl">
             {Array.from({ length: 2 }).map((_, i) => (
               <span key={i} className="flex shrink-0 items-center gap-12">
-                <span>VERIFIED ONLY</span>
+                <span className="text-gradient">VERIFIED ONLY</span>
                 <span className="marquee-stroke text-accent">CYCLES</span>
-                <span>COOLERS</span>
+                <span className="text-gradient">COOLERS</span>
                 <span className="marquee-stroke text-accent">ELECTRONICS</span>
-                <span>MEET ON CAMPUS</span>
+                <span className="text-gradient">CAMPUS SAFE ZONES</span>
                 <span className="marquee-stroke text-accent">ZERO FEES</span>
               </span>
             ))}
@@ -117,80 +114,100 @@ function Index() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="border-b border-border py-20">
+      {/* ── HOW IT WORKS ─────────────────────────────────── */}
+      <section className="relative py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-12 flex items-end justify-between gap-4">
-            <h2 className="display max-w-xl text-4xl text-primary sm:text-5xl">
-              How a safe sale<br />happens here.
+          <div className="mb-16 max-w-2xl">
+            <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ How it works</span>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
+              <span className="text-gradient">A safe sale,</span><br />
+              <span className="text-gradient-accent">end to end.</span>
             </h2>
-            <p className="hidden max-w-sm text-muted-foreground md:block">
-              Every transaction starts with a verified profile and ends at a campus safe zone.
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <Step n="01" icon={<Lock className="h-5 w-5" />} title="Verify your ID" body="Upload your college ID. Admin approves within 24–48 hours. One-time." />
+            <Step n="02" icon={<Sparkles className="h-5 w-5" />} title="List or browse" body="Five photos, honest condition, location. Buyers tap Interested." />
+            <Step n="03" icon={<Zap className="h-5 w-5" />} title="Meet & confirm" body="Pick a safe zone on campus. Exchange. Both confirm in the app." />
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ──────────────────────────────────────────── */}
+      <section className="relative pb-32">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="glass-strong glow-ring relative overflow-hidden rounded-3xl px-8 py-20 text-center sm:px-16">
+            <span className="blob h-72 w-72 -left-20 top-0 bg-[oklch(0.72_0.18_255/0.45)]" />
+            <span className="blob h-72 w-72 right-[-50px] bottom-0 bg-[oklch(0.68_0.18_295/0.4)]" style={{ animationDelay: "-4s" }} />
+            <p className="relative text-[clamp(2rem,5vw,4rem)] font-bold leading-[1] tracking-tight">
+              <span className="text-gradient">Your old bike is</span><br />
+              <span className="text-gradient-accent">someone's first day</span><br />
+              <span className="text-gradient">on campus.</span>
             </p>
-          </div>
-          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-3">
-            <Step n="01" title="Verify your ID" body="Upload your college ID. Admin approves within 24–48 hours. One‑time." />
-            <Step n="02" title="List or browse" body="Five photos, honest condition, location. Buyers tap Interested." />
-            <Step n="03" title="Meet & confirm" body="Pick a safe zone on campus, exchange item, both confirm in the app." />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-primary py-24 text-primary-foreground grain">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <p className="display text-[clamp(2rem,5vw,4rem)] leading-tight">
-            Your old bike is<br />
-            <span className="text-accent">someone&apos;s first day</span><br />
-            on campus.
-          </p>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <Link to="/signup">
-              <Button size="lg" variant="secondary">Create account</Button>
-            </Link>
-            <Link to="/browse">
-              <Button size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
-                See listings
-              </Button>
-            </Link>
+            <div className="relative mt-10 flex flex-wrap justify-center gap-3">
+              <Link to="/signup">
+                <Button size="lg" className="h-12 rounded-full bg-foreground px-7 text-background hover:bg-foreground/90">
+                  Create account
+                </Button>
+              </Link>
+              <Link to="/browse">
+                <Button size="lg" variant="outline" className="h-12 rounded-full border-white/15 bg-white/[0.04] px-7 hover:bg-white/[0.08]">
+                  See listings
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
-        UltraOver.org · A peer‑to‑peer campus marketplace · v0.1
+      <footer className="border-t border-white/5 py-10 text-center text-xs text-muted-foreground">
+        <div className="mx-auto max-w-7xl px-6 flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
+          <span>© UltraOver — A peer-to-peer campus marketplace</span>
+          <span className="inline-flex items-center gap-1.5">
+            <ShieldCheck className="h-3 w-3 text-accent" /> Verified students only · v0.2
+          </span>
+        </div>
       </footer>
     </div>
   );
 }
 
-function Stat({ n, label }: { n: string; label: string }) {
+function Metric({ value, label }: { value: string; label: string }) {
   return (
-    <div>
-      <p className="display text-3xl text-primary">{n}</p>
-      <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
+    <div className="space-y-2">
+      <p className="text-4xl font-bold tracking-tight sm:text-6xl text-gradient">{value}</p>
+      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
     </div>
   );
 }
 
-function CatRow({ icon, label, count }: { icon: React.ReactNode; label: string; count: string }) {
+function CategoryCard({ icon, title, desc, tone }: { icon: React.ReactNode; title: string; desc: string; tone: string }) {
   return (
-    <div className="flex items-center justify-between py-2">
-      <div className="flex items-center gap-4">
-        <span className="text-accent">{icon}</span>
-        <span className="display text-2xl sm:text-3xl">{label}</span>
+    <div className={`floating-card group relative overflow-hidden rounded-2xl border border-white/8 bg-gradient-to-b ${tone} to-transparent p-8 backdrop-blur-xl`}>
+      <div className="absolute inset-0 bg-white/[0.02]" />
+      <div className="relative">
+        <div className="mb-8 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-accent backdrop-blur-md transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[-4deg]">
+          {icon}
+        </div>
+        <h3 className="text-3xl font-bold tracking-tight text-gradient">{title}</h3>
+        <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+        <div className="mt-8 inline-flex items-center gap-1.5 text-xs font-medium text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+          Explore <ArrowRight className="h-3 w-3" />
+        </div>
       </div>
-      <span className="hidden text-xs uppercase tracking-wider text-primary-foreground/60 sm:inline">{count}</span>
     </div>
   );
 }
 
-function Step({ n, title, body }: { n: string; title: string; body: string }) {
+function Step({ n, icon, title, body }: { n: string; icon: React.ReactNode; title: string; body: string }) {
   return (
-    <div className="bg-background p-8">
-      <span className="display text-sm text-accent">{n}</span>
-      <h3 className="mt-3 text-xl font-semibold">{title}</h3>
-      <p className="mt-2 text-sm text-muted-foreground">{body}</p>
+    <div className="floating-card group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-8 backdrop-blur-xl">
+      <div className="mb-6 flex items-center justify-between">
+        <span className="text-xs font-medium tracking-[0.2em] text-accent">{n}</span>
+        <span className="text-muted-foreground transition-colors group-hover:text-accent">{icon}</span>
+      </div>
+      <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
     </div>
   );
 }
