@@ -25,32 +25,41 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
     <Link
       to="/listing/$id"
       params={{ id: item.id }}
-      className="group block overflow-hidden rounded-lg border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-lg"
+      className="floating-card group block overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] backdrop-blur-xl"
     >
-      <div className="aspect-[4/3] overflow-hidden bg-muted">
+      <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-white/[0.04] to-transparent">
         {photo ? (
           <img
             src={photo}
             alt={item.title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110"
             loading="lazy"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-mist">
-            <span className="display text-3xl text-muted-foreground/40">U.</span>
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="text-4xl font-bold tracking-tighter text-muted-foreground/30">U.</span>
           </div>
         )}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute left-3 top-3 flex gap-1.5">
+          <Badge className="rounded-full border border-white/15 bg-black/40 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white/90 backdrop-blur-md">
+            {item.category}
+          </Badge>
+        </div>
       </div>
       <div className="space-y-2 p-4">
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="capitalize">{item.category}</Badge>
-          <Badge variant="secondary">{conditionLabel[item.condition] ?? item.condition}</Badge>
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="line-clamp-1 text-sm font-semibold tracking-tight">{item.title}</h3>
+          <span className="shrink-0 text-[10px] uppercase tracking-wider text-muted-foreground">
+            {conditionLabel[item.condition] ?? item.condition}
+          </span>
         </div>
-        <h3 className="line-clamp-2 font-semibold leading-tight">{item.title}</h3>
-        <div className="flex items-baseline justify-between pt-1">
-          <span className="display text-xl text-primary">₹{Number(item.price).toLocaleString("en-IN")}</span>
+        <div className="flex items-baseline justify-between pt-0.5">
+          <span className="text-lg font-semibold tracking-tight text-gradient">
+            ₹{Number(item.price).toLocaleString("en-IN")}
+          </span>
           {item.location && (
-            <span className="truncate text-xs text-muted-foreground">{item.location}</span>
+            <span className="truncate text-[11px] text-muted-foreground">{item.location}</span>
           )}
         </div>
       </div>
