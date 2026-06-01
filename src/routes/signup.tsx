@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -66,17 +65,6 @@ function SignupPage() {
     nav({ to: "/verify" });
   };
 
-  const handleGoogle = async () => {
-    setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (result.error) {
-      setBusy(false);
-      return toast.error(result.error.message);
-    }
-    if (result.redirected) return;
-    nav({ to: "/verify" });
-  };
-
   return (
     <div className="min-h-screen">
       <Header />
@@ -86,26 +74,6 @@ function SignupPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             Step 1 — create your account. Step 2 — upload your college ID for verification.
           </p>
-        </div>
-
-        <div className="grid gap-2">
-          <Button variant="outline" size="lg" disabled={busy} onClick={handleGoogle}>
-            Continue with Google
-          </Button>
-          <Button variant="outline" size="lg" disabled={busy} onClick={async () => {
-            setBusy(true);
-            const result = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin });
-            if (result.error) { setBusy(false); toast.error(result.error.message); return; }
-            if (result.redirected) return;
-            nav({ to: "/verify" });
-          }}>
-             Continue with Apple
-          </Button>
-        </div>
-
-
-        <div className="flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
-          <div className="h-px flex-1 bg-border" /> or <div className="h-px flex-1 bg-border" />
         </div>
 
         <form onSubmit={handle} className="space-y-4">
