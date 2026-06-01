@@ -61,17 +61,55 @@ function Index() {
             </Link>
           </div>
 
-          {/* Floating product showcase glass card */}
-          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-24 max-w-5xl">
-            <div className="glass-strong glow-ring relative overflow-hidden rounded-3xl p-1.5">
-              <div className="rounded-[1.25rem] bg-gradient-to-b from-white/[0.04] to-transparent p-8 sm:p-14">
-                <div className="grid grid-cols-3 gap-6 text-center">
-                  <Metric value="ID" label="Admin verified" />
-                  <Metric value="0₹" label="Platform fee" />
-                  <Metric value="3" label="Live categories" />
+          {/* Cinematic hero product showcase */}
+          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-24 max-w-6xl">
+            <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-2">
+              <div className="relative overflow-hidden rounded-[1.6rem]">
+                <img
+                  src={heroShowcase}
+                  alt="Floating premium products — bicycles, laptops, headphones and coolers in cinematic light"
+                  className="h-full w-full object-cover"
+                  width={1920}
+                  height={1080}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4 sm:bottom-10 sm:left-10 sm:right-10">
+                  <div>
+                    <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-accent">/ Live now</p>
+                    <p className="mt-2 text-2xl font-bold tracking-tight sm:text-4xl text-gradient">Trusted by your campus.</p>
+                  </div>
+                  <Link to="/browse">
+                    <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
+                      Explore <ArrowRight className="ml-1 h-3 w-3" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CATEGORY SHOWCASE ─────────────────────────────── */}
+      <section className="relative border-t border-white/5 py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+            <div>
+              <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ Categories</span>
+              <h2 className="mt-4 max-w-2xl text-4xl font-bold tracking-tight sm:text-6xl">
+                <span className="text-gradient">Curated for</span><br />
+                <span className="text-gradient-accent">campus life.</span>
+              </h2>
+            </div>
+            <p className="max-w-xs text-sm text-muted-foreground">
+              Three categories. Every listing reviewed. Every seller verified.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <CategoryCard image={catCycle} title="Cycles" desc="MTB · Road · BMX · Hybrid" />
+            <CategoryCard image={catElectronics} title="Electronics" desc="Laptops · Phones · Audio · Tablets" />
+            <CategoryCard image={catCooler} title="Coolers" desc="Portable · Insulated · Personal" />
           </div>
         </div>
       </section>
