@@ -1,7 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, Bike, Cpu, Snowflake, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
+import { ShieldCheck, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
+import heroShowcase from "@/assets/hero-showcase.jpg";
+import catCycle from "@/assets/cat-cycle.jpg";
+import catElectronics from "@/assets/cat-electronics.jpg";
+import catCooler from "@/assets/cat-cooler.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
