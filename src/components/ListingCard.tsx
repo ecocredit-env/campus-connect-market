@@ -25,7 +25,7 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
     <Link
       to="/listing/$id"
       params={{ id: item.id }}
-      className="floating-card group block overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] backdrop-blur-xl"
+      className="floating-card liquid-glass group block overflow-hidden rounded-2xl"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-white/[0.04] to-transparent">
         {photo ? (
