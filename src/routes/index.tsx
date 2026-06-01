@@ -191,14 +191,6 @@ function Index() {
   );
 }
 
-function Metric({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="space-y-2">
-      <p className="text-4xl font-bold tracking-tight sm:text-6xl text-gradient">{value}</p>
-      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
-    </div>
-  );
-}
 
 function CategoryCard({ image, title, desc }: { image: string; title: string; desc: string }) {
   return (
