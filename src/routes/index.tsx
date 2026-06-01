@@ -200,21 +200,28 @@ function Metric({ value, label }: { value: string; label: string }) {
   );
 }
 
-function CategoryCard({ icon, title, desc, tone }: { icon: React.ReactNode; title: string; desc: string; tone: string }) {
+function CategoryCard({ image, title, desc }: { image: string; title: string; desc: string }) {
   return (
-    <div className={`floating-card group relative overflow-hidden rounded-2xl border border-white/8 bg-gradient-to-b ${tone} to-transparent p-8 backdrop-blur-xl`}>
-      <div className="absolute inset-0 bg-white/[0.02]" />
-      <div className="relative">
-        <div className="mb-8 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-accent backdrop-blur-md transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[-4deg]">
-          {icon}
-        </div>
+    <Link to="/browse" className="floating-card liquid-glass group relative block overflow-hidden rounded-3xl">
+      <div className="relative aspect-[4/5] overflow-hidden">
+        <img
+          src={image}
+          alt={title}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110"
+          loading="lazy"
+          width={1024}
+          height={1024}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+      </div>
+      <div className="absolute inset-x-0 bottom-0 p-7">
         <h3 className="text-3xl font-bold tracking-tight text-gradient">{title}</h3>
         <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-        <div className="mt-8 inline-flex items-center gap-1.5 text-xs font-medium text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+        <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
           Explore <ArrowRight className="h-3 w-3" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
