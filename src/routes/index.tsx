@@ -114,29 +114,6 @@ function Index() {
         </div>
       </section>
 
-      {/* ── CATEGORY SHOWCASE ─────────────────────────────── */}
-      <section className="relative border-t border-white/5 py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-16 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
-            <div>
-              <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ Categories</span>
-              <h2 className="mt-4 max-w-2xl text-4xl font-bold tracking-tight sm:text-6xl">
-                <span className="text-gradient">Curated for</span><br />
-                <span className="text-gradient-accent">campus life.</span>
-              </h2>
-            </div>
-            <p className="max-w-xs text-sm text-muted-foreground">
-              Three categories. Every listing reviewed. Every seller verified.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            <CategoryCard icon={<Bike className="h-7 w-7" />} title="Cycles" desc="MTB · Road · BMX · Hybrid" tone="from-[oklch(0.72_0.18_255/0.25)]" />
-            <CategoryCard icon={<Cpu className="h-7 w-7" />} title="Electronics" desc="Laptops · Phones · Audio · Tablets" tone="from-[oklch(0.68_0.18_295/0.25)]" />
-            <CategoryCard icon={<Snowflake className="h-7 w-7" />} title="Coolers" desc="Portable · Insulated · Personal" tone="from-[oklch(0.72_0.14_200/0.25)]" />
-          </div>
-        </div>
-      </section>
 
       {/* ── MARQUEE ─────────────────────────────────────── */}
       <section className="relative border-y border-white/5 py-10 overflow-hidden">
