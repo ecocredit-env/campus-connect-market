@@ -1,7 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, Bike, Cpu, Snowflake, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
+import { ShieldCheck, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
+import heroShowcase from "@/assets/hero-showcase.jpg";
+import catCycle from "@/assets/cat-cycle.jpg";
+import catElectronics from "@/assets/cat-electronics.jpg";
+import catCooler from "@/assets/cat-cooler.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,14 +61,28 @@ function Index() {
             </Link>
           </div>
 
-          {/* Floating product showcase glass card */}
-          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-24 max-w-5xl">
-            <div className="glass-strong glow-ring relative overflow-hidden rounded-3xl p-1.5">
-              <div className="rounded-[1.25rem] bg-gradient-to-b from-white/[0.04] to-transparent p-8 sm:p-14">
-                <div className="grid grid-cols-3 gap-6 text-center">
-                  <Metric value="ID" label="Admin verified" />
-                  <Metric value="0₹" label="Platform fee" />
-                  <Metric value="3" label="Live categories" />
+          {/* Cinematic hero product showcase */}
+          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-24 max-w-6xl">
+            <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-2">
+              <div className="relative overflow-hidden rounded-[1.6rem]">
+                <img
+                  src={heroShowcase}
+                  alt="Floating premium products — bicycles, laptops, headphones and coolers in cinematic light"
+                  className="h-full w-full object-cover"
+                  width={1920}
+                  height={1080}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4 sm:bottom-10 sm:left-10 sm:right-10">
+                  <div>
+                    <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-accent">/ Live now</p>
+                    <p className="mt-2 text-2xl font-bold tracking-tight sm:text-4xl text-gradient">Trusted by your campus.</p>
+                  </div>
+                  <Link to="/browse">
+                    <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
+                      Explore <ArrowRight className="ml-1 h-3 w-3" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -89,12 +107,13 @@ function Index() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            <CategoryCard icon={<Bike className="h-7 w-7" />} title="Cycles" desc="MTB · Road · BMX · Hybrid" tone="from-[oklch(0.72_0.18_255/0.25)]" />
-            <CategoryCard icon={<Cpu className="h-7 w-7" />} title="Electronics" desc="Laptops · Phones · Audio · Tablets" tone="from-[oklch(0.68_0.18_295/0.25)]" />
-            <CategoryCard icon={<Snowflake className="h-7 w-7" />} title="Coolers" desc="Portable · Insulated · Personal" tone="from-[oklch(0.72_0.14_200/0.25)]" />
+            <CategoryCard image={catCycle} title="Cycles" desc="MTB · Road · BMX · Hybrid" />
+            <CategoryCard image={catElectronics} title="Electronics" desc="Laptops · Phones · Audio · Tablets" />
+            <CategoryCard image={catCooler} title="Coolers" desc="Portable · Insulated · Personal" />
           </div>
         </div>
       </section>
+
 
       {/* ── MARQUEE ─────────────────────────────────────── */}
       <section className="relative border-y border-white/5 py-10 overflow-hidden">
@@ -172,36 +191,35 @@ function Index() {
   );
 }
 
-function Metric({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="space-y-2">
-      <p className="text-4xl font-bold tracking-tight sm:text-6xl text-gradient">{value}</p>
-      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
-    </div>
-  );
-}
 
-function CategoryCard({ icon, title, desc, tone }: { icon: React.ReactNode; title: string; desc: string; tone: string }) {
+function CategoryCard({ image, title, desc }: { image: string; title: string; desc: string }) {
   return (
-    <div className={`floating-card group relative overflow-hidden rounded-2xl border border-white/8 bg-gradient-to-b ${tone} to-transparent p-8 backdrop-blur-xl`}>
-      <div className="absolute inset-0 bg-white/[0.02]" />
-      <div className="relative">
-        <div className="mb-8 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-accent backdrop-blur-md transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[-4deg]">
-          {icon}
-        </div>
+    <Link to="/browse" className="floating-card liquid-glass group relative block overflow-hidden rounded-3xl">
+      <div className="relative aspect-[4/5] overflow-hidden">
+        <img
+          src={image}
+          alt={title}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110"
+          loading="lazy"
+          width={1024}
+          height={1024}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+      </div>
+      <div className="absolute inset-x-0 bottom-0 p-7">
         <h3 className="text-3xl font-bold tracking-tight text-gradient">{title}</h3>
         <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-        <div className="mt-8 inline-flex items-center gap-1.5 text-xs font-medium text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+        <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
           Explore <ArrowRight className="h-3 w-3" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
 function Step({ n, icon, title, body }: { n: string; icon: React.ReactNode; title: string; body: string }) {
   return (
-    <div className="floating-card group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-8 backdrop-blur-xl">
+    <div className="floating-card liquid-glass group relative overflow-hidden rounded-2xl p-8">
       <div className="mb-6 flex items-center justify-between">
         <span className="text-xs font-medium tracking-[0.2em] text-accent">{n}</span>
         <span className="text-muted-foreground transition-colors group-hover:text-accent">{icon}</span>
