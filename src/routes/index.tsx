@@ -219,7 +219,7 @@ function CategoryCard({ image, title, desc }: { image: string; title: string; de
 
 function Step({ n, icon, title, body }: { n: string; icon: React.ReactNode; title: string; body: string }) {
   return (
-    <div className="floating-card group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-8 backdrop-blur-xl">
+    <div className="floating-card liquid-glass group relative overflow-hidden rounded-2xl p-8">
       <div className="mb-6 flex items-center justify-between">
         <span className="text-xs font-medium tracking-[0.2em] text-accent">{n}</span>
         <span className="text-muted-foreground transition-colors group-hover:text-accent">{icon}</span>
