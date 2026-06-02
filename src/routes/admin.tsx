@@ -31,6 +31,17 @@ type Row = {
   created_at: string;
 };
 
+type AdminApp = {
+  id: string;
+  user_id: string;
+  reason: string;
+  status: "pending" | "approved" | "rejected";
+  admin_notes: string | null;
+  created_at: string;
+  decided_at: string | null;
+  applicant: { full_name: string; college_email: string | null };
+};
+
 function AdminPage() {
   const { user, loading } = useAuth();
   const nav = useNavigate();
