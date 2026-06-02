@@ -37,10 +37,14 @@ function AdminPage() {
   const check = useServerFn(checkIsAdmin);
   const list = useServerFn(listVerificationQueue);
   const decide = useServerFn(decideVerification);
+  const listApps = useServerFn(listAdminApplications);
+  const decideApp = useServerFn(decideAdminApplication);
 
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [rows, setRows] = useState<Row[]>([]);
+  const [apps, setApps] = useState<AdminApp[]>([]);
   const [notes, setNotes] = useState<Record<string, string>>({});
+  const [appNotes, setAppNotes] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,8 +64,9 @@ function AdminPage() {
   }, [loading, user]);
 
   const reload = async () => {
-    const { profiles } = await list();
+    const [{ profiles }, { applications }] = await Promise.all([list(), listApps()]);
     setRows(profiles as Row[]);
+    setApps(applications as AdminApp[]);
   };
 
   const act = async (row: Row, decision: "approved" | "rejected" | "suspended") => {
