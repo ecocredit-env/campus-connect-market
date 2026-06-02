@@ -155,6 +155,7 @@ function AdminPage() {
               <TabsTrigger value="pending">Pending ({pending.length})</TabsTrigger>
               <TabsTrigger value="reviewed">Reviewed ({reviewed.length})</TabsTrigger>
               <TabsTrigger value="nodoc">No document ({noDoc.length})</TabsTrigger>
+              <TabsTrigger value="apps"><UserPlus className="mr-1 h-3.5 w-3.5" />Admin requests ({apps.filter(a => a.status === "pending").length})</TabsTrigger>
             </TabsList>
 
             <TabsContent value="pending" className="mt-6 space-y-4">
@@ -175,6 +176,13 @@ function AdminPage() {
               {noDoc.length === 0 ? <Empty msg="Everyone uploaded a document" /> :
                 noDoc.map(r => (
                   <Card key={r.id} row={r} notes={notes} setNotes={setNotes} act={act} busy={busy === r.id} />
+                ))}
+            </TabsContent>
+
+            <TabsContent value="apps" className="mt-6 space-y-4">
+              {apps.length === 0 ? <Empty msg="No admin applications yet" /> :
+                apps.map(a => (
+                  <AppCard key={a.id} app={a} notes={appNotes} setNotes={setAppNotes} act={actApp} busy={busy === a.id} />
                 ))}
             </TabsContent>
           </Tabs>
