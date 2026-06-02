@@ -7,9 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useServerFn } from "@tanstack/react-start";
-import { checkIsAdmin, listVerificationQueue, decideVerification } from "@/lib/admin.functions";
+import { checkIsAdmin, listVerificationQueue, decideVerification, listAdminApplications, decideAdminApplication } from "@/lib/admin.functions";
 import { toast } from "sonner";
-import { ShieldCheck, Clock, XCircle, ExternalLink } from "lucide-react";
+import { ShieldCheck, Clock, XCircle, ExternalLink, UserPlus } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin · UltraOver" }] }),
