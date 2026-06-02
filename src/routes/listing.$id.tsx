@@ -29,7 +29,19 @@ type Seller = { full_name: string; verification_status: string; total_transactio
 
 function ListingPage() {
   const { id } = useParams({ from: "/listing/$id" });
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const deleteFn = useServerFn(adminDeleteListing);
+
+  const handleAdminDelete = async () => {
+    if (!confirm("Delete this listing permanently? This also removes related interest requests.")) return;
+    try {
+      await deleteFn({ data: { listingId: id } });
+      toast.success("Listing deleted");
+      nav({ to: "/browse" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to delete");
+    }
+  };
   const nav = useNavigate();
   const [listing, setListing] = useState<Listing | null>(null);
   const [seller, setSeller] = useState<Seller | null>(null);
