@@ -113,3 +113,122 @@ export const decideVerification = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// ---------- Admin applications ----------
+
+export const applyForAdmin = createServerFn({ method: "POST" })
+  .inputValidator((d: { reason: string }) => {
+    const reason = (d.reason ?? "").trim();
+    if (reason.length < 10) throw new Error("Please write at least 10 characters explaining why");
+    if (reason.length > 1000) throw new Error("Keep it under 1000 characters");
+    return { reason };
+  })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data }) => {
+    const { userId } = context;
+
+    const { data: existingRole } = await supabaseAdmin
+      .from("user_roles").select("id").eq("user_id", userId).eq("role", "admin").maybeSingle();
+    if (existingRole) throw new Error("You are already an admin");
+
+    const { data: existing } = await supabaseAdmin
+      .from("admin_applications").select("id,status").eq("user_id", userId).maybeSingle();
+    if (existing && existing.status === "pending") throw new Error("Your application is already pending review");
+
+    if (existing) {
+      const { error } = await supabaseAdmin
+        .from("admin_applications")
+        .update({ reason: data.reason, status: "pending", admin_notes: null, decided_at: null, decided_by: null })
+        .eq("id", existing.id);
+      if (error) throw new Error(error.message);
+    } else {
+      const { error } = await supabaseAdmin
+        .from("admin_applications")
+        .insert({ user_id: userId, reason: data.reason });
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true };
+  });
+
+export const getMyAdminApplication = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await supabaseAdmin
+      .from("admin_applications")
+      .select("id,reason,status,admin_notes,created_at,decided_at")
+      .eq("user_id", context.userId).maybeSingle();
+    return { application: data ?? null };
+  });
+
+export const listAdminApplications = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.userId);
+    const { data, error } = await supabaseAdmin
+      .from("admin_applications")
+      .select("id,user_id,reason,status,admin_notes,created_at,decided_at")
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+
+    const ids = (data ?? []).map((a) => a.user_id);
+    let profiles: Record<string, { full_name: string; college_email: string | null }> = {};
+    if (ids.length) {
+      const { data: profs } = await supabaseAdmin
+        .from("profiles").select("id,full_name,college_email").in("id", ids);
+      profiles = Object.fromEntries((profs ?? []).map((p) => [p.id, { full_name: p.full_name, college_email: p.college_email }]));
+    }
+    return {
+      applications: (data ?? []).map((a) => ({
+        ...a,
+        applicant: profiles[a.user_id] ?? { full_name: "Unknown", college_email: null },
+      })),
+    };
+  });
+
+export const decideAdminApplication = createServerFn({ method: "POST" })
+  .inputValidator((d: { applicationId: string; decision: "approved" | "rejected"; notes?: string }) => d)
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.userId);
+    const { data: app, error: appErr } = await supabaseAdmin
+      .from("admin_applications").select("id,user_id,status").eq("id", data.applicationId).maybeSingle();
+    if (appErr) throw new Error(appErr.message);
+    if (!app) throw new Error("Application not found");
+
+    if (data.decision === "approved") {
+      // Grant admin role (idempotent)
+      const { data: existing } = await supabaseAdmin
+        .from("user_roles").select("id").eq("user_id", app.user_id).eq("role", "admin").maybeSingle();
+      if (!existing) {
+        const { error: insErr } = await supabaseAdmin
+          .from("user_roles").insert({ user_id: app.user_id, role: "admin" });
+        if (insErr) throw new Error(insErr.message);
+      }
+    }
+
+    const { error } = await supabaseAdmin
+      .from("admin_applications")
+      .update({
+        status: data.decision,
+        admin_notes: data.notes ?? null,
+        decided_by: context.userId,
+        decided_at: new Date().toISOString(),
+      })
+      .eq("id", data.applicationId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ---------- Admin: delete listing ----------
+
+export const adminDeleteListing = createServerFn({ method: "POST" })
+  .inputValidator((d: { listingId: string }) => d)
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.userId);
+    // Clean up dependent interest_requests first
+    await supabaseAdmin.from("interest_requests").delete().eq("listing_id", data.listingId);
+    const { error } = await supabaseAdmin.from("listings").delete().eq("id", data.listingId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

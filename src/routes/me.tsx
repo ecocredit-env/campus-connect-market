@@ -5,12 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ListingCard, type ListingCardItem } from "@/components/ListingCard";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { applyForAdmin, getMyAdminApplication } from "@/lib/admin.functions";
 import { toast } from "sonner";
-import { Wallet } from "lucide-react";
+import { Wallet, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/me")({
   head: () => ({ meta: [{ title: "My Stuff · UltraOver" }] }),
@@ -142,6 +145,7 @@ function MePage() {
             <TabsTrigger value="received">Received interest ({received.length})</TabsTrigger>
             <TabsTrigger value="sent">Sent interest ({sent.length})</TabsTrigger>
             <TabsTrigger value="payout"><Wallet className="mr-1 h-3.5 w-3.5" />Payout</TabsTrigger>
+            <TabsTrigger value="admin-apply"><ShieldCheck className="mr-1 h-3.5 w-3.5" />Become admin</TabsTrigger>
           </TabsList>
 
           <TabsContent value="listings" className="mt-6">
@@ -169,8 +173,91 @@ function MePage() {
           <TabsContent value="payout" className="mt-6">
             <PayoutForm />
           </TabsContent>
+
+          <TabsContent value="admin-apply" className="mt-6">
+            <AdminApplicationForm />
+          </TabsContent>
         </Tabs>
       </div>
+    </div>
+  );
+}
+
+function AdminApplicationForm() {
+  const { isAdmin } = useAuth();
+  const apply = useServerFn(applyForAdmin);
+  const get = useServerFn(getMyAdminApplication);
+  const [reason, setReason] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [app, setApp] = useState<{ status: string; reason: string; admin_notes: string | null; created_at: string; decided_at: string | null } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isAdmin) { setLoading(false); return; }
+    void (async () => {
+      try { const r = await get(); setApp(r.application as typeof app); }
+      catch { /* ignore */ }
+      finally { setLoading(false); }
+    })();
+  }, [isAdmin]);
+
+  if (isAdmin) {
+    return (
+      <div className="rounded-xl border border-success/30 bg-success/5 p-6 text-sm">
+        <p className="flex items-center gap-2 font-semibold text-success"><ShieldCheck className="h-4 w-4" /> You are already an admin.</p>
+        <Link to="/admin"><Button variant="outline" className="mt-4">Open Admin Console</Button></Link>
+      </div>
+    );
+  }
+
+  if (loading) return <p className="text-muted-foreground">Loading…</p>;
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      await apply({ data: { reason } });
+      toast.success("Application submitted — an admin will review it soon");
+      const r = await get();
+      setApp(r.application as typeof app);
+      setReason("");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to submit");
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <div className="max-w-xl space-y-4">
+      {app && (
+        <div className="rounded-xl border border-border bg-card p-5 text-sm">
+          <div className="flex items-center justify-between">
+            <p className="font-semibold">Your application</p>
+            <Badge variant={app.status === "approved" ? "secondary" : app.status === "rejected" ? "destructive" : "outline"} className="capitalize">{app.status}</Badge>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">Submitted {new Date(app.created_at).toLocaleDateString()}</p>
+          <p className="mt-2 italic">&ldquo;{app.reason}&rdquo;</p>
+          {app.admin_notes && <p className="mt-2 text-xs"><strong>Admin note:</strong> {app.admin_notes}</p>}
+        </div>
+      )}
+
+      {(!app || app.status === "rejected") && (
+        <form onSubmit={submit} className="space-y-3 rounded-xl border border-border bg-card p-6">
+          <h2 className="display text-2xl text-primary">Apply to be an admin</h2>
+          <p className="text-sm text-muted-foreground">
+            Admins moderate listings, verify student IDs, and approve interest requests. Tell us why you're a good fit.
+          </p>
+          <Textarea
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="I'm involved in campus tech club, available 1h/day, etc. (min 10 chars)"
+            minLength={10}
+            maxLength={1000}
+            className="min-h-[120px]"
+            required
+          />
+          <Button type="submit" disabled={busy}>{busy ? "Submitting…" : app?.status === "rejected" ? "Re-apply" : "Submit application"}</Button>
+        </form>
+      )}
     </div>
   );
 }

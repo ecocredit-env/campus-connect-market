@@ -7,9 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useServerFn } from "@tanstack/react-start";
-import { checkIsAdmin, listVerificationQueue, decideVerification } from "@/lib/admin.functions";
+import { checkIsAdmin, listVerificationQueue, decideVerification, listAdminApplications, decideAdminApplication } from "@/lib/admin.functions";
 import { toast } from "sonner";
-import { ShieldCheck, Clock, XCircle, ExternalLink } from "lucide-react";
+import { ShieldCheck, Clock, XCircle, ExternalLink, UserPlus } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin · UltraOver" }] }),
@@ -31,16 +31,31 @@ type Row = {
   created_at: string;
 };
 
+type AdminApp = {
+  id: string;
+  user_id: string;
+  reason: string;
+  status: "pending" | "approved" | "rejected";
+  admin_notes: string | null;
+  created_at: string;
+  decided_at: string | null;
+  applicant: { full_name: string; college_email: string | null };
+};
+
 function AdminPage() {
   const { user, loading } = useAuth();
   const nav = useNavigate();
   const check = useServerFn(checkIsAdmin);
   const list = useServerFn(listVerificationQueue);
   const decide = useServerFn(decideVerification);
+  const listApps = useServerFn(listAdminApplications);
+  const decideApp = useServerFn(decideAdminApplication);
 
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [rows, setRows] = useState<Row[]>([]);
+  const [apps, setApps] = useState<AdminApp[]>([]);
   const [notes, setNotes] = useState<Record<string, string>>({});
+  const [appNotes, setAppNotes] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,8 +75,9 @@ function AdminPage() {
   }, [loading, user]);
 
   const reload = async () => {
-    const { profiles } = await list();
+    const [{ profiles }, { applications }] = await Promise.all([list(), listApps()]);
     setRows(profiles as Row[]);
+    setApps(applications as AdminApp[]);
   };
 
   const act = async (row: Row, decision: "approved" | "rejected" | "suspended") => {
@@ -69,6 +85,19 @@ function AdminPage() {
     try {
       await decide({ data: { userId: row.id, decision, notes: notes[row.id] || undefined } });
       toast.success(`Marked ${decision}`);
+      await reload();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const actApp = async (a: AdminApp, decision: "approved" | "rejected") => {
+    setBusy(a.id);
+    try {
+      await decideApp({ data: { applicationId: a.id, decision, notes: appNotes[a.id] || undefined } });
+      toast.success(decision === "approved" ? "Granted admin role" : "Application rejected");
       await reload();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed");
@@ -126,6 +155,7 @@ function AdminPage() {
               <TabsTrigger value="pending">Pending ({pending.length})</TabsTrigger>
               <TabsTrigger value="reviewed">Reviewed ({reviewed.length})</TabsTrigger>
               <TabsTrigger value="nodoc">No document ({noDoc.length})</TabsTrigger>
+              <TabsTrigger value="apps"><UserPlus className="mr-1 h-3.5 w-3.5" />Admin requests ({apps.filter(a => a.status === "pending").length})</TabsTrigger>
             </TabsList>
 
             <TabsContent value="pending" className="mt-6 space-y-4">
@@ -146,6 +176,13 @@ function AdminPage() {
               {noDoc.length === 0 ? <Empty msg="Everyone uploaded a document" /> :
                 noDoc.map(r => (
                   <Card key={r.id} row={r} notes={notes} setNotes={setNotes} act={act} busy={busy === r.id} />
+                ))}
+            </TabsContent>
+
+            <TabsContent value="apps" className="mt-6 space-y-4">
+              {apps.length === 0 ? <Empty msg="No admin applications yet" /> :
+                apps.map(a => (
+                  <AppCard key={a.id} app={a} notes={appNotes} setNotes={setAppNotes} act={actApp} busy={busy === a.id} />
                 ))}
             </TabsContent>
           </Tabs>
@@ -240,6 +277,46 @@ function Meta({ k, v }: { k: string; v: string | null }) {
     <div>
       <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{k}</p>
       <p className="truncate">{v ?? "—"}</p>
+    </div>
+  );
+}
+
+function AppCard({
+  app, notes, setNotes, act, busy,
+}: {
+  app: AdminApp;
+  notes: Record<string, string>;
+  setNotes: (n: Record<string, string>) => void;
+  act: (a: AdminApp, d: "approved" | "rejected") => void;
+  busy: boolean;
+}) {
+  return (
+    <div className="space-y-3 rounded-xl border border-border bg-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h3 className="display text-xl text-primary">{app.applicant.full_name}</h3>
+          <p className="text-xs text-muted-foreground">{app.applicant.college_email ?? "—"} · applied {new Date(app.created_at).toLocaleDateString()}</p>
+        </div>
+        <Badge variant={app.status === "approved" ? "secondary" : app.status === "rejected" ? "destructive" : "outline"} className="capitalize">
+          {app.status}
+        </Badge>
+      </div>
+      <p className="rounded-md border border-border bg-background/40 p-3 text-sm italic">&ldquo;{app.reason}&rdquo;</p>
+      {app.admin_notes && <p className="text-xs"><strong>Previous note:</strong> {app.admin_notes}</p>}
+      {app.status === "pending" && (
+        <>
+          <Textarea
+            placeholder="Optional note to applicant"
+            value={notes[app.id] ?? ""}
+            onChange={(e) => setNotes({ ...notes, [app.id]: e.target.value })}
+            className="min-h-[64px]"
+          />
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" disabled={busy} onClick={() => act(app, "approved")}>Grant admin</Button>
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => act(app, "rejected")}>Reject</Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

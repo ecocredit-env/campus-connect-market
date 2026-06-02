@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { adminDeleteListing } from "@/lib/admin.functions";
 import { toast } from "sonner";
-import { MapPin, Check, Clock, ArrowLeft } from "lucide-react";
+import { MapPin, Check, Clock, ArrowLeft, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/listing/$id")({
   head: () => ({ meta: [{ title: "Listing · UltraOver" }] }),
@@ -27,7 +29,19 @@ type Seller = { full_name: string; verification_status: string; total_transactio
 
 function ListingPage() {
   const { id } = useParams({ from: "/listing/$id" });
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const deleteFn = useServerFn(adminDeleteListing);
+
+  const handleAdminDelete = async () => {
+    if (!confirm("Delete this listing permanently? This also removes related interest requests.")) return;
+    try {
+      await deleteFn({ data: { listingId: id } });
+      toast.success("Listing deleted");
+      nav({ to: "/browse" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to delete");
+    }
+  };
   const nav = useNavigate();
   const [listing, setListing] = useState<Listing | null>(null);
   const [seller, setSeller] = useState<Seller | null>(null);
@@ -100,9 +114,16 @@ function ListingPage() {
     <div className="min-h-screen">
       <Header />
       <div className="mx-auto max-w-6xl px-6 py-8">
-        <button onClick={() => nav({ to: "/browse" })} className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" /> Back
-        </button>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <button onClick={() => nav({ to: "/browse" })} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Back
+          </button>
+          {isAdmin && (
+            <Button variant="destructive" size="sm" onClick={handleAdminDelete}>
+              <Trash2 className="mr-1.5 h-4 w-4" /> Admin: delete listing
+            </Button>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr]">
           {/* gallery */}
