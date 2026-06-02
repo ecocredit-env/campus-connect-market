@@ -114,9 +114,16 @@ function ListingPage() {
     <div className="min-h-screen">
       <Header />
       <div className="mx-auto max-w-6xl px-6 py-8">
-        <button onClick={() => nav({ to: "/browse" })} className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" /> Back
-        </button>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <button onClick={() => nav({ to: "/browse" })} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Back
+          </button>
+          {isAdmin && (
+            <Button variant="destructive" size="sm" onClick={handleAdminDelete}>
+              <Trash2 className="mr-1.5 h-4 w-4" /> Admin: delete listing
+            </Button>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr]">
           {/* gallery */}
