@@ -93,6 +93,19 @@ function AdminPage() {
     }
   };
 
+  const actApp = async (a: AdminApp, decision: "approved" | "rejected") => {
+    setBusy(a.id);
+    try {
+      await decideApp({ data: { applicationId: a.id, decision, notes: appNotes[a.id] || undefined } });
+      toast.success(decision === "approved" ? "Granted admin role" : "Application rejected");
+      await reload();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed");
+    } finally {
+      setBusy(null);
+    }
+  };
+
   if (allowed === false) {
     return (
       <div className="min-h-screen">
