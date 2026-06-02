@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { adminDeleteListing } from "@/lib/admin.functions";
 import { toast } from "sonner";
-import { MapPin, Check, Clock, ArrowLeft } from "lucide-react";
+import { MapPin, Check, Clock, ArrowLeft, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/listing/$id")({
   head: () => ({ meta: [{ title: "Listing · UltraOver" }] }),
