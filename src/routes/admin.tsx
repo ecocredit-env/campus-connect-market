@@ -280,3 +280,43 @@ function Meta({ k, v }: { k: string; v: string | null }) {
     </div>
   );
 }
+
+function AppCard({
+  app, notes, setNotes, act, busy,
+}: {
+  app: AdminApp;
+  notes: Record<string, string>;
+  setNotes: (n: Record<string, string>) => void;
+  act: (a: AdminApp, d: "approved" | "rejected") => void;
+  busy: boolean;
+}) {
+  return (
+    <div className="space-y-3 rounded-xl border border-border bg-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h3 className="display text-xl text-primary">{app.applicant.full_name}</h3>
+          <p className="text-xs text-muted-foreground">{app.applicant.college_email ?? "—"} · applied {new Date(app.created_at).toLocaleDateString()}</p>
+        </div>
+        <Badge variant={app.status === "approved" ? "secondary" : app.status === "rejected" ? "destructive" : "outline"} className="capitalize">
+          {app.status}
+        </Badge>
+      </div>
+      <p className="rounded-md border border-border bg-background/40 p-3 text-sm italic">&ldquo;{app.reason}&rdquo;</p>
+      {app.admin_notes && <p className="text-xs"><strong>Previous note:</strong> {app.admin_notes}</p>}
+      {app.status === "pending" && (
+        <>
+          <Textarea
+            placeholder="Optional note to applicant"
+            value={notes[app.id] ?? ""}
+            onChange={(e) => setNotes({ ...notes, [app.id]: e.target.value })}
+            className="min-h-[64px]"
+          />
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" disabled={busy} onClick={() => act(app, "approved")}>Grant admin</Button>
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => act(app, "rejected")}>Reject</Button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
