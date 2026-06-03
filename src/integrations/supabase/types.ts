@@ -183,6 +183,8 @@ export type Database = {
           listing_id: string
           payout_note: string | null
           payout_status: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
           seller_id: string
           seller_payout_amount: number
           status: string
@@ -203,6 +205,8 @@ export type Database = {
           listing_id: string
           payout_note?: string | null
           payout_status?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
           seller_id: string
           seller_payout_amount: number
           status?: string
@@ -223,6 +227,8 @@ export type Database = {
           listing_id?: string
           payout_note?: string | null
           payout_status?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
           seller_id?: string
           seller_payout_amount?: number
           status?: string
