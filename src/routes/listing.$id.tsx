@@ -4,12 +4,13 @@ import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { BuyDialog } from "@/components/BuyDialog";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { adminDeleteListing } from "@/lib/admin.functions";
 import { toast } from "sonner";
-import { MapPin, Check, Clock, ArrowLeft, Trash2 } from "lucide-react";
+import { MapPin, Check, Clock, ArrowLeft, Trash2, ShoppingBag } from "lucide-react";
 
 export const Route = createFileRoute("/listing/$id")({
   head: () => ({ meta: [{ title: "Listing · UltraOver" }] }),
@@ -50,6 +51,8 @@ function ListingPage() {
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [buyOpen, setBuyOpen] = useState(false);
+
 
   useEffect(() => { void load(); }, [id, user]);
 
@@ -218,6 +221,14 @@ function ListingPage() {
             ) : (
               <div className="space-y-3">
                 <button
+                  onClick={() => setBuyOpen(true)}
+                  disabled={listing.status !== "active"}
+                  className="liquid-buy flex w-full items-center justify-center gap-2 px-6 py-4 text-base font-bold disabled:opacity-50"
+                >
+                  <ShoppingBag className="h-5 w-5" />
+                  <span>Buy now · ₹{Number(listing.price).toLocaleString("en-IN")}</span>
+                </button>
+                <button
                   onClick={expressInterest}
                   disabled={busy}
                   className="flex w-full flex-col items-center justify-center rounded-lg border-2 border-border bg-card px-4 py-3 text-center transition hover:border-primary hover:shadow-md disabled:opacity-50"
@@ -232,6 +243,15 @@ function ListingPage() {
           </div>
         </div>
       </div>
+      <BuyDialog
+        open={buyOpen}
+        onOpenChange={setBuyOpen}
+        listingId={listing.id}
+        listingTitle={listing.title}
+        price={Number(listing.price)}
+        deliveryNote={listing.delivery_charge_note}
+      />
     </div>
   );
 }
+
