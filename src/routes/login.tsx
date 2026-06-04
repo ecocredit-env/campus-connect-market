@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
@@ -25,6 +26,19 @@ function LoginPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
+    nav({ to: "/browse" });
+  };
+
+  const handleGoogle = async () => {
+    setBusy(true);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setBusy(false);
+      return toast.error(result.error.message ?? "Google sign-in failed");
+    }
+    if (result.redirected) return;
     nav({ to: "/browse" });
   };
 
