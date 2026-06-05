@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SellRouteImport } from './routes/sell'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MeRouteImport } from './routes/me'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -39,6 +41,11 @@ const SellRoute = SellRouteImport.update({
   path: '/sell',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -52,6 +59,11 @@ const MeRoute = MeRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BrowseRoute = BrowseRouteImport.update({
@@ -102,9 +114,11 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/admin-login': typeof AdminLoginRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/me': typeof MeRoute
   '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
@@ -118,9 +132,11 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/admin-login': typeof AdminLoginRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/me': typeof MeRoute
   '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
@@ -135,9 +151,11 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/admin-login': typeof AdminLoginRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/me': typeof MeRoute
   '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sell': typeof SellRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
@@ -153,9 +171,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin-login'
     | '/browse'
+    | '/forgot-password'
     | '/login'
     | '/me'
     | '/profile'
+    | '/reset-password'
     | '/sell'
     | '/signup'
     | '/verify'
@@ -169,9 +189,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin-login'
     | '/browse'
+    | '/forgot-password'
     | '/login'
     | '/me'
     | '/profile'
+    | '/reset-password'
     | '/sell'
     | '/signup'
     | '/verify'
@@ -185,9 +207,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin-login'
     | '/browse'
+    | '/forgot-password'
     | '/login'
     | '/me'
     | '/profile'
+    | '/reset-password'
     | '/sell'
     | '/signup'
     | '/verify'
@@ -202,9 +226,11 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AdminLoginRoute: typeof AdminLoginRoute
   BrowseRoute: typeof BrowseRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   MeRoute: typeof MeRoute
   ProfileRoute: typeof ProfileRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SellRoute: typeof SellRoute
   SignupRoute: typeof SignupRoute
   VerifyRoute: typeof VerifyRoute
@@ -237,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SellRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -256,6 +289,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/browse': {
@@ -322,9 +362,11 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AdminLoginRoute: AdminLoginRoute,
   BrowseRoute: BrowseRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   MeRoute: MeRoute,
   ProfileRoute: ProfileRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SellRoute: SellRoute,
   SignupRoute: SignupRoute,
   VerifyRoute: VerifyRoute,
