@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ShieldCheck, Clock, XCircle, Camera, Star, Package } from "lucide-react";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "My Profile · UltraOver" }] }),
@@ -193,7 +194,7 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
 }
 
 function StatusBadge({ status }: { status: string }) {
-  if (status === "approved") return <Badge className="gap-1 bg-success text-success-foreground"><ShieldCheck className="h-3 w-3" /> Verified</Badge>;
+  if (status === "approved") return <Badge className="gap-1 bg-success text-success-foreground"><VerifiedBadge size={14} /> Verified</Badge>;
   if (status === "rejected") return <Badge variant="destructive" className="gap-1"><XCircle className="h-3 w-3" /> Rejected</Badge>;
   if (status === "suspended") return <Badge variant="destructive">Suspended</Badge>;
   return <Badge variant="outline" className="gap-1"><Clock className="h-3 w-3" /> Pending</Badge>;

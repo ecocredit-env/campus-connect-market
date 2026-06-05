@@ -10,7 +10,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { ShieldCheck, Plus, User as UserIcon, Shield, LogOut, Package, BadgeCheck, Sparkles } from "lucide-react";
+import { Plus, User as UserIcon, Shield, LogOut, Package, Sparkles } from "lucide-react";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logoAsset from "@/assets/ultraover-mark.asset.json";
 
@@ -98,8 +99,8 @@ export function Header() {
                       </span>
                     )}
                     {profile?.verification_status === "approved" && (
-                      <span className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-md ring-2 ring-background">
-                        <BadgeCheck className="h-2.5 w-2.5" />
+                      <span className="absolute -bottom-1 -right-1">
+                        <VerifiedBadge size={16} />
                       </span>
                     )}
                   </button>
@@ -125,7 +126,7 @@ export function Header() {
                     </div>
                     {profile?.verification_status === "approved" ? (
                       <Badge variant="secondary" className="mt-3 gap-1 border-white/10 bg-white/5">
-                        <ShieldCheck className="h-3 w-3 text-accent" /> Verified
+                        <VerifiedBadge size={14} /> Verified
                       </Badge>
                     ) : profile?.verification_status === "pending" ? (
                       <Link to="/verify">
