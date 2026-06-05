@@ -10,6 +10,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { checkIsAdmin, listVerificationQueue, decideVerification, listAdminApplications, decideAdminApplication } from "@/lib/admin.functions";
 import { toast } from "sonner";
 import { ShieldCheck, Clock, XCircle, ExternalLink, UserPlus } from "lucide-react";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin · UltraOver" }] }),
@@ -206,7 +207,7 @@ function Empty({ msg }: { msg: string }) {
 }
 
 function StatusPill({ s }: { s: Row["verification_status"] }) {
-  if (s === "approved") return <Badge className="gap-1 bg-success text-success-foreground"><ShieldCheck className="h-3 w-3" />Approved</Badge>;
+  if (s === "approved") return <Badge className="gap-1 bg-success text-success-foreground"><VerifiedBadge size={14} />Approved</Badge>;
   if (s === "rejected") return <Badge variant="destructive" className="gap-1"><XCircle className="h-3 w-3" />Rejected</Badge>;
   if (s === "suspended") return <Badge variant="destructive">Suspended</Badge>;
   return <Badge variant="outline" className="gap-1"><Clock className="h-3 w-3" />Pending</Badge>;
