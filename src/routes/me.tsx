@@ -401,3 +401,72 @@ function ReqCard({
     </div>
   );
 }
+
+function ChangePasswordForm() {
+  const { user } = useAuth();
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user?.email) return;
+    if (next.length < 8) return toast.error("New password must be at least 8 characters");
+    if (next !== confirm) return toast.error("Passwords do not match");
+    setBusy(true);
+    // Re-authenticate to confirm the current password.
+    const { error: signInErr } = await supabase.auth.signInWithPassword({ email: user.email, password: current });
+    if (signInErr) {
+      setBusy(false);
+      return toast.error("Current password is incorrect");
+    }
+    const { error } = await supabase.auth.updateUser({ password: next });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    setCurrent(""); setNext(""); setConfirm("");
+    toast.success("Password updated");
+  };
+
+  const sendReset = async () => {
+    if (!user?.email) return;
+    setBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    setResetSent(true);
+    toast.success("Reset link sent to your email");
+  };
+
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      <form onSubmit={submit} className="space-y-4 rounded-xl border border-border bg-card p-6">
+        <h3 className="display text-xl text-primary">Change password</h3>
+        <div className="space-y-1.5">
+          <Label htmlFor="cur">Current password</Label>
+          <Input id="cur" type="password" required value={current} onChange={(e) => setCurrent(e.target.value)} />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="np">New password</Label>
+          <Input id="np" type="password" required minLength={8} value={next} onChange={(e) => setNext(e.target.value)} />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="cp">Confirm new password</Label>
+          <Input id="cp" type="password" required minLength={8} value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+        </div>
+        <Button type="submit" disabled={busy}>{busy ? "Updating…" : "Update password"}</Button>
+      </form>
+
+      <div className="space-y-3 rounded-xl border border-dashed border-border bg-muted/30 p-6">
+        <h3 className="display text-xl text-primary">Forgot it?</h3>
+        <p className="text-sm text-muted-foreground">We&apos;ll email you a secure reset link.</p>
+        <Button variant="outline" onClick={sendReset} disabled={busy || resetSent}>
+          {resetSent ? "Link sent ✓" : "Email me a reset link"}
+        </Button>
+      </div>
+    </div>
+  );
+}
