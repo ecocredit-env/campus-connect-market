@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { applyForAdmin, getMyAdminApplication } from "@/lib/admin.functions";
 import { toast } from "sonner";
-import { Wallet, ShieldCheck } from "lucide-react";
+import { Wallet, ShieldCheck, KeyRound } from "lucide-react";
 
 export const Route = createFileRoute("/me")({
   head: () => ({ meta: [{ title: "My Stuff · UltraOver" }] }),
@@ -146,6 +146,7 @@ function MePage() {
             <TabsTrigger value="sent">Sent interest ({sent.length})</TabsTrigger>
             <TabsTrigger value="payout"><Wallet className="mr-1 h-3.5 w-3.5" />Payout</TabsTrigger>
             <TabsTrigger value="admin-apply"><ShieldCheck className="mr-1 h-3.5 w-3.5" />Become admin</TabsTrigger>
+            <TabsTrigger value="password"><KeyRound className="mr-1 h-3.5 w-3.5" />Password</TabsTrigger>
           </TabsList>
 
           <TabsContent value="listings" className="mt-6">
@@ -176,6 +177,10 @@ function MePage() {
 
           <TabsContent value="admin-apply" className="mt-6">
             <AdminApplicationForm />
+          </TabsContent>
+
+          <TabsContent value="password" className="mt-6">
+            <ChangePasswordForm />
           </TabsContent>
         </Tabs>
       </div>
