@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ShieldCheck, Clock, XCircle } from "lucide-react";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
 
 export const Route = createFileRoute("/verify")({
   head: () => ({ meta: [{ title: "Verify ID · UltraOver" }] }),
