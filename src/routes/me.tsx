@@ -476,3 +476,231 @@ function ChangePasswordForm() {
     </div>
   );
 }
+
+type OrderRow = {
+  id: string;
+  listing_id: string;
+  buyer_id: string;
+  seller_id: string;
+  amount_paid: number;
+  status: string;
+  delivery_status: string;
+  estimated_delivery_date: string | null;
+  seller_notes: string | null;
+  delivery_address: string | null;
+  buyer_contact_phone: string | null;
+  buyer_contact_email: string | null;
+  razorpay_payment_id: string | null;
+  razorpay_order_id: string | null;
+  created_at: string;
+  listing: { id: string; title: string; photos: string[] } | null;
+};
+
+function OrdersPanel({ userId }: { userId: string }) {
+  const [purchases, setPurchases] = useState<OrderRow[]>([]);
+  const [sales, setSales] = useState<OrderRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [recoverId, setRecoverId] = useState("");
+  const [recovering, setRecovering] = useState(false);
+  const reconcile = useServerFn(reconcileRazorpayPayment);
+
+  const load = async () => {
+    setLoading(true);
+    const sel = "id,listing_id,buyer_id,seller_id,amount_paid,status,delivery_status,estimated_delivery_date,seller_notes,delivery_address,buyer_contact_phone,buyer_contact_email,razorpay_payment_id,razorpay_order_id,created_at,listing:listings(id,title,photos)";
+    const [p, s] = await Promise.all([
+      supabase.from("orders").select(sel).eq("buyer_id", userId).order("created_at", { ascending: false }),
+      supabase.from("orders").select(sel).eq("seller_id", userId).order("created_at", { ascending: false }),
+    ]);
+    if (p.error) toast.error(p.error.message);
+    if (s.error) toast.error(s.error.message);
+    setPurchases((p.data ?? []) as unknown as OrderRow[]);
+    setSales((s.data ?? []) as unknown as OrderRow[]);
+    setLoading(false);
+  };
+
+  useEffect(() => { void load(); }, [userId]);
+
+  const recover = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setRecovering(true);
+    try {
+      const r = await reconcile({ data: { razorpayPaymentId: recoverId.trim() } });
+      if ("error" in r) { toast.error(r.error); return; }
+      toast.success("Order recovered");
+      setRecoverId("");
+      void load();
+    } finally { setRecovering(false); }
+  };
+
+  if (loading) return <p className="text-muted-foreground">Loading…</p>;
+
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="display text-2xl text-primary">Purchases ({purchases.length})</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Things you bought. Sellers update delivery timelines here.</p>
+        <div className="mt-4 space-y-3">
+          {purchases.length === 0 ? (
+            <Empty msg="You haven't bought anything yet" />
+          ) : purchases.map((o) => <PurchaseCard key={o.id} order={o} />)}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="display text-2xl text-primary">Sales ({sales.length})</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Orders for items you sold. Set the expected delivery date and mark when shipped.</p>
+        <div className="mt-4 space-y-3">
+          {sales.length === 0 ? (
+            <Empty msg="No sales yet" />
+          ) : sales.map((o) => <SaleCard key={o.id} order={o} onUpdated={load} />)}
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-dashed border-border bg-muted/30 p-6">
+        <h3 className="display text-lg text-primary">Payment received but no order showing?</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Paste your Razorpay payment ID (starts with <code className="rounded bg-background px-1">pay_</code>) from your bank SMS or email receipt. We&rsquo;ll verify it directly with Razorpay and restore the order.
+        </p>
+        <form onSubmit={recover} className="mt-3 flex flex-wrap gap-2">
+          <Input
+            value={recoverId}
+            onChange={(e) => setRecoverId(e.target.value)}
+            placeholder="pay_XXXXXXXXXXXX"
+            className="max-w-xs"
+            required
+          />
+          <Button type="submit" disabled={recovering}>{recovering ? "Recovering…" : "Recover order"}</Button>
+        </form>
+      </section>
+    </div>
+  );
+}
+
+function deliveryStatusBadge(status: string) {
+  const map: Record<string, { icon: typeof Clock; label: string; cls: string }> = {
+    processing: { icon: Clock, label: "Processing", cls: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
+    shipped: { icon: Truck, label: "Shipped", cls: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
+    delivered: { icon: CheckCircle2, label: "Delivered", cls: "bg-success/10 text-success border-success/20" },
+    cancelled: { icon: Clock, label: "Cancelled", cls: "bg-destructive/10 text-destructive border-destructive/20" },
+  };
+  const cfg = map[status] ?? map.processing;
+  const Icon = cfg.icon;
+  return (
+    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${cfg.cls}`}>
+      <Icon className="h-3 w-3" /> {cfg.label}
+    </span>
+  );
+}
+
+function PurchaseCard({ order }: { order: OrderRow }) {
+  const eta = order.estimated_delivery_date
+    ? new Date(order.estimated_delivery_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
+    : null;
+  return (
+    <div className="flex flex-wrap gap-4 rounded-xl border border-border bg-card p-4">
+      <div className="h-20 w-20 shrink-0 overflow-hidden rounded bg-muted">
+        {order.listing?.photos?.[0] && <img src={order.listing.photos[0]} alt="" className="h-full w-full object-cover" />}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <Link to="/listing/$id" params={{ id: order.listing_id }} className="font-semibold hover:underline">
+            {order.listing?.title ?? "Listing"}
+          </Link>
+          {deliveryStatusBadge(order.delivery_status)}
+        </div>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Paid ₹{Number(order.amount_paid).toLocaleString("en-IN")} · {new Date(order.created_at).toLocaleDateString()}
+        </p>
+        <p className="mt-1 text-sm">
+          <strong>Expected delivery:</strong>{" "}
+          {eta ?? <span className="text-muted-foreground">Seller hasn&rsquo;t set a date yet</span>}
+        </p>
+        {order.seller_notes && (
+          <p className="mt-1 text-sm text-muted-foreground"><strong>Seller note:</strong> {order.seller_notes}</p>
+        )}
+        {order.razorpay_payment_id && (
+          <p className="mt-1 text-[11px] text-muted-foreground">Payment ID: <code>{order.razorpay_payment_id}</code></p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function SaleCard({ order, onUpdated }: { order: OrderRow; onUpdated: () => void }) {
+  const [eta, setEta] = useState(order.estimated_delivery_date ?? "");
+  const [status, setStatus] = useState(order.delivery_status);
+  const [notes, setNotes] = useState(order.seller_notes ?? "");
+  const [busy, setBusy] = useState(false);
+
+  const save = async () => {
+    setBusy(true);
+    const { error } = await supabase.rpc("seller_update_order_delivery" as never, {
+      _order_id: order.id,
+      _estimated_delivery_date: eta || null,
+      _delivery_status: status,
+      _seller_notes: notes || null,
+    } as never);
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Delivery info updated — buyer will see this");
+    onUpdated();
+  };
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-4">
+      <div className="flex flex-wrap gap-4">
+        <div className="h-20 w-20 shrink-0 overflow-hidden rounded bg-muted">
+          {order.listing?.photos?.[0] && <img src={order.listing.photos[0]} alt="" className="h-full w-full object-cover" />}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link to="/listing/$id" params={{ id: order.listing_id }} className="font-semibold hover:underline">
+              {order.listing?.title ?? "Listing"}
+            </Link>
+            {deliveryStatusBadge(order.delivery_status)}
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            ₹{Number(order.amount_paid).toLocaleString("en-IN")} · {new Date(order.created_at).toLocaleDateString()}
+          </p>
+          {order.delivery_address && (
+            <p className="mt-2 rounded-md bg-muted/40 p-2 text-sm">
+              <strong>Deliver to:</strong> {order.delivery_address}
+            </p>
+          )}
+          {(order.buyer_contact_phone || order.buyer_contact_email) && (
+            <p className="mt-1 text-xs text-muted-foreground">
+              Buyer: {order.buyer_contact_email ?? ""}{order.buyer_contact_phone ? ` · ${order.buyer_contact_phone}` : ""}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="space-y-1.5">
+          <Label className="text-xs">Estimated delivery date</Label>
+          <Input type="date" value={eta} onChange={(e) => setEta(e.target.value)} />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-xs">Delivery status</Label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm"
+          >
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped / Out for delivery</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-xs">Note to buyer (optional)</Label>
+          <Input value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={300} placeholder="Tracking #, meetup spot…" />
+        </div>
+      </div>
+      <div className="mt-3 flex justify-end">
+        <Button size="sm" onClick={save} disabled={busy}>{busy ? "Saving…" : "Update delivery info"}</Button>
+      </div>
+    </div>
+  );
+}
