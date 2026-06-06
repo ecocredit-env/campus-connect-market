@@ -179,6 +179,8 @@ export type Database = {
           created_at: string
           currency: string
           delivery_address: string | null
+          delivery_status: string
+          estimated_delivery_date: string | null
           id: string
           listing_id: string
           payout_note: string | null
@@ -186,6 +188,7 @@ export type Database = {
           razorpay_order_id: string | null
           razorpay_payment_id: string | null
           seller_id: string
+          seller_notes: string | null
           seller_payout_amount: number
           status: string
           stripe_payment_intent: string | null
@@ -201,6 +204,8 @@ export type Database = {
           created_at?: string
           currency?: string
           delivery_address?: string | null
+          delivery_status?: string
+          estimated_delivery_date?: string | null
           id?: string
           listing_id: string
           payout_note?: string | null
@@ -208,6 +213,7 @@ export type Database = {
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
           seller_id: string
+          seller_notes?: string | null
           seller_payout_amount: number
           status?: string
           stripe_payment_intent?: string | null
@@ -223,6 +229,8 @@ export type Database = {
           created_at?: string
           currency?: string
           delivery_address?: string | null
+          delivery_status?: string
+          estimated_delivery_date?: string | null
           id?: string
           listing_id?: string
           payout_note?: string | null
@@ -230,6 +238,7 @@ export type Database = {
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
           seller_id?: string
+          seller_notes?: string | null
           seller_payout_amount?: number
           status?: string
           stripe_payment_intent?: string | null
@@ -439,6 +448,45 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      seller_update_order_delivery: {
+        Args: {
+          _delivery_status: string
+          _estimated_delivery_date: string
+          _order_id: string
+          _seller_notes: string
+        }
+        Returns: {
+          amount_paid: number
+          buyer_contact_email: string | null
+          buyer_contact_phone: string | null
+          buyer_id: string
+          commission_amount: number
+          created_at: string
+          currency: string
+          delivery_address: string | null
+          delivery_status: string
+          estimated_delivery_date: string | null
+          id: string
+          listing_id: string
+          payout_note: string | null
+          payout_status: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          seller_id: string
+          seller_notes: string | null
+          seller_payout_amount: number
+          status: string
+          stripe_payment_intent: string | null
+          stripe_session_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "orders"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
