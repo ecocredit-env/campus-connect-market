@@ -162,3 +162,96 @@ export const confirmRazorpayPayment = createServerFn({ method: "POST" })
       return { error: e instanceof Error ? e.message : "Could not confirm payment" };
     }
   });
+
+// Recover an orphan payment: buyer pastes a Razorpay payment id, we look it up,
+// verify it belongs to them (via order notes), and materialize the order row
+// if the webhook never fired.
+type ReconcileResult = { ok: true; orderRowId: string } | { error: string };
+
+export const reconcileRazorpayPayment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { razorpayPaymentId: string }) => {
+    if (!/^pay_[A-Za-z0-9]+$/.test(data.razorpayPaymentId))
+      throw new Error("Enter a valid Razorpay payment ID (starts with pay_)");
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<ReconcileResult> => {
+    try {
+      const { userId } = context;
+      const auth =
+        "Basic " +
+        Buffer.from(
+          `${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}`,
+        ).toString("base64");
+
+      const payRes = await fetch(
+        `https://api.razorpay.com/v1/payments/${data.razorpayPaymentId}`,
+        { headers: { Authorization: auth } },
+      );
+      if (!payRes.ok) return { error: "Payment not found at Razorpay" };
+      const payment = (await payRes.json()) as {
+        id: string;
+        status: string;
+        amount: number;
+        currency: string;
+        order_id: string;
+        email?: string;
+      };
+      if (payment.status !== "captured" && payment.status !== "authorized")
+        return { error: `Payment status is ${payment.status}` };
+
+      const ordRes = await fetch(
+        `https://api.razorpay.com/v1/orders/${payment.order_id}`,
+        { headers: { Authorization: auth } },
+      );
+      if (!ordRes.ok) return { error: "Could not load order from Razorpay" };
+      const rzpOrder = (await ordRes.json()) as {
+        id: string;
+        amount: number;
+        currency: string;
+        notes: Record<string, string>;
+      };
+      const notes = rzpOrder.notes ?? {};
+      if (notes.buyer_id !== userId)
+        return { error: "This payment does not belong to your account" };
+
+      const amountPaid = (rzpOrder.amount ?? 0) / 100;
+      const commission = Math.round(amountPaid * COMMISSION_RATE * 100) / 100;
+      const payout = Math.round((amountPaid - commission) * 100) / 100;
+
+      const admin = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      );
+
+      const { data: upserted, error: upErr } = await (admin.from("orders") as any).upsert(
+        {
+          listing_id: notes.listing_id,
+          buyer_id: notes.buyer_id,
+          seller_id: notes.seller_id,
+          amount_paid: amountPaid,
+          commission_amount: commission,
+          seller_payout_amount: payout,
+          currency: (rzpOrder.currency ?? "INR").toLowerCase(),
+          razorpay_order_id: rzpOrder.id,
+          razorpay_payment_id: payment.id,
+          status: "paid",
+          payout_status: "pending",
+          buyer_contact_phone: notes.contact_phone ?? null,
+          delivery_address: notes.delivery_address ?? null,
+          buyer_contact_email: notes.buyer_email ?? payment.email ?? null,
+        },
+        { onConflict: "razorpay_order_id" },
+      ).select("id").maybeSingle();
+      if (upErr) return { error: upErr.message };
+
+      await (admin.from("listings") as any)
+        .update({ status: "sold" })
+        .eq("id", notes.listing_id);
+
+      return { ok: true, orderRowId: (upserted?.id as string) ?? "" };
+    } catch (e) {
+      console.error("reconcileRazorpayPayment error", e);
+      return { error: e instanceof Error ? e.message : "Could not reconcile payment" };
+    }
+  });
