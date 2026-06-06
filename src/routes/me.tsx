@@ -12,8 +12,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { applyForAdmin, getMyAdminApplication } from "@/lib/admin.functions";
+import { reconcileRazorpayPayment } from "@/lib/razorpay.functions";
 import { toast } from "sonner";
-import { Wallet, ShieldCheck, KeyRound } from "lucide-react";
+import { Wallet, ShieldCheck, KeyRound, Package, Truck, CheckCircle2, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/me")({
   head: () => ({ meta: [{ title: "My Stuff · UltraOver" }] }),
@@ -139,8 +140,9 @@ function MePage() {
           )}
         </div>
 
-        <Tabs defaultValue="listings" className="mt-8">
-          <TabsList>
+        <Tabs defaultValue="orders" className="mt-8">
+          <TabsList className="flex h-auto flex-wrap">
+            <TabsTrigger value="orders"><Package className="mr-1 h-3.5 w-3.5" />My orders</TabsTrigger>
             <TabsTrigger value="listings">My listings ({myListings.length})</TabsTrigger>
             <TabsTrigger value="received">Received interest ({received.length})</TabsTrigger>
             <TabsTrigger value="sent">Sent interest ({sent.length})</TabsTrigger>
@@ -148,6 +150,10 @@ function MePage() {
             <TabsTrigger value="admin-apply"><ShieldCheck className="mr-1 h-3.5 w-3.5" />Become admin</TabsTrigger>
             <TabsTrigger value="password"><KeyRound className="mr-1 h-3.5 w-3.5" />Password</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="orders" className="mt-6">
+            <OrdersPanel userId={user.id} />
+          </TabsContent>
 
           <TabsContent value="listings" className="mt-6">
             {myListings.length === 0 ? (
