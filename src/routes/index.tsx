@@ -114,6 +114,8 @@ function Index() {
         </div>
       </section>
 
+      {/* ── COLOR GALLERY ─────────────────────────────────── */}
+      <ColorGallery />
 
       {/* ── MARQUEE ─────────────────────────────────────── */}
       <section className="relative border-y border-white/5 py-10 overflow-hidden">
