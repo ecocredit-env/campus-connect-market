@@ -114,8 +114,6 @@ function Index() {
         </div>
       </section>
 
-      {/* ── COLOR GALLERY ─────────────────────────────────── */}
-      <ColorGallery />
 
       {/* ── MARQUEE ─────────────────────────────────────── */}
       <section className="relative border-y border-white/5 py-10 overflow-hidden">
@@ -229,52 +227,5 @@ function Step({ n, icon, title, body }: { n: string; icon: React.ReactNode; titl
       <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
     </div>
-  );
-}
-
-function ColorGallery() {
-  const shots = [
-    { url: "https://images.unsplash.com/photo-1502744688674-c619d1586c9e?w=900&q=80", tag: "Cycles", tint: "from-pink-500/40" },
-    { url: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900&q=80", tag: "Laptops", tint: "from-cyan-500/40" },
-    { url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80", tag: "Gadgets", tint: "from-amber-500/40" },
-    { url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&q=80", tag: "Audio", tint: "from-violet-500/40" },
-    { url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80", tag: "Kicks", tint: "from-rose-500/40" },
-    { url: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=900&q=80", tag: "Coolers", tint: "from-emerald-500/40" },
-    { url: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=900&q=80", tag: "Phones", tint: "from-blue-500/40" },
-    { url: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=900&q=80", tag: "Vinyl", tint: "from-fuchsia-500/40" },
-  ];
-  return (
-    <section className="relative border-t border-white/5 py-24 sm:py-32 overflow-hidden">
-      <span className="blob h-[380px] w-[380px] left-[10%] top-10 bg-[oklch(0.7_0.22_30/0.45)]" />
-      <span className="blob h-[420px] w-[420px] right-[5%] bottom-10 bg-[oklch(0.72_0.2_180/0.4)]" style={{ animationDelay: "-8s" }} />
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div className="mb-12 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ In the wild</span>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
-              <span className="text-gradient">A campus</span> <span className="text-gradient-accent">in color.</span>
-            </h2>
-          </div>
-          <p className="max-w-xs text-sm text-muted-foreground">Real listings. Real students. Tap an image to start browsing.</p>
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {shots.map((s, i) => (
-            <Link
-              key={i}
-              to="/browse"
-              className={`floating-card group relative overflow-hidden rounded-2xl ${i % 3 === 0 ? "row-span-2 aspect-[3/5]" : "aspect-square"}`}
-              style={{ animation: `fade-up 900ms cubic-bezier(.2,.8,.2,1) both`, animationDelay: `${i * 80}ms` }}
-            >
-              <img src={s.url} alt={s.tag} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-125 group-hover:rotate-1" />
-              <div className={`absolute inset-0 bg-gradient-to-t ${s.tint} via-transparent to-transparent mix-blend-overlay`} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <span className="absolute left-3 bottom-3 rounded-full border border-white/20 bg-black/40 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur-md">
-                {s.tag}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
