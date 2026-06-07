@@ -38,9 +38,9 @@ function Index() {
           </div>
 
           <h1 className="reveal reveal-delay-1 mx-auto max-w-5xl text-center text-[clamp(2.75rem,9vw,7.5rem)] font-bold leading-[0.9] tracking-[-0.04em]">
-            <span className="text-gradient">The marketplace</span>
+            <span className="liquid-text">The marketplace</span>
             <br />
-            <span className="text-gradient-accent">built on trust.</span>
+            <span className="liquid-text">built on trust.</span>
           </h1>
 
           <p className="reveal reveal-delay-2 mx-auto mt-8 max-w-xl text-center text-base text-muted-foreground sm:text-lg">
