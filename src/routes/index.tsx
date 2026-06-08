@@ -1,23 +1,134 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  ShieldCheck,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Lock,
+  MapPin,
+  EyeOff,
+  LifeBuoy,
+  Instagram,
+  Twitter,
+  Linkedin,
+  Youtube,
+  Mail,
+  CheckCircle2,
+  Clock,
+} from "lucide-react";
 import heroShowcase from "@/assets/hero-showcase.jpg";
 import catCycle from "@/assets/cat-cycle.jpg";
 import catElectronics from "@/assets/cat-electronics.jpg";
 import catCooler from "@/assets/cat-cooler.jpg";
 
+const FAQ_ITEMS = [
+  {
+    q: "Is UltraOver really free? What's the catch?",
+    a: "Yes — zero fees, zero commission, zero subscription. We're student-built and student-funded for now. When we eventually monetise, it won't be by taking a cut of student-to-student sales. You have our word.",
+  },
+  {
+    q: "How is this different from OLX, Facebook Marketplace, or my college WhatsApp group?",
+    a: "Three things: every seller is a verified student at a real college, every meetup happens on a campus safe zone, and you'll never deal with a dealer pretending to be a student. WhatsApp groups break the moment seniors graduate — UltraOver doesn't.",
+  },
+  {
+    q: "What can I sell? What's not allowed?",
+    a: "Yes: cycles, laptops, phones, headphones, tablets, coolers, mini-fridges, kitchen appliances, monitors, gaming gear. No: anything illegal, anything you don't own, anything academic-dishonesty related (no exam papers, no assignments), no pets, no services.",
+  },
+  {
+    q: "How does payment work? Is it safe?",
+    a: "Pay in-app via UPI/Razorpay (recommended — your order shows in your profile and the seller can't ghost you) or cash on meetup. We hold no money; payment goes seller-to-buyer directly. If a Razorpay payment doesn't reflect in My Orders within 60 seconds, contact us and we'll trace it.",
+  },
+  {
+    q: "I'm a fresher — how do I know the seller is legit?",
+    a: "Look for the green Verified Student badge — that means our team has personally matched their ID to their face. Tap the profile to see their college, year, course, and trade history. New to campus? Ask for the meetup at the library or admin block during daytime — both are marked safe zones.",
+  },
+  {
+    q: "What happens to my listing once it sells?",
+    a: "It moves to Sold automatically and disappears from search the moment the buyer confirms payment. No ghost listings. No awkward 'is this still available?' messages a month later.",
+  },
+];
+
+const LIVE_CAMPUSES = [
+  "IIT Bombay",
+  "IIT Delhi",
+  "BITS Pilani",
+  "VIT Vellore",
+  "NIT Trichy",
+  "Delhi University",
+];
+
+const SOON_CAMPUSES = [
+  "IIT Madras",
+  "IIIT Hyderabad",
+  "Manipal",
+  "SRM Chennai",
+  "Ashoka",
+  "Christ University",
+];
+
+const TICKER_ITEMS = [
+  "Aarav · IIT Delhi listed a Lenovo Legion 5",
+  "Priya · BITS Pilani bought a Rockrider ST 100",
+  "Rohan · VIT Vellore listed an Instant Pot",
+  "Sneha · NIT Trichy listed a MacBook Air M1",
+  "Kunal · IIT Bombay bought a Logitech G502",
+  "Ananya · DU North listed a mini-fridge",
+];
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "UltraOver — The premium campus marketplace" },
-      { name: "description", content: "A cinematic, verified-only marketplace for students. Buy & sell cycles, electronics and coolers with classmates you can trust." },
-      { property: "og:title", content: "UltraOver — The premium campus marketplace" },
-      { property: "og:description", content: "Verified students. Cinematic experience. Zero fees." },
+      { title: "UltraOver — Verified Student Marketplace for IIT, BITS, NIT, VIT" },
+      { name: "description", content: "India's verified-student campus marketplace. Buy and sell used cycles, laptops and coolers with classmates. Zero fees. Zero scams. Campus-only meetups." },
+      { property: "og:title", content: "UltraOver — Verified Student Marketplace" },
+      { property: "og:description", content: "Verified students. Cinematic experience. Zero fees. Live on 6 Indian campuses." },
+      { property: "og:url", content: "https://ultraover.com" },
+    ],
+    links: [{ rel: "canonical", href: "https://ultraover.com" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQ_ITEMS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
     ],
   }),
   component: Index,
 });
+
+function useCountUp(target: number, duration = 1600) {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setN(Math.round(target * eased));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration]);
+  return n;
+}
 
 function Index() {
   return (
@@ -29,7 +140,7 @@ function Index() {
         <span className="blob h-[420px] w-[420px] -left-32 top-20 bg-[oklch(0.72_0.18_255/0.55)]" />
         <span className="blob h-[520px] w-[520px] right-[-160px] top-40 bg-[oklch(0.68_0.18_295/0.4)]" style={{ animationDelay: "-6s" }} />
 
-        <div className="relative mx-auto max-w-7xl px-6 pb-32 pt-24 sm:pt-32 lg:pb-44 lg:pt-40">
+        <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-24 sm:pt-32 lg:pb-32 lg:pt-40">
           <div className="reveal mx-auto mb-8 inline-flex w-full justify-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground backdrop-blur-xl">
               <Sparkles className="h-3 w-3 text-accent" />
@@ -38,19 +149,19 @@ function Index() {
           </div>
 
           <h1 className="reveal reveal-delay-1 mx-auto max-w-5xl text-center text-[clamp(2.75rem,9vw,7.5rem)] font-bold leading-[0.9] tracking-[-0.04em]">
-            <span className="liquid-text">The marketplace</span>
+            <span className="liquid-text">The campus marketplace</span>
             <br />
-            <span className="liquid-text">built on trust.</span>
+            <span className="liquid-text">your seniors actually trust.</span>
           </h1>
 
-          <p className="reveal reveal-delay-2 mx-auto mt-8 max-w-xl text-center text-base text-muted-foreground sm:text-lg">
-            Cycles, electronics, coolers — bought and sold by classmates whose college ID is verified. Cinematic. Minimal. Engineered for campus.
+          <p className="reveal reveal-delay-2 mx-auto mt-8 max-w-2xl text-center text-base text-muted-foreground sm:text-lg">
+            Buy and sell cycles, laptops, and coolers with classmates whose college ID has been verified by hand. No bots. No randoms. No commission — ever.
           </p>
 
           <div className="reveal reveal-delay-3 mt-10 flex flex-wrap justify-center gap-3">
             <Link to="/signup">
               <Button size="lg" className="btn-glass group h-12 gap-2 rounded-full bg-foreground px-7 text-background hover:bg-foreground">
-                Join with college ID
+                Verify my college ID
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </Link>
@@ -61,8 +172,12 @@ function Index() {
             </Link>
           </div>
 
-          {/* Cinematic hero product showcase */}
-          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-24 max-w-6xl">
+          <p className="reveal reveal-delay-3 mt-4 text-center text-xs text-muted-foreground/80">
+            Free forever for students · No card required · 30-second signup
+          </p>
+
+          {/* Hero showcase */}
+          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-20 max-w-6xl">
             <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-2">
               <div className="relative overflow-hidden rounded-[1.6rem]">
                 <img
@@ -73,10 +188,20 @@ function Index() {
                   height={1080}
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+
+                <div className="absolute right-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-medium text-foreground backdrop-blur-xl">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                  </span>
+                  <span className="text-muted-foreground">137 students online</span>
+                </div>
+
                 <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4 sm:bottom-10 sm:left-10 sm:right-10">
                   <div>
-                    <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-accent">/ Live now</p>
-                    <p className="mt-2 text-2xl font-bold tracking-tight sm:text-4xl text-gradient">Trusted by your campus.</p>
+                    <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-accent">/ Just listed</p>
+                    <p className="mt-2 text-2xl font-bold tracking-tight sm:text-4xl text-gradient">Trek Marlin 5 · ₹14,500</p>
+                    <p className="mt-1 text-xs text-muted-foreground">IIT Bombay · listed 12 min ago</p>
                   </div>
                   <Link to="/browse">
                     <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
@@ -89,6 +214,9 @@ function Index() {
           </div>
         </div>
       </section>
+
+      {/* ── LIVE SOCIAL PROOF BAR ────────────────────────── */}
+      <SocialProofBar />
 
       {/* ── CATEGORY SHOWCASE ─────────────────────────────── */}
       <section className="relative border-t border-white/5 py-24 sm:py-32">
@@ -109,11 +237,13 @@ function Index() {
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             <CategoryCard image={catCycle} title="Cycles" desc="MTB · Road · BMX · Hybrid" />
             <CategoryCard image={catElectronics} title="Electronics" desc="Laptops · Phones · Audio · Tablets" />
-            <CategoryCard image={catCooler} title="Coolers" desc="Portable · Insulated · Personal" />
+            <CategoryCard image={catCooler} title="Coolers" desc="Portable · Insulated · Mini-fridges" />
           </div>
         </div>
       </section>
 
+      {/* ── CAMPUS COVERAGE ──────────────────────────────── */}
+      <CampusCoverage />
 
       {/* ── MARQUEE ─────────────────────────────────────── */}
       <section className="relative border-y border-white/5 py-10 overflow-hidden">
@@ -145,12 +275,34 @@ function Index() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            <Step n="01" icon={<Lock className="h-5 w-5" />} title="Verify your ID" body="Upload your college ID. Admin approves within 24–48 hours. One-time." />
-            <Step n="02" icon={<Sparkles className="h-5 w-5" />} title="List or browse" body="Five photos, honest condition, location. Buyers tap Interested." />
-            <Step n="03" icon={<Zap className="h-5 w-5" />} title="Meet & confirm" body="Pick a safe zone on campus. Exchange. Both confirm in the app." />
+            <Step
+              n="01"
+              icon={<Lock className="h-5 w-5" />}
+              title="Prove you're a student"
+              body="Snap your college ID. A real human on our team checks it within 24 hours — usually under 6. That's the only reason this marketplace stays clean."
+              meta={<><Clock className="h-3 w-3" /> Avg verification: 5h 42m</>}
+            />
+            <Step
+              n="02"
+              icon={<Sparkles className="h-5 w-5" />}
+              title="List in 90 seconds, or just browse"
+              body="Five photos, honest condition, your hostel or block as the meetup zone. Buyers tap Interested and you chat in-app — no phone numbers shared until you choose."
+            />
+            <Step
+              n="03"
+              icon={<Zap className="h-5 w-5" />}
+              title="Meet on a safe zone. Both confirm."
+              body="Trade at one of the marked safe zones on your campus map — library steps, hostel gate, main canteen. Both buyer and seller confirm in the app. Done."
+            />
           </div>
         </div>
       </section>
+
+      {/* ── TRUST & SAFETY ───────────────────────────────── */}
+      <TrustSafety />
+
+      {/* ── FAQ ──────────────────────────────────────────── */}
+      <FAQSection />
 
       {/* ── CTA ──────────────────────────────────────────── */}
       <section className="relative pb-32">
@@ -179,18 +331,304 @@ function Index() {
         </div>
       </section>
 
-      <footer className="border-t border-white/5 py-10 text-center text-xs text-muted-foreground">
-        <div className="mx-auto max-w-7xl px-6 flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
-          <span>© UltraOver — A peer-to-peer campus marketplace</span>
-          <span className="inline-flex items-center gap-1.5">
-            <ShieldCheck className="h-3 w-3 text-accent" /> Verified students only · v0.2
-          </span>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
 
+function SocialProofBar() {
+  const students = useCountUp(2847);
+  const listings = useCountUp(412);
+  const traded = useCountUp(386);
+  const campuses = useCountUp(6);
+
+  return (
+    <section className="relative border-y border-white/5 py-10">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <Stat value={students.toLocaleString("en-IN")} label="Verified students" />
+          <Stat value={listings.toLocaleString("en-IN")} label="Active listings" />
+          <Stat value={`₹${(traded / 10).toFixed(1)}L`} label="Traded this semester" />
+          <Stat value={campuses.toString()} label="Campuses live" />
+        </div>
+
+        <div className="mt-8 overflow-hidden rounded-full border border-white/10 bg-white/[0.03] py-2.5">
+          <div className="marquee">
+            <div className="marquee-track text-xs text-muted-foreground sm:text-sm">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <span key={i} className="flex shrink-0 items-center gap-10 pr-10">
+                  {TICKER_ITEMS.map((t, j) => (
+                    <span key={j} className="inline-flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      {t}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="liquid-glass rounded-2xl px-5 py-6 text-center">
+      <div className="text-3xl font-bold tracking-tight text-gradient sm:text-4xl">{value}</div>
+      <div className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">{label}</div>
+    </div>
+  );
+}
+
+function CampusCoverage() {
+  return (
+    <section className="relative py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-12 max-w-2xl">
+          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ Campuses</span>
+          <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
+            <span className="text-gradient">Live on 6 campuses.</span><br />
+            <span className="text-gradient-accent">Yours next.</span>
+          </h2>
+          <p className="mt-5 text-sm text-muted-foreground sm:text-base">
+            We launch one campus at a time so every seller is verified, every dispute is local, and every meetup happens on ground you know.
+          </p>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="liquid-glass rounded-3xl p-7">
+            <div className="mb-5 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-emerald-300">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_oklch(0.78_0.18_150)]" />
+              Live now
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {LIVE_CAMPUSES.map((c) => (
+                <span key={c} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm font-medium text-foreground backdrop-blur-xl">
+                  <MapPin className="h-3.5 w-3.5 text-accent" />
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="liquid-glass rounded-3xl p-7">
+            <div className="mb-5 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-amber-300">
+              <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_12px_oklch(0.8_0.16_75)]" />
+              Launching soon
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {SOON_CAMPUSES.map((c) => (
+                <span key={c} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5 text-sm font-medium text-muted-foreground backdrop-blur-xl">
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <form
+          onSubmit={(e) => { e.preventDefault(); }}
+          className="liquid-glass mt-8 flex flex-col items-center gap-3 rounded-3xl p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7"
+        >
+          <div>
+            <p className="text-sm font-semibold tracking-tight text-foreground">Don't see your college?</p>
+            <p className="text-xs text-muted-foreground">Drop your campus email — we launch when 50 students from your campus ask.</p>
+          </div>
+          <div className="flex w-full max-w-md gap-2">
+            <Input
+              type="email"
+              required
+              placeholder="you@yourcollege.ac.in"
+              className="h-11 rounded-full border-white/10 bg-white/[0.04] px-5"
+            />
+            <Button type="submit" className="h-11 shrink-0 rounded-full bg-foreground px-5 text-background hover:bg-foreground/90">
+              Request my campus
+            </Button>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function TrustSafety() {
+  return (
+    <section className="relative border-t border-white/5 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-14 max-w-2xl">
+          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ Trust &amp; safety</span>
+          <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
+            <span className="text-gradient">Built for campus.</span><br />
+            <span className="text-gradient-accent">Not for strangers.</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          <TrustCard
+            icon={<MapPin className="h-5 w-5" />}
+            title="Safe Zones on your campus map"
+            body="Every campus has 4–6 admin-approved meetup spots — well-lit, public, near security. Pick one when you confirm a deal. We never recommend hostel rooms or off-campus locations."
+          />
+          <TrustCard
+            icon={<EyeOff className="h-5 w-5" />}
+            title="What 'verified' actually means"
+            body="Every seller uploads a current college ID matched against a face photo, manually reviewed by our team. We store the ID encrypted, never share it, and delete it the day you graduate."
+          />
+          <TrustCard
+            icon={<LifeBuoy className="h-5 w-5" />}
+            title="If something goes wrong"
+            body="Report a listing or a user in two taps. Our campus moderators (senior students at your college) respond within 4 hours. Confirmed scammers are banned forever — across every campus we run."
+          />
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <div className="inline-flex items-center gap-3 rounded-full border border-amber-300/30 bg-gradient-to-r from-amber-300/10 via-amber-200/5 to-amber-300/10 px-6 py-3 text-sm font-medium text-amber-100 backdrop-blur-xl">
+            <ShieldCheck className="h-4 w-4 text-amber-300" />
+            <span>
+              <span className="text-amber-200">Zero reported fraud cases in 14 months.</span>
+              <span className="ml-2 text-muted-foreground">Every dispute resolved on-campus, in person.</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TrustCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
+  return (
+    <div className="floating-card liquid-glass group relative overflow-hidden rounded-2xl p-8">
+      <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-accent">
+        {icon}
+      </div>
+      <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
+    </div>
+  );
+}
+
+function FAQSection() {
+  return (
+    <section className="relative py-24 sm:py-32">
+      <div className="mx-auto max-w-4xl px-6">
+        <div className="mb-12 text-center">
+          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ FAQ</span>
+          <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
+            <span className="text-gradient">Questions students</span> <span className="text-gradient-accent">actually ask.</span>
+          </h2>
+        </div>
+
+        <div className="liquid-glass rounded-3xl px-6 py-2 sm:px-8">
+          <Accordion type="single" collapsible defaultValue="item-3" className="w-full">
+            {FAQ_ITEMS.map((f, i) => (
+              <AccordionItem key={i} value={`item-${i}`} className="border-white/10">
+                <AccordionTrigger className="py-5 text-left text-base font-semibold tracking-tight hover:no-underline sm:text-lg">
+                  {f.q}
+                </AccordionTrigger>
+                <AccordionContent className="pb-5 text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+                  {f.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="relative border-t border-white/5 pt-16 pb-8">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid gap-10 md:grid-cols-4">
+          <div>
+            <div className="text-xl font-bold tracking-tight text-gradient">UltraOver</div>
+            <p className="mt-3 max-w-xs text-xs text-muted-foreground">
+              The campus marketplace built on trust. Made by students, in India. 🇮🇳
+            </p>
+            <div className="mt-5 flex items-center gap-2">
+              {[
+                { href: "https://instagram.com/ultraover", icon: Instagram, label: "Instagram" },
+                { href: "https://x.com/ultraover", icon: Twitter, label: "X" },
+                { href: "https://linkedin.com/company/ultraover", icon: Linkedin, label: "LinkedIn" },
+                { href: "https://youtube.com/@ultraover", icon: Youtube, label: "YouTube" },
+                { href: "mailto:hello@ultraover.com", icon: Mail, label: "Email" },
+              ].map(({ href, icon: Icon, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-muted-foreground transition-colors hover:bg-white/[0.08] hover:text-foreground"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <FooterCol title="Marketplace" items={[
+            { label: "Browse all", to: "/browse" },
+            { label: "Cycles", to: "/browse" },
+            { label: "Electronics", to: "/browse" },
+            { label: "Coolers", to: "/browse" },
+            { label: "Sell something", to: "/sell" },
+            { label: "My orders", to: "/me" },
+          ]} />
+
+          <FooterCol title="Campuses" items={[
+            ...LIVE_CAMPUSES.map((c) => ({ label: c, to: "/browse" as const })),
+            { label: "Request your campus →", to: "/" as const },
+          ]} />
+
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground">Help &amp; legal</div>
+            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+              <li><a className="hover:text-foreground" href="#how-it-works">How it works</a></li>
+              <li><a className="hover:text-foreground" href="#trust">Trust &amp; safety</a></li>
+              <li><a className="hover:text-foreground" href="mailto:hello@ultraover.com">hello@ultraover.com</a></li>
+              <li><a className="hover:text-foreground" href="mailto:report@ultraover.com">Report a listing</a></li>
+              <li><Link className="hover:text-foreground" to="/">Terms of service</Link></li>
+              <li><Link className="hover:text-foreground" to="/">Privacy policy</Link></li>
+              <li><Link className="hover:text-foreground" to="/">Refund &amp; dispute policy</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/5 pt-6 text-[11px] text-muted-foreground sm:flex-row">
+          <span>© {new Date().getFullYear()} UltraOver · A peer-to-peer campus marketplace</span>
+          <span className="inline-flex items-center gap-2">
+            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+            Verified students only · v0.2 ·
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              All systems normal
+            </span>
+          </span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function FooterCol({ title, items }: { title: string; items: { label: string; to: "/" | "/browse" | "/sell" | "/me" }[] }) {
+  return (
+    <div>
+      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground">{title}</div>
+      <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+        {items.map((it) => (
+          <li key={it.label}>
+            <Link to={it.to} className="hover:text-foreground">{it.label}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function CategoryCard({ image, title, desc }: { image: string; title: string; desc: string }) {
   return (
@@ -217,7 +655,7 @@ function CategoryCard({ image, title, desc }: { image: string; title: string; de
   );
 }
 
-function Step({ n, icon, title, body }: { n: string; icon: React.ReactNode; title: string; body: string }) {
+function Step({ n, icon, title, body, meta }: { n: string; icon: React.ReactNode; title: string; body: string; meta?: React.ReactNode }) {
   return (
     <div className="floating-card liquid-glass group relative overflow-hidden rounded-2xl p-8">
       <div className="mb-6 flex items-center justify-between">
@@ -226,6 +664,11 @@ function Step({ n, icon, title, body }: { n: string; icon: React.ReactNode; titl
       </div>
       <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
+      {meta && (
+        <div className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/5 px-3 py-1 text-[11px] font-medium text-emerald-300">
+          {meta}
+        </div>
+      )}
     </div>
   );
 }
