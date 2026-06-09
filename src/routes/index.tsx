@@ -94,6 +94,7 @@ const homeStatsQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(homeStatsQuery),
   head: () => ({
     meta: [
       { title: "UltraOver — Verified Student Marketplace for IIT, BITS, NIT, VIT" },
