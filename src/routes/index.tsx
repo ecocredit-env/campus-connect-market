@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { getHomeStats } from "@/lib/home-stats.functions";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
