@@ -60,23 +60,33 @@ const FAQ_ITEMS = [
   },
 ];
 
-const LIVE_CAMPUSES = [
-  "IIT Bombay",
-  "IIT Delhi",
-  "BITS Pilani",
-  "VIT Vellore",
-  "NIT Trichy",
-  "Delhi University",
+type Campus = { name: string; domain: string };
+
+const LIVE_CAMPUSES: Campus[] = [
+  { name: "MNNIT Allahabad", domain: "mnnit.ac.in" },
 ];
 
-const SOON_CAMPUSES = [
-  "IIT Madras",
-  "IIIT Hyderabad",
-  "Manipal",
-  "SRM Chennai",
-  "Ashoka",
-  "Christ University",
+const SOON_CAMPUSES: Campus[] = [
+  { name: "IIT Bombay", domain: "iitb.ac.in" },
+  { name: "IIT Delhi", domain: "iitd.ac.in" },
+  { name: "IIT Madras", domain: "iitm.ac.in" },
+  { name: "IIT Kanpur", domain: "iitk.ac.in" },
+  { name: "IIT Kharagpur", domain: "iitkgp.ac.in" },
+  { name: "IIT Roorkee", domain: "iitr.ac.in" },
+  { name: "BITS Pilani", domain: "bits-pilani.ac.in" },
+  { name: "VIT Vellore", domain: "vit.ac.in" },
+  { name: "NIT Trichy", domain: "nitt.edu" },
+  { name: "NIT Warangal", domain: "nitw.ac.in" },
+  { name: "IIIT Hyderabad", domain: "iiit.ac.in" },
+  { name: "Manipal", domain: "manipal.edu" },
+  { name: "SRM Chennai", domain: "srmist.edu.in" },
+  { name: "Ashoka", domain: "ashoka.edu.in" },
+  { name: "Christ University", domain: "christuniversity.in" },
+  { name: "Delhi University", domain: "du.ac.in" },
 ];
+
+const campusLogo = (domain: string) =>
+  `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 
 const FALLBACK_TICKER = [
   "Aarav · IIT Delhi listed a Lenovo Legion 5",
