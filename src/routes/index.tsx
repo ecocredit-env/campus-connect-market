@@ -300,7 +300,7 @@ function Index() {
               icon={<Lock className="h-5 w-5" />}
               title="Prove you're a student"
               body="Snap your college ID. A real human on our team checks it within 24 hours — usually under 6. That's the only reason this marketplace stays clean."
-              meta={<><Clock className="h-3 w-3" /> Avg verification: 5h 42m</>}
+              meta={<><Clock className="h-3 w-3" /> Avg verification: {avgVerify}</>}
             />
             <Step
               n="02"
