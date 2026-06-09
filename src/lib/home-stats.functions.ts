@@ -10,7 +10,8 @@ export type HomeStats = {
 };
 
 export const getHomeStats = createServerFn({ method: "GET" }).handler(async (): Promise<HomeStats> => {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   const [studentsRes, listingsRes, tradedRes, verifyRes, recentListingsRes, recentOrdersRes] = await Promise.all([
     supabaseAdmin
