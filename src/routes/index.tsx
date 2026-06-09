@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { getHomeStats } from "@/lib/home-stats.functions";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,7 +78,7 @@ const SOON_CAMPUSES = [
   "Christ University",
 ];
 
-const TICKER_ITEMS = [
+const FALLBACK_TICKER = [
   "Aarav · IIT Delhi listed a Lenovo Legion 5",
   "Priya · BITS Pilani bought a Rockrider ST 100",
   "Rohan · VIT Vellore listed an Instant Pot",
@@ -85,7 +87,14 @@ const TICKER_ITEMS = [
   "Ananya · DU North listed a mini-fridge",
 ];
 
+const homeStatsQuery = queryOptions({
+  queryKey: ["home-stats"],
+  queryFn: () => getHomeStats(),
+  staleTime: 60_000,
+});
+
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(homeStatsQuery),
   head: () => ({
     meta: [
       { title: "UltraOver — Verified Student Marketplace for IIT, BITS, NIT, VIT" },
@@ -111,6 +120,7 @@ export const Route = createFileRoute("/")({
     ],
   }),
   component: Index,
+  errorComponent: () => <Index />,
 });
 
 function useCountUp(target: number, duration = 1600) {
@@ -130,10 +140,21 @@ function useCountUp(target: number, duration = 1600) {
   return n;
 }
 
+function formatAvgVerification(mins: number | null): string {
+  if (mins == null || mins <= 0) return "Under 24h";
+  if (mins < 60) return `${mins}m`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m === 0 ? `${h}h` : `${h}h ${m}m`;
+}
+
 function Index() {
+  const { data: stats } = useSuspenseQuery(homeStatsQuery);
+  const avgVerify = formatAvgVerification(stats.avgVerificationMinutes);
   return (
     <div className="min-h-screen overflow-hidden">
       <Header />
+
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="relative">
@@ -280,7 +301,7 @@ function Index() {
               icon={<Lock className="h-5 w-5" />}
               title="Prove you're a student"
               body="Snap your college ID. A real human on our team checks it within 24 hours — usually under 6. That's the only reason this marketplace stays clean."
-              meta={<><Clock className="h-3 w-3" /> Avg verification: 5h 42m</>}
+              meta={<><Clock className="h-3 w-3" /> Avg verification: {avgVerify}</>}
             />
             <Step
               n="02"
@@ -337,10 +358,12 @@ function Index() {
 }
 
 function SocialProofBar() {
-  const students = useCountUp(2847);
-  const listings = useCountUp(412);
-  const traded = useCountUp(386);
-  const campuses = useCountUp(6);
+  const { data } = useSuspenseQuery(homeStatsQuery);
+  const students = useCountUp(data.students);
+  const listings = useCountUp(data.listings);
+  const tradedLakhs = useCountUp(Math.round(data.tradedRupees / 10_000)); // tenths of a lakh
+  const campuses = useCountUp(data.campuses);
+  const items = data.ticker.length > 0 ? data.ticker : FALLBACK_TICKER;
 
   return (
     <section className="relative border-y border-white/5 py-10">
@@ -348,7 +371,7 @@ function SocialProofBar() {
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <Stat value={students.toLocaleString("en-IN")} label="Verified students" />
           <Stat value={listings.toLocaleString("en-IN")} label="Active listings" />
-          <Stat value={`₹${(traded / 10).toFixed(1)}L`} label="Traded this semester" />
+          <Stat value={`₹${(tradedLakhs / 10).toFixed(1)}L`} label="Traded this semester" />
           <Stat value={campuses.toString()} label="Campuses live" />
         </div>
 
@@ -357,7 +380,7 @@ function SocialProofBar() {
             <div className="marquee-track text-xs text-muted-foreground sm:text-sm">
               {Array.from({ length: 2 }).map((_, i) => (
                 <span key={i} className="flex shrink-0 items-center gap-10 pr-10">
-                  {TICKER_ITEMS.map((t, j) => (
+                  {items.map((t, j) => (
                     <span key={j} className="inline-flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                       {t}
