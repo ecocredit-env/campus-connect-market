@@ -346,10 +346,12 @@ function Index() {
 }
 
 function SocialProofBar() {
-  const students = useCountUp(2847);
-  const listings = useCountUp(412);
-  const traded = useCountUp(386);
-  const campuses = useCountUp(6);
+  const { data } = useSuspenseQuery(homeStatsQuery);
+  const students = useCountUp(data.students);
+  const listings = useCountUp(data.listings);
+  const tradedLakhs = useCountUp(Math.round(data.tradedRupees / 10_000)); // tenths of a lakh
+  const campuses = useCountUp(data.campuses);
+  const items = data.ticker.length > 0 ? data.ticker : FALLBACK_TICKER;
 
   return (
     <section className="relative border-y border-white/5 py-10">
@@ -357,7 +359,7 @@ function SocialProofBar() {
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <Stat value={students.toLocaleString("en-IN")} label="Verified students" />
           <Stat value={listings.toLocaleString("en-IN")} label="Active listings" />
-          <Stat value={`₹${(traded / 10).toFixed(1)}L`} label="Traded this semester" />
+          <Stat value={`₹${(tradedLakhs / 10).toFixed(1)}L`} label="Traded this semester" />
           <Stat value={campuses.toString()} label="Campuses live" />
         </div>
 
@@ -366,7 +368,7 @@ function SocialProofBar() {
             <div className="marquee-track text-xs text-muted-foreground sm:text-sm">
               {Array.from({ length: 2 }).map((_, i) => (
                 <span key={i} className="flex shrink-0 items-center gap-10 pr-10">
-                  {TICKER_ITEMS.map((t, j) => (
+                  {items.map((t, j) => (
                     <span key={j} className="inline-flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                       {t}
