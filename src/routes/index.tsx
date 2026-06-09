@@ -120,6 +120,7 @@ export const Route = createFileRoute("/")({
     ],
   }),
   component: Index,
+  errorComponent: () => <Index />,
 });
 
 function useCountUp(target: number, duration = 1600) {
