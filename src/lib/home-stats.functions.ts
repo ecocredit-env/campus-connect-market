@@ -94,12 +94,23 @@ export const getHomeStats = createServerFn({ method: "GET" }).handler(async (): 
   events.sort((a, b) => b.ts - a.ts);
   const ticker = events.slice(0, 8).map((e) => e.text);
 
-  return {
-    students: studentsRes.count ?? 0,
-    listings: listingsRes.count ?? 0,
-    tradedRupees,
-    campuses: 6,
-    avgVerificationMinutes,
-    ticker,
-  };
+    return {
+      students: studentsRes.count ?? 0,
+      listings: listingsRes.count ?? 0,
+      tradedRupees,
+      campuses: 6,
+      avgVerificationMinutes,
+      ticker,
+    };
+  } catch (err) {
+    console.error("[getHomeStats] failed", err);
+    return {
+      students: 0,
+      listings: 0,
+      tradedRupees: 0,
+      campuses: 6,
+      avgVerificationMinutes: null,
+      ticker: [],
+    };
+  }
 });
