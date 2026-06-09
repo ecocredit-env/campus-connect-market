@@ -139,6 +139,14 @@ function useCountUp(target: number, duration = 1600) {
   return n;
 }
 
+function formatAvgVerification(mins: number | null): string {
+  if (mins == null || mins <= 0) return "Under 24h";
+  if (mins < 60) return `${mins}m`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m === 0 ? `${h}h` : `${h}h ${m}m`;
+}
+
 function Index() {
   const { data: stats } = useSuspenseQuery(homeStatsQuery);
   const avgVerify = formatAvgVerification(stats.avgVerificationMinutes);
