@@ -438,9 +438,14 @@ function CampusCoverage() {
             </div>
             <div className="flex flex-wrap gap-2">
               {LIVE_CAMPUSES.map((c) => (
-                <span key={c} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm font-medium text-foreground backdrop-blur-xl">
-                  <MapPin className="h-3.5 w-3.5 text-accent" />
-                  {c}
+                <span key={c.name} className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/[0.06] px-3.5 py-1.5 text-sm font-medium text-foreground backdrop-blur-xl">
+                  <img
+                    src={campusLogo(c.domain)}
+                    alt={`${c.name} logo`}
+                    loading="lazy"
+                    className="h-5 w-5 rounded-sm bg-white/90 object-contain p-0.5"
+                  />
+                  {c.name}
                 </span>
               ))}
             </div>
@@ -453,13 +458,20 @@ function CampusCoverage() {
             </div>
             <div className="flex flex-wrap gap-2">
               {SOON_CAMPUSES.map((c) => (
-                <span key={c} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5 text-sm font-medium text-muted-foreground backdrop-blur-xl">
-                  {c}
+                <span key={c.name} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5 text-sm font-medium text-muted-foreground backdrop-blur-xl">
+                  <img
+                    src={campusLogo(c.domain)}
+                    alt={`${c.name} logo`}
+                    loading="lazy"
+                    className="h-5 w-5 rounded-sm bg-white/80 object-contain p-0.5 opacity-80"
+                  />
+                  {c.name}
                 </span>
               ))}
             </div>
           </div>
         </div>
+
 
         <form
           onSubmit={(e) => { e.preventDefault(); }}
