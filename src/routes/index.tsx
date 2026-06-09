@@ -626,7 +626,7 @@ function SiteFooter() {
           ]} />
 
           <FooterCol title="Campuses" items={[
-            ...LIVE_CAMPUSES.map((c) => ({ label: c, to: "/browse" as const })),
+            ...LIVE_CAMPUSES.map((c) => ({ label: c.name, to: "/browse" as const })),
             { label: "Request your campus →", to: "/" as const },
           ]} />
 
