@@ -140,9 +140,12 @@ function useCountUp(target: number, duration = 1600) {
 }
 
 function Index() {
+  const { data: stats } = useSuspenseQuery(homeStatsQuery);
+  const avgVerify = formatAvgVerification(stats.avgVerificationMinutes);
   return (
     <div className="min-h-screen overflow-hidden">
       <Header />
+
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="relative">
