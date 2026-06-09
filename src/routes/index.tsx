@@ -78,7 +78,7 @@ const SOON_CAMPUSES = [
   "Christ University",
 ];
 
-const TICKER_ITEMS = [
+const FALLBACK_TICKER = [
   "Aarav · IIT Delhi listed a Lenovo Legion 5",
   "Priya · BITS Pilani bought a Rockrider ST 100",
   "Rohan · VIT Vellore listed an Instant Pot",
@@ -86,6 +86,12 @@ const TICKER_ITEMS = [
   "Kunal · IIT Bombay bought a Logitech G502",
   "Ananya · DU North listed a mini-fridge",
 ];
+
+const homeStatsQuery = queryOptions({
+  queryKey: ["home-stats"],
+  queryFn: () => getHomeStats(),
+  staleTime: 60_000,
+});
 
 export const Route = createFileRoute("/")({
   head: () => ({
