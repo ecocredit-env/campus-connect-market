@@ -60,23 +60,33 @@ const FAQ_ITEMS = [
   },
 ];
 
-const LIVE_CAMPUSES = [
-  "IIT Bombay",
-  "IIT Delhi",
-  "BITS Pilani",
-  "VIT Vellore",
-  "NIT Trichy",
-  "Delhi University",
+type Campus = { name: string; domain: string };
+
+const LIVE_CAMPUSES: Campus[] = [
+  { name: "MNNIT Allahabad", domain: "mnnit.ac.in" },
 ];
 
-const SOON_CAMPUSES = [
-  "IIT Madras",
-  "IIIT Hyderabad",
-  "Manipal",
-  "SRM Chennai",
-  "Ashoka",
-  "Christ University",
+const SOON_CAMPUSES: Campus[] = [
+  { name: "IIT Bombay", domain: "iitb.ac.in" },
+  { name: "IIT Delhi", domain: "iitd.ac.in" },
+  { name: "IIT Madras", domain: "iitm.ac.in" },
+  { name: "IIT Kanpur", domain: "iitk.ac.in" },
+  { name: "IIT Kharagpur", domain: "iitkgp.ac.in" },
+  { name: "IIT Roorkee", domain: "iitr.ac.in" },
+  { name: "BITS Pilani", domain: "bits-pilani.ac.in" },
+  { name: "VIT Vellore", domain: "vit.ac.in" },
+  { name: "NIT Trichy", domain: "nitt.edu" },
+  { name: "NIT Warangal", domain: "nitw.ac.in" },
+  { name: "IIIT Hyderabad", domain: "iiit.ac.in" },
+  { name: "Manipal", domain: "manipal.edu" },
+  { name: "SRM Chennai", domain: "srmist.edu.in" },
+  { name: "Ashoka", domain: "ashoka.edu.in" },
+  { name: "Christ University", domain: "christuniversity.in" },
+  { name: "Delhi University", domain: "du.ac.in" },
 ];
+
+const campusLogo = (domain: string) =>
+  `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 
 const FALLBACK_TICKER = [
   "Aarav · IIT Delhi listed a Lenovo Legion 5",
@@ -428,9 +438,14 @@ function CampusCoverage() {
             </div>
             <div className="flex flex-wrap gap-2">
               {LIVE_CAMPUSES.map((c) => (
-                <span key={c} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm font-medium text-foreground backdrop-blur-xl">
-                  <MapPin className="h-3.5 w-3.5 text-accent" />
-                  {c}
+                <span key={c.name} className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/[0.06] px-3.5 py-1.5 text-sm font-medium text-foreground backdrop-blur-xl">
+                  <img
+                    src={campusLogo(c.domain)}
+                    alt={`${c.name} logo`}
+                    loading="lazy"
+                    className="h-5 w-5 rounded-sm bg-white/90 object-contain p-0.5"
+                  />
+                  {c.name}
                 </span>
               ))}
             </div>
@@ -443,13 +458,20 @@ function CampusCoverage() {
             </div>
             <div className="flex flex-wrap gap-2">
               {SOON_CAMPUSES.map((c) => (
-                <span key={c} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5 text-sm font-medium text-muted-foreground backdrop-blur-xl">
-                  {c}
+                <span key={c.name} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5 text-sm font-medium text-muted-foreground backdrop-blur-xl">
+                  <img
+                    src={campusLogo(c.domain)}
+                    alt={`${c.name} logo`}
+                    loading="lazy"
+                    className="h-5 w-5 rounded-sm bg-white/80 object-contain p-0.5 opacity-80"
+                  />
+                  {c.name}
                 </span>
               ))}
             </div>
           </div>
         </div>
+
 
         <form
           onSubmit={(e) => { e.preventDefault(); }}
@@ -604,7 +626,7 @@ function SiteFooter() {
           ]} />
 
           <FooterCol title="Campuses" items={[
-            ...LIVE_CAMPUSES.map((c) => ({ label: c, to: "/browse" as const })),
+            ...LIVE_CAMPUSES.map((c) => ({ label: c.name, to: "/browse" as const })),
             { label: "Request your campus →", to: "/" as const },
           ]} />
 
