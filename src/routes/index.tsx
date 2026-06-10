@@ -563,6 +563,156 @@ function TrustCard({ icon, title, body }: { icon: React.ReactNode; title: string
   );
 }
 
+const TESTIMONIALS = [
+  {
+    quote: "Sold my second-year cycle in 40 minutes — to a fresher in the next hostel. Zero haggling drama, met at the library steps.",
+    name: "Aarav S.",
+    meta: "B.Tech CSE, 3rd year · MNNIT Allahabad",
+  },
+  {
+    quote: "I'd been scammed twice on Facebook Marketplace before joining. Verified-only changed everything — the laptop I bought came with the original box.",
+    name: "Priya M.",
+    meta: "B.Tech ECE, 2nd year · MNNIT Allahabad",
+  },
+  {
+    quote: "Listed my old cooler on a Sunday night. Confirmed sale by Monday lunch. Both of us literally live in the same block.",
+    name: "Rohan K.",
+    meta: "M.Tech, 1st year · MNNIT Allahabad",
+  },
+];
+
+function Testimonials() {
+  return (
+    <section className="relative border-t border-white/5 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-14 max-w-2xl">
+          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ From the campus</span>
+          <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
+            <span className="text-gradient">Students who've</span><br />
+            <span className="text-gradient-accent">already traded.</span>
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {TESTIMONIALS.map((t) => (
+            <figure key={t.name} className="floating-card liquid-glass relative overflow-hidden rounded-2xl p-8">
+              <div className="text-4xl leading-none text-accent/60">"</div>
+              <blockquote className="mt-3 text-sm leading-relaxed text-foreground/90">{t.quote}</blockquote>
+              <figcaption className="mt-6 border-t border-white/5 pt-4">
+                <div className="text-sm font-semibold tracking-tight">{t.name}</div>
+                <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{t.meta}</div>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const REVENUE_ITEMS = [
+  {
+    title: "Free, forever",
+    body: "Listing, browsing, chatting, and meeting on campus stays free. No commission. No subscription. No 'unlock contact' fee.",
+    tag: "Free",
+  },
+  {
+    title: "Hostel-to-hostel delivery",
+    body: "Optional. When you don't want to meet, a verified runner brings the item to your hostel gate. Small flat fee paid by the buyer.",
+    tag: "Optional · Paid",
+  },
+  {
+    title: "UltraProtect escrow",
+    body: "Optional. We hold the payment until both buyer and seller confirm the meetup. Small buyer-side fee. Recommended for ₹5,000+ items.",
+    tag: "Optional · Paid",
+  },
+  {
+    title: "Verified shops & boosts",
+    body: "Local cycle-repair and refurb partners pay to appear. Verified sellers can boost a listing once a week — never spammy, always labelled.",
+    tag: "Optional · Paid",
+  },
+];
+
+function RevenueModel() {
+  return (
+    <section className="relative border-t border-white/5 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-14 max-w-2xl">
+          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ How we make money</span>
+          <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
+            <span className="text-gradient">Free where it matters.</span><br />
+            <span className="text-gradient-accent">Paid only if you opt in.</span>
+          </h2>
+          <p className="mt-5 text-sm text-muted-foreground sm:text-base">
+            We'll never take a cut of a student-to-student sale. Here's the full list of things we charge for — and they're all optional.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {REVENUE_ITEMS.map((r) => (
+            <div key={r.title} className="floating-card liquid-glass relative overflow-hidden rounded-2xl p-7">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                {r.tag}
+              </div>
+              <h3 className="text-lg font-semibold tracking-tight">{r.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{r.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const ALLOWED = ["Cycles & e-cycles", "Laptops, phones, tablets", "Headphones, monitors, peripherals", "Coolers & mini-fridges", "Kitchen appliances", "Calculators & lab kits"];
+const NOT_ALLOWED = ["Anything illegal or counterfeit", "Items you don't personally own", "Exam papers, assignments, solved sets", "Pets or live animals", "Cash-equivalent items (gift cards, crypto)", "Services, freelancing, tuitions"];
+
+function NotAllowed() {
+  return (
+    <section className="relative border-t border-white/5 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-12 max-w-2xl">
+          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ House rules</span>
+          <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
+            <span className="text-gradient">What you can &amp;</span><br />
+            <span className="text-gradient-accent">can't list.</span>
+          </h2>
+          <p className="mt-5 text-sm text-muted-foreground sm:text-base">
+            Clear rules mean fewer disputes. Listings outside this list are removed within hours — repeat offenders are banned across every campus we run.
+          </p>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          <div className="liquid-glass rounded-3xl p-7">
+            <div className="mb-4 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-emerald-300">
+              <CheckCircle2 className="h-4 w-4" /> Allowed
+            </div>
+            <ul className="space-y-2.5 text-sm text-foreground/90">
+              {ALLOWED.map((a) => (
+                <li key={a} className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="liquid-glass rounded-3xl p-7">
+            <div className="mb-4 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-rose-300">
+              <EyeOff className="h-4 w-4" /> Not allowed
+            </div>
+            <ul className="space-y-2.5 text-sm text-foreground/90">
+              {NOT_ALLOWED.map((a) => (
+                <li key={a} className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-400" />
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 function FAQSection() {
   return (
     <section className="relative py-24 sm:py-32">
