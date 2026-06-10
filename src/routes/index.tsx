@@ -186,7 +186,7 @@ function Index() {
           </h1>
 
           <p className="reveal reveal-delay-2 mx-auto mt-8 max-w-2xl text-center text-base text-muted-foreground sm:text-lg">
-            Buy and sell cycles, laptops, and coolers with classmates whose college ID has been verified by hand. No bots. No randoms. No commission — ever.
+            Buy and sell cycles, laptops, and coolers with classmates whose college ID has been verified by hand. <span className="text-foreground/90">No scammers. No spam. Meet only at campus safe zones.</span>
           </p>
 
           <div className="reveal reveal-delay-3 mt-10 flex flex-wrap justify-center gap-3">
