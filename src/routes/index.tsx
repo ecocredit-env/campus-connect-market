@@ -332,6 +332,15 @@ function Index() {
       {/* ── TRUST & SAFETY ───────────────────────────────── */}
       <TrustSafety />
 
+      {/* ── TESTIMONIALS ─────────────────────────────────── */}
+      <Testimonials />
+
+      {/* ── HOW WE MAKE MONEY ────────────────────────────── */}
+      <RevenueModel />
+
+      {/* ── WHAT'S NOT ALLOWED ───────────────────────────── */}
+      <NotAllowed />
+
       {/* ── FAQ ──────────────────────────────────────────── */}
       <FAQSection />
 
