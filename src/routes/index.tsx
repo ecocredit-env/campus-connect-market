@@ -108,9 +108,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "UltraOver — Verified Student Marketplace for IIT, BITS, NIT, VIT" },
-      { name: "description", content: "India's verified-student campus marketplace. Buy and sell used cycles, laptops and coolers with classmates. Zero fees. Zero scams. Campus-only meetups." },
+      { name: "description", content: "India's verified-student campus marketplace. Buy and sell cycles, laptops and coolers with classmates. No scammers. No spam. Safe-zone meetups only. Zero commission on campus meetups." },
       { property: "og:title", content: "UltraOver — Verified Student Marketplace" },
-      { property: "og:description", content: "Verified students. Cinematic experience. Zero fees. Live on 6 Indian campuses." },
+      { property: "og:description", content: "Verified students only. Zero commission on campus meetups. Live at MNNIT Allahabad — 16 more campuses launching." },
       { property: "og:url", content: "https://ultraover.com" },
     ],
     links: [{ rel: "canonical", href: "https://ultraover.com" }],
