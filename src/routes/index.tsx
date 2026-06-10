@@ -422,8 +422,8 @@ function CampusCoverage() {
         <div className="mb-12 max-w-2xl">
           <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ Campuses</span>
           <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
-            <span className="text-gradient">Live on 6 campuses.</span><br />
-            <span className="text-gradient-accent">Yours next.</span>
+            <span className="text-gradient">Live at MNNIT Allahabad.</span><br />
+            <span className="text-gradient-accent">16 campuses launching.</span>
           </h2>
           <p className="mt-5 text-sm text-muted-foreground sm:text-base">
             We launch one campus at a time so every seller is verified, every dispute is local, and every meetup happens on ground you know.
