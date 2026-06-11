@@ -632,3 +632,74 @@
   }
 }
 
+
+/* ─────────────────────────────────────────────────────────────────
+   FLAT OLED OVERRIDES — kill gradients, shadows, glass refraction.
+   Spec: flat, clean, confident. Emerald primary on #0A0A0F.
+   ───────────────────────────────────────────────────────────────── */
+@layer components {
+  .glass,
+  .glass-strong,
+  .glass-nav,
+  .liquid-glass,
+  .liquid-buy,
+  .jelly,
+  .jelly-orb {
+    background: var(--color-card) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--color-border) !important;
+    box-shadow: none !important;
+  }
+  .light .glass,
+  .light .glass-strong,
+  .light .glass-nav,
+  .light .liquid-glass,
+  .light .liquid-buy,
+  .light .jelly,
+  .light .jelly-orb {
+    background: var(--color-card) !important;
+  }
+  .liquid-glass::before,
+  .liquid-glass::after,
+  .liquid-buy::before,
+  .liquid-buy::after,
+  .jelly::before,
+  .jelly::after,
+  .jelly-orb::after,
+  .ambient::before,
+  .grain::after { display: none !important; }
+
+  .jelly[data-active="true"] {
+    background: var(--color-primary) !important;
+    color: var(--color-primary-foreground) !important;
+    border-color: var(--color-primary) !important;
+    box-shadow: none !important;
+  }
+
+  .floating-card:hover,
+  .btn-glass:hover,
+  .jelly:hover,
+  .jelly-orb:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: var(--color-primary) !important;
+  }
+
+  .text-gradient,
+  .text-gradient-accent,
+  .liquid-text {
+    color: var(--color-foreground) !important;
+    background: none !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+    -webkit-background-clip: border-box !important;
+            background-clip: border-box !important;
+  }
+
+  .glow-ring { box-shadow: 0 0 0 1px var(--color-primary) !important; }
+
+  .blob { display: none !important; }
+}
