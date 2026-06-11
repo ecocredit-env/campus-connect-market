@@ -144,7 +144,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AuthInvalidator />
-        <div className="aurora-bg" aria-hidden="true" />
+        {/* OLED flat background — no aurora */}
         <PaymentTestModeBanner />
         <Outlet />
         <Toaster />
