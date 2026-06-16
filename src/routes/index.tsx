@@ -27,11 +27,13 @@ import {
   Mail,
   CheckCircle2,
   Clock,
+  Bike,
+  Laptop,
+  Snowflake,
+  TrendingUp,
+  Users,
 } from "lucide-react";
-import heroShowcase from "@/assets/hero-showcase.jpg";
-import catCycle from "@/assets/cat-cycle.jpg";
-import catElectronics from "@/assets/cat-electronics.jpg";
-import catCooler from "@/assets/cat-cooler.jpg";
+
 
 const FAQ_ITEMS = [
   {
@@ -207,42 +209,33 @@ function Index() {
             Free forever for students · No card required · 30-second signup
           </p>
 
-          {/* Hero showcase */}
-          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-20 max-w-6xl">
-            <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-2">
-              <div className="relative overflow-hidden rounded-[1.6rem]">
-                <img
-                  src={heroShowcase}
-                  alt="Floating premium products — bicycles, laptops, headphones and coolers in cinematic light"
-                  className="h-full w-full object-cover"
-                  width={1920}
-                  height={1080}
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-
-                <div className="absolute right-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-medium text-foreground backdrop-blur-xl">
+          {/* Hero live stats — no AI product photos */}
+          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-20 max-w-5xl">
+            <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-8 sm:p-10">
+              <div className="flex flex-wrap items-center justify-between gap-6">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-medium text-foreground backdrop-blur-xl">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                   </span>
-                  <span className="text-muted-foreground">137 students online</span>
+                  <span className="text-muted-foreground">137 students online · live</span>
                 </div>
+                <Link to="/browse">
+                  <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
+                    Explore listings <ArrowRight className="ml-1 h-3 w-3" />
+                  </Button>
+                </Link>
+              </div>
 
-                <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4 sm:bottom-10 sm:left-10 sm:right-10">
-                  <div>
-                    <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-accent">/ Just listed</p>
-                    <p className="mt-2 text-2xl font-bold tracking-tight sm:text-4xl text-gradient">Trek Marlin 5 · ₹14,500</p>
-                    <p className="mt-1 text-xs text-muted-foreground">IIT Bombay · listed 12 min ago</p>
-                  </div>
-                  <Link to="/browse">
-                    <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
-                      Explore <ArrowRight className="ml-1 h-3 w-3" />
-                    </Button>
-                  </Link>
-                </div>
+              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <HeroStat icon={<TrendingUp className="h-4 w-4" />} value="1,284" label="Active listings" />
+                <HeroStat icon={<Users className="h-4 w-4" />} value="9,420" label="Verified students" />
+                <HeroStat icon={<ShieldCheck className="h-4 w-4" />} value="100%" label="ID-verified sellers" />
+                <HeroStat icon={<MapPin className="h-4 w-4" />} value="16" label="Campuses live" />
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -266,10 +259,11 @@ function Index() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            <CategoryCard image={catCycle} title="Cycles" desc="MTB · Road · BMX · Hybrid" />
-            <CategoryCard image={catElectronics} title="Electronics" desc="Laptops · Phones · Audio · Tablets" />
-            <CategoryCard image={catCooler} title="Coolers" desc="Portable · Insulated · Mini-fridges" />
+            <CategoryCard icon={<Bike className="h-10 w-10" strokeWidth={1.2} />} title="Cycles" desc="MTB · Road · BMX · Hybrid" tint="from-emerald-400/20 to-transparent" />
+            <CategoryCard icon={<Laptop className="h-10 w-10" strokeWidth={1.2} />} title="Electronics" desc="Laptops · Phones · Audio · Tablets" tint="from-sky-400/20 to-transparent" />
+            <CategoryCard icon={<Snowflake className="h-10 w-10" strokeWidth={1.2} />} title="Coolers" desc="Portable · Insulated · Mini-fridges" tint="from-cyan-300/20 to-transparent" />
           </div>
+
         </div>
       </section>
 
@@ -834,18 +828,14 @@ function FooterCol({ title, items }: { title: string; items: { label: string; to
   );
 }
 
-function CategoryCard({ image, title, desc }: { image: string; title: string; desc: string }) {
+function CategoryCard({ icon, title, desc, tint }: { icon: React.ReactNode; title: string; desc: string; tint: string }) {
   return (
     <Link to="/browse" className="floating-card liquid-glass group relative block overflow-hidden rounded-3xl">
-      <div className="relative aspect-[4/5] overflow-hidden">
-        <img
-          src={image}
-          alt={title}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110"
-          loading="lazy"
-          width={1024}
-          height={1024}
-        />
+      <div className={`relative aspect-[4/5] overflow-hidden bg-gradient-to-br ${tint}`}>
+        <div className="absolute inset-0 [background:radial-gradient(circle_at_30%_20%,oklch(1_0_0/0.08),transparent_60%)]" />
+        <div className="absolute inset-0 flex items-start justify-end p-7 text-foreground/80 transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110">
+          {icon}
+        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
       </div>
       <div className="absolute inset-x-0 bottom-0 p-7">
@@ -858,6 +848,16 @@ function CategoryCard({ image, title, desc }: { image: string; title: string; de
     </Link>
   );
 }
+
+function HeroStat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+      <div className="flex items-center gap-2 text-accent">{icon}<span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">{label}</span></div>
+      <div className="mt-2 text-2xl font-bold tracking-tight text-gradient sm:text-3xl">{value}</div>
+    </div>
+  );
+}
+
 
 function Step({ n, icon, title, body, meta }: { n: string; icon: React.ReactNode; title: string; body: string; meta?: React.ReactNode }) {
   return (
