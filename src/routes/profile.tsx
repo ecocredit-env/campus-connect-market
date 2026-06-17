@@ -149,18 +149,21 @@ function ProfilePage() {
         {/* Avatar + form */}
         <form onSubmit={save} className="mt-8 space-y-6 rounded-xl border border-border bg-card p-6">
           <div className="flex items-center gap-4">
-            <Avatar className="h-20 w-20">
-              {form.profile_photo && <AvatarImage src={form.profile_photo} alt={form.full_name} />}
-              <AvatarFallback>{initials}</AvatarFallback>
-            </Avatar>
+            <div className="relative h-20 w-20 overflow-hidden rounded-full ring-1 ring-border bg-muted">
+              {form.profile_photo ? (
+                <img src={form.profile_photo} alt={form.full_name} className="h-full w-full object-cover aspect-square" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-sm font-semibold">{initials}</div>
+              )}
+            </div>
             <div>
               <Label htmlFor="photo" className="cursor-pointer">
                 <span className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-muted">
-                  <Camera className="h-4 w-4" /> {uploading ? "Uploading…" : "Change photo"}
+                  <Camera className="h-4 w-4" /> {uploading ? "Uploading…" : "Upload 1:1 photo"}
                 </span>
                 <input id="photo" type="file" accept="image/*" className="hidden" onChange={onPhotoChange} disabled={uploading} />
               </Label>
-              <p className="mt-1 text-xs text-muted-foreground">JPG/PNG, max 3MB</p>
+              <p className="mt-1 text-xs text-muted-foreground">Auto-cropped to square · JPG/PNG, max 5MB</p>
             </div>
           </div>
 
