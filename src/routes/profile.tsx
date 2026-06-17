@@ -75,21 +75,48 @@ function ProfilePage() {
     await refreshProfile();
   };
 
+  const cropToSquare = (file: File): Promise<Blob> =>
+    new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        const size = Math.min(img.width, img.height);
+        const sx = (img.width - size) / 2;
+        const sy = (img.height - size) / 2;
+        const out = Math.min(size, 1024);
+        const canvas = document.createElement("canvas");
+        canvas.width = out;
+        canvas.height = out;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas not supported"));
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, out, out);
+        URL.revokeObjectURL(url);
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Crop failed"))), "image/jpeg", 0.9);
+      };
+      img.onerror = () => reject(new Error("Could not load image"));
+      img.src = url;
+    });
+
   const onPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 3 * 1024 * 1024) return toast.error("Image must be under 3 MB");
+    if (file.size > 5 * 1024 * 1024) return toast.error("Image must be under 5 MB");
     setUploading(true);
-    const path = `${user.id}/avatar-${Date.now()}-${file.name.replace(/[^a-z0-9.]/gi, "_")}`;
-    const { error: upErr } = await supabase.storage.from("listing-photos").upload(path, file, { upsert: true });
-    if (upErr) {
+    try {
+      const blob = await cropToSquare(file);
+      const path = `${user.id}/avatar-${Date.now()}.jpg`;
+      const { error: upErr } = await supabase.storage
+        .from("listing-photos")
+        .upload(path, blob, { upsert: true, contentType: "image/jpeg" });
+      if (upErr) throw upErr;
+      const { data: pub } = supabase.storage.from("listing-photos").getPublicUrl(path);
+      setForm((f) => ({ ...f, profile_photo: pub.publicUrl }));
+      toast.success("Photo cropped to 1:1 — don't forget to save");
+    } catch (err: any) {
+      toast.error(err.message ?? "Upload failed");
+    } finally {
       setUploading(false);
-      return toast.error(upErr.message);
     }
-    const { data: pub } = supabase.storage.from("listing-photos").getPublicUrl(path);
-    setForm((f) => ({ ...f, profile_photo: pub.publicUrl }));
-    setUploading(false);
-    toast.success("Photo uploaded — don't forget to save");
   };
 
   const status = profile.verification_status;

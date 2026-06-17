@@ -98,11 +98,6 @@ export function Header() {
                         {initials}
                       </span>
                     )}
-                    {profile?.verification_status === "approved" && (
-                      <span className="absolute -bottom-1 -right-1">
-                        <VerifiedBadge size={16} />
-                      </span>
-                    )}
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
