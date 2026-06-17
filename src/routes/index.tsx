@@ -790,9 +790,9 @@ function SiteFooter() {
               <li><a className="hover:text-foreground" href="#trust">Trust &amp; safety</a></li>
               <li><a className="hover:text-foreground" href="mailto:hello@ultraover.com">hello@ultraover.com</a></li>
               <li><a className="hover:text-foreground" href="mailto:report@ultraover.com">Report a listing</a></li>
-              <li><Link className="hover:text-foreground" to="/">Terms of service</Link></li>
-              <li><Link className="hover:text-foreground" to="/">Privacy policy</Link></li>
-              <li><Link className="hover:text-foreground" to="/">Refund &amp; dispute policy</Link></li>
+              <li><Link className="hover:text-foreground" to="/terms">Terms of service</Link></li>
+              <li><Link className="hover:text-foreground" to="/privacy">Privacy policy</Link></li>
+              <li><Link className="hover:text-foreground" to="/refunds">Refunds &amp; UltraProtect</Link></li>
             </ul>
           </div>
         </div>
