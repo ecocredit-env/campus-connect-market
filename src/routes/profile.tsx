@@ -12,6 +12,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ShieldCheck, Clock, XCircle, Camera, Star, Package } from "lucide-react";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { VerificationBadges } from "@/components/VerificationBadges";
+import { isCollegeEmail } from "@/lib/college-email";
+
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "My Profile · UltraOver" }] }),
@@ -131,12 +134,17 @@ function ProfilePage() {
             <h1 className="display text-4xl text-primary">My Profile</h1>
             <p className="mt-1 text-muted-foreground">{user.email}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <StatusBadge status={status} />
+          <div className="flex flex-col items-end gap-2">
+            <VerificationBadges
+              emailVerified={profile.college_email_verified ?? isCollegeEmail(user.email)}
+              idVerified={status === "approved"}
+              showPending
+            />
             <Button variant="ghost" size="sm" onClick={() => void signOut().then(() => nav({ to: "/" }))}>
               Sign out
             </Button>
           </div>
+
         </div>
 
         {/* Stats */}

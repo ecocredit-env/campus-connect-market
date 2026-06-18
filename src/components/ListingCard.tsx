@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
+import { VerificationBadges } from "@/components/VerificationBadges";
 
 export type ListingCardItem = {
   id: string;
@@ -9,7 +10,12 @@ export type ListingCardItem = {
   condition: string;
   photos: string[];
   location: string | null;
+  seller?: {
+    verification_status?: string | null;
+    college_email_verified?: boolean | null;
+  } | null;
 };
+
 
 const conditionLabel: Record<string, string> = {
   new: "New",
@@ -62,7 +68,15 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
             <span className="truncate text-[11px] text-muted-foreground">{item.location}</span>
           )}
         </div>
+        {item.seller && (
+          <VerificationBadges
+            size="sm"
+            emailVerified={!!item.seller.college_email_verified}
+            idVerified={item.seller.verification_status === "approved"}
+          />
+        )}
       </div>
+
     </Link>
   );
 }

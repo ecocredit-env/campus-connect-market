@@ -305,9 +305,10 @@ function Index() {
               n="01"
               icon={<Lock className="h-5 w-5" />}
               title="Prove you're a student"
-              body="Snap your college ID. A real human on our team checks it — typically within a day. That's the only reason this marketplace stays clean."
-              meta={<><Clock className="h-3 w-3" /> Current avg verification: {avgVerify}</>}
+              body="Sign up with your college email and get a basic 'College email' badge instantly. Want the full blue 'ID Verified' tick? Snap your college ID — a real human on our team checks it within a day."
+              meta={<><Clock className="h-3 w-3" /> Get a basic badge in 30 seconds. Full ID verified after manual review.</>}
             />
+
             <Step
               n="02"
               icon={<Sparkles className="h-5 w-5" />}

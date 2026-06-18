@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Plus, User as UserIcon, Shield, LogOut, Package, Sparkles } from "lucide-react";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { VerificationBadges } from "@/components/VerificationBadges";
+
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logoAsset from "@/assets/ultraover-mark.asset.json";
 
@@ -119,17 +121,19 @@ export function Header() {
                         <div className="truncate text-[11px] text-muted-foreground">{user.email}</div>
                       </div>
                     </div>
-                    {profile?.verification_status === "approved" ? (
-                      <Badge variant="secondary" className="mt-3 gap-1 border-white/10 bg-white/5">
-                        <VerifiedBadge size={14} /> Verified
-                      </Badge>
-                    ) : profile?.verification_status === "pending" ? (
-                      <Link to="/verify">
-                        <Badge variant="outline" className="mt-3 cursor-pointer border-white/15 bg-white/5">
-                          Verify ID
-                        </Badge>
-                      </Link>
-                    ) : null}
+                    <div className="mt-3">
+                      <VerificationBadges
+                        emailVerified={!!profile?.college_email_verified}
+                        idVerified={profile?.verification_status === "approved"}
+                        size="sm"
+                      />
+                      {profile?.verification_status !== "approved" && (
+                        <Link to="/verify" className="mt-2 inline-block text-[11px] text-accent underline-offset-2 hover:underline">
+                          Get ID verified →
+                        </Link>
+                      )}
+                    </div>
+
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-white/10" />
                   <DropdownMenuItem asChild className="rounded-xl">

@@ -6,6 +6,8 @@ type Profile = {
   id: string;
   full_name: string;
   verification_status: "pending" | "approved" | "rejected" | "suspended";
+  college_email: string | null;
+  college_email_verified: boolean | null;
   registration_number: string | null;
   department: string | null;
   year_of_study: string | null;
@@ -22,6 +24,7 @@ type Profile = {
   payout_ifsc: string | null;
   payout_upi_id: string | null;
 };
+
 
 type AuthCtx = {
   session: Session | null;
