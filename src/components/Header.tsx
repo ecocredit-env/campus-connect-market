@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Plus, User as UserIcon, Shield, LogOut, Package, Sparkles } from "lucide-react";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { VerificationBadges } from "@/components/VerificationBadges";
+
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logoAsset from "@/assets/ultraover-mark.asset.json";
 
