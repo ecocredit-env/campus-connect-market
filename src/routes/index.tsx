@@ -228,11 +228,12 @@ function Index() {
               </div>
 
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <HeroStat icon={<TrendingUp className="h-4 w-4" />} value="1,284" label="Active listings" />
-                <HeroStat icon={<Users className="h-4 w-4" />} value="9,420" label="Verified students" />
+                <HeroStat icon={<TrendingUp className="h-4 w-4" />} target={stats.listings} label="Active listings" />
+                <HeroStat icon={<Users className="h-4 w-4" />} target={stats.students} label="Verified students" />
                 <HeroStat icon={<ShieldCheck className="h-4 w-4" />} value="100%" label="ID-verified sellers" />
-                <HeroStat icon={<MapPin className="h-4 w-4" />} value="16" label="Campuses live" />
+                <HeroStat icon={<MapPin className="h-4 w-4" />} target={stats.campuses} label="Campuses live" />
               </div>
+
             </div>
           </div>
 
@@ -893,14 +894,35 @@ function CategoryCard({ icon, title, desc, tint }: { icon: React.ReactNode; titl
   );
 }
 
-function HeroStat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
+function HeroStat({
+  icon,
+  value,
+  target,
+  label,
+}: {
+  icon: React.ReactNode;
+  value?: string;
+  target?: number;
+  label: string;
+}) {
+  const animated = useCountUp(target ?? 0);
+  const display =
+    value ?? (target == null ? null : animated.toLocaleString("en-IN"));
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <div className="flex items-center gap-2 text-accent">{icon}<span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">{label}</span></div>
-      <div className="mt-2 text-2xl font-bold tracking-tight text-gradient sm:text-3xl">{value}</div>
+      <div className="flex items-center gap-2 text-accent">
+        {icon}
+        <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">{label}</span>
+      </div>
+      {display == null ? (
+        <div className="mt-2 h-8 w-20 animate-pulse rounded-md bg-white/10" />
+      ) : (
+        <div className="mt-2 text-2xl font-bold tracking-tight text-gradient sm:text-3xl">{display}</div>
+      )}
     </div>
   );
 }
+
 
 
 function Step({ n, icon, title, body, meta }: { n: string; icon: React.ReactNode; title: string; body: string; meta?: React.ReactNode }) {
