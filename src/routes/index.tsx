@@ -228,11 +228,12 @@ function Index() {
               </div>
 
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <HeroStat icon={<TrendingUp className="h-4 w-4" />} value="1,284" label="Active listings" />
-                <HeroStat icon={<Users className="h-4 w-4" />} value="9,420" label="Verified students" />
+                <HeroStat icon={<TrendingUp className="h-4 w-4" />} target={stats.listings} label="Active listings" />
+                <HeroStat icon={<Users className="h-4 w-4" />} target={stats.students} label="Verified students" />
                 <HeroStat icon={<ShieldCheck className="h-4 w-4" />} value="100%" label="ID-verified sellers" />
-                <HeroStat icon={<MapPin className="h-4 w-4" />} value="16" label="Campuses live" />
+                <HeroStat icon={<MapPin className="h-4 w-4" />} target={stats.campuses} label="Campuses live" />
               </div>
+
             </div>
           </div>
 
