@@ -252,6 +252,7 @@ export type Database = {
           average_rating: number | null
           bio: string | null
           college_email: string | null
+          college_email_verified: boolean | null
           created_at: string
           department: string | null
           full_name: string
@@ -276,6 +277,7 @@ export type Database = {
           average_rating?: number | null
           bio?: string | null
           college_email?: string | null
+          college_email_verified?: boolean | null
           created_at?: string
           department?: string | null
           full_name: string
@@ -300,6 +302,7 @@ export type Database = {
           average_rating?: number | null
           bio?: string | null
           college_email?: string | null
+          college_email_verified?: boolean | null
           created_at?: string
           department?: string | null
           full_name?: string
@@ -396,6 +399,7 @@ export type Database = {
         Row: {
           average_rating: number | null
           bio: string | null
+          college_email_verified: boolean | null
           created_at: string | null
           full_name: string | null
           id: string | null
@@ -408,6 +412,7 @@ export type Database = {
         Insert: {
           average_rating?: number | null
           bio?: string | null
+          college_email_verified?: boolean | null
           created_at?: string | null
           full_name?: string | null
           id?: string | null
@@ -420,6 +425,7 @@ export type Database = {
         Update: {
           average_rating?: number | null
           bio?: string | null
+          college_email_verified?: boolean | null
           created_at?: string | null
           full_name?: string | null
           id?: string | null
