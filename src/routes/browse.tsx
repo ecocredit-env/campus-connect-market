@@ -30,16 +30,44 @@ function BrowsePage() {
 
   const load = async () => {
     setBusy(true);
-    let query = supabase.from("listings").select("id,title,price,category,condition,photos,location").eq("status", "active");
+    let query = supabase
+      .from("listings")
+      .select("id,title,price,category,condition,photos,location,seller_id")
+      .eq("status", "active");
     if (cat !== "all") query = query.eq("category", cat as "cycles" | "coolers" | "electronics");
     if (sort === "price_low") query = query.order("price", { ascending: true });
     else if (sort === "price_high") query = query.order("price", { ascending: false });
     else query = query.order("created_at", { ascending: false });
     const { data, error } = await query.limit(60);
+    if (error) { setBusy(false); return; }
+
+    const rows = data ?? [];
+    const sellerIds = Array.from(new Set(rows.map((r: any) => r.seller_id).filter(Boolean)));
+    const sellerMap = new Map<string, { verification_status: string | null; college_email_verified: boolean | null }>();
+    if (sellerIds.length) {
+      const { data: sellers } = await supabase
+        .from("public_profiles")
+        .select("id,verification_status,college_email_verified")
+        .in("id", sellerIds);
+      (sellers ?? []).forEach((s: any) => sellerMap.set(s.id, {
+        verification_status: s.verification_status,
+        college_email_verified: s.college_email_verified,
+      }));
+    }
+
     setBusy(false);
-    if (error) return;
-    setItems((data ?? []) as ListingCardItem[]);
+    setItems(rows.map((r: any) => ({
+      id: r.id,
+      title: r.title,
+      price: r.price,
+      category: r.category,
+      condition: r.condition,
+      photos: r.photos,
+      location: r.location,
+      seller: sellerMap.get(r.seller_id) ?? null,
+    })));
   };
+
 
   const filtered = useMemo(() => {
     if (!q.trim()) return items;
