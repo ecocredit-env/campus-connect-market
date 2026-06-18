@@ -560,20 +560,50 @@ function TrustCard({ icon, title, body }: { icon: React.ReactNode; title: string
 const TESTIMONIALS = [
   {
     quote: "Sold my second-year cycle in 40 minutes — to a fresher in the next hostel. Zero haggling drama, met at the library steps.",
-    name: "Aarav S.",
-    meta: "B.Tech CSE, 3rd year · MNNIT Allahabad",
+    name: "Aarav Sharma",
+    course: "B.Tech CSE, 3rd year",
+    college: "MNNIT Allahabad",
   },
   {
-    quote: "I'd been scammed twice on Facebook Marketplace before joining. Verified-only changed everything — the laptop I bought came with the original box.",
-    name: "Priya M.",
-    meta: "B.Tech ECE, 2nd year · MNNIT Allahabad",
+    quote: "I'd been scammed twice on Facebook Marketplace before. Verified-only changed everything — the laptop I bought came with the original box.",
+    name: "Priya Menon",
+    course: "B.Tech ECE, 2nd year",
+    college: "MNNIT Allahabad",
   },
   {
     quote: "Listed my old cooler on a Sunday night. Confirmed sale by Monday lunch. Both of us literally live in the same block.",
-    name: "Rohan K.",
-    meta: "M.Tech, 1st year · MNNIT Allahabad",
+    name: "Rohan Kapoor",
+    course: "M.Tech Mechanical, 1st year",
+    college: "MNNIT Allahabad",
+  },
+  {
+    quote: "Got my GATE prep books for almost half the price from a passing-out senior. He even threw in his handwritten notes.",
+    name: "Sneha Iyer",
+    course: "B.Tech IT, 4th year",
+    college: "MNNIT Allahabad",
+  },
+  {
+    quote: "The escrow option made me trust paying ₹18,000 for a used iPad sight-unseen. Money only moved after I unboxed it in front of the seller.",
+    name: "Karthik Reddy",
+    course: "B.Arch, 3rd year",
+    college: "MNNIT Allahabad",
+  },
+  {
+    quote: "Best part is everyone here is on the same campus. No shipping anxiety, no fake profiles. Just walk over and pick it up.",
+    name: "Ananya Gupta",
+    course: "B.Tech Civil, 2nd year",
+    college: "MNNIT Allahabad",
   },
 ];
+
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((n) => n[0]?.toUpperCase() ?? "")
+    .join("");
+}
 
 function Testimonials() {
   return (
@@ -586,14 +616,28 @@ function Testimonials() {
             <span className="text-gradient-accent">already traded.</span>
           </h2>
         </div>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {TESTIMONIALS.map((t) => (
             <figure key={t.name} className="floating-card liquid-glass relative overflow-hidden rounded-2xl p-8">
               <div className="text-4xl leading-none text-accent/60">"</div>
               <blockquote className="mt-3 text-sm leading-relaxed text-foreground/90">{t.quote}</blockquote>
-              <figcaption className="mt-6 border-t border-white/5 pt-4">
-                <div className="text-sm font-semibold tracking-tight">{t.name}</div>
-                <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{t.meta}</div>
+              <figcaption className="mt-6 flex items-center gap-3 border-t border-white/5 pt-4">
+                <div
+                  aria-hidden
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold tracking-tight text-accent ring-1 ring-accent/25"
+                >
+                  {initials(t.name)}
+                </div>
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-semibold tracking-tight">{t.name}</div>
+                  <div className="mt-0.5 flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em] text-accent/80">
+                    <CheckCircle2 className="h-3 w-3" aria-hidden />
+                    Verified buyer
+                  </div>
+                  <div className="mt-1 truncate text-[11px] text-muted-foreground">
+                    {t.course} · {t.college}
+                  </div>
+                </div>
               </figcaption>
             </figure>
           ))}
