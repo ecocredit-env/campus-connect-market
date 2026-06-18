@@ -68,7 +68,15 @@ export function ListingCard({ item }: { item: ListingCardItem }) {
             <span className="truncate text-[11px] text-muted-foreground">{item.location}</span>
           )}
         </div>
+        {item.seller && (
+          <VerificationBadges
+            size="sm"
+            emailVerified={!!item.seller.college_email_verified}
+            idVerified={item.seller.verification_status === "approved"}
+          />
+        )}
       </div>
+
     </Link>
   );
 }
