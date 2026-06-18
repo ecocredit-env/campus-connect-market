@@ -12,6 +12,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ShieldCheck, Clock, XCircle, Camera, Star, Package } from "lucide-react";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { VerificationBadges } from "@/components/VerificationBadges";
+import { isCollegeEmail } from "@/lib/college-email";
+
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "My Profile · UltraOver" }] }),
