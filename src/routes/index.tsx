@@ -456,6 +456,9 @@ function BuiltByStudents() {
       </div>
     </section>
   );
+}
+
+
 
 function SocialProofBar() {
   const { data } = useSuspenseQuery(homeStatsQuery);
