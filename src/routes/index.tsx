@@ -921,8 +921,7 @@ function SiteFooter() {
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li><a className="hover:text-foreground" href="#how-it-works">How it works</a></li>
               <li><a className="hover:text-foreground" href="#trust">Trust &amp; safety</a></li>
-              <li><a className="hover:text-foreground" href="mailto:hello@ultraover.com">hello@ultraover.com</a></li>
-              <li><a className="hover:text-foreground" href="mailto:report@ultraover.com">Report a listing</a></li>
+              <li><Link className="hover:text-foreground" to="/support">Contact support</Link></li>
               <li><Link className="hover:text-foreground" to="/about">About &amp; founder</Link></li>
               <li><Link className="hover:text-foreground" to="/terms">Terms of service</Link></li>
               <li><Link className="hover:text-foreground" to="/privacy">Privacy policy</Link></li>
