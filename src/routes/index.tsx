@@ -32,7 +32,9 @@ import {
   Snowflake,
   TrendingUp,
   Users,
+  GraduationCap,
 } from "lucide-react";
+import rintuAsset from "@/assets/rintu-mahapatra.png.asset.json";
 
 
 const FAQ_ITEMS = [
@@ -328,6 +330,9 @@ function Index() {
       {/* ── TRUST & SAFETY ───────────────────────────────── */}
       <TrustSafety />
 
+      {/* ── BUILT BY STUDENTS ────────────────────────────── */}
+      <BuiltByStudents />
+
       {/* ── TESTIMONIALS ─────────────────────────────────── */}
       <Testimonials />
 
@@ -371,6 +376,88 @@ function Index() {
     </div>
   );
 }
+
+function BuiltByStudents() {
+  return (
+    <section className="relative py-24">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="mb-12 text-center">
+          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">
+            / Who's behind this
+          </span>
+          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-gradient sm:text-5xl">
+            Built by students,<br />for students.
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-sm text-muted-foreground">
+            We trade our college IDs on this platform too. That's not marketing —
+            that's why every decision starts with "would I trust this with my own
+            ID?"
+          </p>
+        </div>
+
+        <div className="glass-strong glow-ring relative overflow-hidden rounded-3xl p-8 sm:p-12">
+          <span className="blob h-64 w-64 -left-12 -top-12 bg-[oklch(0.72_0.18_255/0.4)]" />
+          <div className="relative grid items-center gap-10 md:grid-cols-[auto_1fr]">
+            <div className="mx-auto md:mx-0">
+              <div className="h-40 w-40 overflow-hidden rounded-full ring-2 ring-accent/30 sm:h-48 sm:w-48">
+                <img
+                  src={rintuAsset.url}
+                  alt="Rintu Mahapatra, founder and CEO of UltraOver"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div>
+              <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">
+                Founder &amp; CEO
+              </span>
+              <h3 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+                Rintu Mahapatra
+              </h3>
+              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5">
+                  <GraduationCap className="h-4 w-4 text-accent" />
+                  B.Tech, MNNIT Allahabad
+                </span>
+              </div>
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                In his first semester, Rintu lost ₹6,800 to a "senior" on a college
+                resale group who turned out to be a reseller with three fake profiles.
+                UltraOver started that night as a spreadsheet of verified MNNIT
+                students and grew into the safest place on campus to trade a cycle, a
+                cooler, or a laptop.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href="https://www.linkedin.com/in/rintu-mahapatra-385b63300/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Button className="h-10 rounded-full bg-foreground px-5 text-background hover:bg-foreground/90">
+                    <Linkedin className="mr-2 h-4 w-4" />
+                    LinkedIn
+                  </Button>
+                </a>
+                <Link to="/about">
+                  <Button
+                    variant="outline"
+                    className="h-10 rounded-full border-white/15 bg-white/[0.04] px-5 hover:bg-white/[0.08]"
+                  >
+                    Read the full story
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 
 function SocialProofBar() {
   const { data } = useSuspenseQuery(homeStatsQuery);
@@ -836,6 +923,7 @@ function SiteFooter() {
               <li><a className="hover:text-foreground" href="#trust">Trust &amp; safety</a></li>
               <li><a className="hover:text-foreground" href="mailto:hello@ultraover.com">hello@ultraover.com</a></li>
               <li><a className="hover:text-foreground" href="mailto:report@ultraover.com">Report a listing</a></li>
+              <li><Link className="hover:text-foreground" to="/about">About &amp; founder</Link></li>
               <li><Link className="hover:text-foreground" to="/terms">Terms of service</Link></li>
               <li><Link className="hover:text-foreground" to="/privacy">Privacy policy</Link></li>
               <li><Link className="hover:text-foreground" to="/refunds">Refunds &amp; UltraProtect</Link></li>
