@@ -25,6 +25,7 @@ export function LegalShell({
             <LegalChip to="/terms" label="Terms" current={title.startsWith("Terms")} />
             <LegalChip to="/privacy" label="Privacy" current={title.startsWith("Privacy")} />
             <LegalChip to="/refunds" label="Refunds & UltraProtect" current={title.startsWith("Refunds")} />
+            <LegalChip to="/support" label="Support" current={title.startsWith("Support")} />
           </nav>
         </div>
         <div className="space-y-10">{children}</div>
