@@ -32,7 +32,6 @@ import {
   Snowflake,
   TrendingUp,
   Users,
-  Users,
   GraduationCap,
 } from "lucide-react";
 import rintuAsset from "@/assets/rintu-mahapatra.png.asset.json";
