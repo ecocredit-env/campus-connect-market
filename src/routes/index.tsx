@@ -328,6 +328,9 @@ function Index() {
       {/* ── TRUST & SAFETY ───────────────────────────────── */}
       <TrustSafety />
 
+      {/* ── BUILT BY STUDENTS ────────────────────────────── */}
+      <BuiltByStudents />
+
       {/* ── TESTIMONIALS ─────────────────────────────────── */}
       <Testimonials />
 
@@ -836,6 +839,7 @@ function SiteFooter() {
               <li><a className="hover:text-foreground" href="#trust">Trust &amp; safety</a></li>
               <li><a className="hover:text-foreground" href="mailto:hello@ultraover.com">hello@ultraover.com</a></li>
               <li><a className="hover:text-foreground" href="mailto:report@ultraover.com">Report a listing</a></li>
+              <li><Link className="hover:text-foreground" to="/about">About &amp; founder</Link></li>
               <li><Link className="hover:text-foreground" to="/terms">Terms of service</Link></li>
               <li><Link className="hover:text-foreground" to="/privacy">Privacy policy</Link></li>
               <li><Link className="hover:text-foreground" to="/refunds">Refunds &amp; UltraProtect</Link></li>
