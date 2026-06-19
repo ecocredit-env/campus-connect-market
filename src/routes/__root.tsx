@@ -14,6 +14,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { HelpButton } from "@/components/HelpButton";
 
 function NotFoundComponent() {
   return (
@@ -147,6 +148,7 @@ function RootComponent() {
         <div className="aurora-bg" aria-hidden />
         <PaymentTestModeBanner />
         <Outlet />
+        <HelpButton />
         <Toaster />
       </AuthProvider>
     </QueryClientProvider>
