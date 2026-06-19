@@ -34,7 +34,7 @@ export function LegalShell({
   );
 }
 
-function LegalChip({ to, label, current }: { to: "/terms" | "/privacy" | "/refunds"; label: string; current: boolean }) {
+function LegalChip({ to, label, current }: { to: "/terms" | "/privacy" | "/refunds" | "/support"; label: string; current: boolean }) {
   return (
     <Link
       to={to}
