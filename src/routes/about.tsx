@@ -71,7 +71,7 @@ function AboutPage() {
                 <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                   <span className="inline-flex items-center gap-1.5">
                     <GraduationCap className="h-4 w-4 text-accent" />
-                    B.Tech, MNNIT Allahabad
+                    M.Tech, MNNIT Allahabad
                   </span>
                   <span className="inline-flex items-center gap-1.5">
                     <MapPin className="h-4 w-4 text-accent" />
@@ -80,12 +80,11 @@ function AboutPage() {
                 </div>
 
                 <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-                  In his first semester, Rintu lost ₹6,800 to a "senior" on a college
-                  resale group who turned out to be a reseller with three fake profiles.
-                  UltraOver started that night as a spreadsheet of verified MNNIT students
-                  trading cycles and coolers — and grew into a campus marketplace where
-                  every seller is ID-verified and every meetup happens at a marked safe
-                  zone.
+                  Rintu got the idea to help juniors make the most of available
+                  campus resources. UltraOver started as a simple way for verified
+                  MNNIT students to trade cycles, coolers, and laptops safely on campus
+                  — and grew into a peer-to-peer marketplace where every seller is
+                  ID-verified and every meetup happens at a marked safe zone.
                 </p>
 
                 <div className="mt-7 flex flex-wrap gap-3">
