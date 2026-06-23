@@ -25,6 +25,7 @@ const NAV = [
 export function Header() {
   const { user, profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const logoTo = user ? "/browse" : "/";
 
   const initials = (profile?.full_name ?? user?.email ?? "U")
     .split(/\s+/)
@@ -37,7 +38,8 @@ export function Header() {
     <header className="pointer-events-none sticky top-0 z-40 px-3 pt-3 sm:px-6 sm:pt-5">
       <div className="pointer-events-auto mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full glass-nav px-3 sm:h-[68px] sm:px-4">
         {/* LOGO */}
-        <Link to="/" className="group flex items-center gap-2.5 pl-1">
+        <Link to={logoTo} className="group flex items-center gap-2.5 pl-1">
+
           <span className="jelly-orb relative flex h-10 w-10 items-center justify-center sm:h-11 sm:w-11">
             <img
               src={logoAsset.url}
