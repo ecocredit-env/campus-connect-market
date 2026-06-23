@@ -25,6 +25,8 @@ const NAV = [
 export function Header() {
   const { user, profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const logoTo = user ? "/browse" : "/";
+
 
   const initials = (profile?.full_name ?? user?.email ?? "U")
     .split(/\s+/)
