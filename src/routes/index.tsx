@@ -447,12 +447,22 @@ function BuiltByStudents() {
                   </Button>
                 </Link>
               </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2.5 text-xs text-muted-foreground backdrop-blur-xl">
+              <ShieldCheck className="h-4 w-4 text-emerald-400" />
+              <span>
+                <span className="text-foreground/90 font-medium">Entity registration &amp; DPIIT Startup India recognition</span>
+                <span className="ml-1.5">in progress — badges will appear once issued.</span>
+              </span>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
 }
 
 
