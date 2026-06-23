@@ -27,7 +27,6 @@ export function Header() {
   const navigate = useNavigate();
   const logoTo = user ? "/browse" : "/";
 
-
   const initials = (profile?.full_name ?? user?.email ?? "U")
     .split(/\s+/)
     .map((s) => s[0])
