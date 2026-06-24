@@ -972,21 +972,40 @@ function FooterCol({ title, items }: { title: string; items: { label: string; to
   );
 }
 
-function CategoryCard({ icon, title, desc, tint }: { icon: React.ReactNode; title: string; desc: string; tint: string }) {
+function CategoryCard({ image, icon, title, desc, tint, accent }: { image?: string; icon: React.ReactNode; title: string; desc: string; tint: string; accent?: string }) {
   return (
-    <Link to="/browse" className="floating-card liquid-glass group relative block overflow-hidden rounded-3xl">
+    <Link to="/browse" className="floating-card shine-sweep group relative block overflow-hidden rounded-3xl border border-white/10 bg-card">
       <div className={`relative aspect-[4/5] overflow-hidden bg-gradient-to-br ${tint}`}>
-        <div className="absolute inset-0 [background:radial-gradient(circle_at_30%_20%,oklch(1_0_0/0.08),transparent_60%)]" />
-        <div className="absolute inset-0 flex items-start justify-end p-7 text-foreground/80 transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110">
+        {image && (
+          <img
+            src={image}
+            alt={`${title} category`}
+            loading="lazy"
+            width={1024}
+            height={1280}
+            className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-[1400ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110"
+          />
+        )}
+        {/* liquid color wash */}
+        <div
+          className="absolute -inset-10 opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-100"
+          style={{
+            background: `radial-gradient(60% 50% at 70% 20%, ${accent ?? "oklch(0.82 0.21 152 / 0.5)"}, transparent 70%), radial-gradient(50% 40% at 20% 80%, oklch(0.78 0.15 220 / 0.35), transparent 70%)`,
+            filter: "blur(30px)",
+          }}
+        />
+        {/* icon top-right */}
+        <div className="absolute right-0 top-0 flex items-start justify-end p-7 text-foreground/85 transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:-translate-y-1 group-hover:scale-110">
           {icon}
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+        {/* bottom dark fade for legible text */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/55 to-transparent" />
       </div>
       <div className="absolute inset-x-0 bottom-0 p-7">
         <h3 className="text-3xl font-bold tracking-tight text-gradient">{title}</h3>
         <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-        <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-          Explore <ArrowRight className="h-3 w-3" />
+        <div className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-accent backdrop-blur-xl transition-all duration-500 group-hover:bg-white/[0.12]">
+          Explore <ArrowRight className="h-3 w-3 transition-transform duration-500 group-hover:translate-x-0.5" />
         </div>
       </div>
     </Link>
