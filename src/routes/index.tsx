@@ -35,6 +35,9 @@ import {
   GraduationCap,
 } from "lucide-react";
 import rintuAsset from "@/assets/rintu-mahapatra.png.asset.json";
+import catCyclesImg from "@/assets/cat-cycles.jpg";
+import catElectronicsImg from "@/assets/cat-electronics.jpg";
+import catCoolersImg from "@/assets/cat-coolers.jpg";
 
 
 const FAQ_ITEMS = [
