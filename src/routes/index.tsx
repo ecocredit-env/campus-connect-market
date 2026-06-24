@@ -265,9 +265,9 @@ function Index() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            <CategoryCard icon={<Bike className="h-10 w-10" strokeWidth={1.2} />} title="Cycles" desc="MTB · Road · BMX · Hybrid" tint="from-emerald-400/20 to-transparent" />
-            <CategoryCard icon={<Laptop className="h-10 w-10" strokeWidth={1.2} />} title="Electronics" desc="Laptops · Phones · Audio · Tablets" tint="from-sky-400/20 to-transparent" />
-            <CategoryCard icon={<Snowflake className="h-10 w-10" strokeWidth={1.2} />} title="Coolers" desc="Portable · Insulated · Mini-fridges" tint="from-cyan-300/20 to-transparent" />
+            <CategoryCard image={catCyclesImg} icon={<Bike className="h-10 w-10" strokeWidth={1.2} />} title="Cycles" desc="MTB · Road · BMX · Hybrid" tint="from-emerald-400/30 to-transparent" accent="oklch(0.82 0.21 152 / 0.6)" />
+            <CategoryCard image={catElectronicsImg} icon={<Laptop className="h-10 w-10" strokeWidth={1.2} />} title="Electronics" desc="Laptops · Phones · Audio · Tablets" tint="from-sky-400/30 to-transparent" accent="oklch(0.78 0.15 220 / 0.6)" />
+            <CategoryCard image={catCoolersImg} icon={<Snowflake className="h-10 w-10" strokeWidth={1.2} />} title="Coolers" desc="Portable · Insulated · Mini-fridges" tint="from-cyan-300/30 to-transparent" accent="oklch(0.85 0.13 210 / 0.6)" />
           </div>
 
         </div>
