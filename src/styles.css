@@ -416,6 +416,51 @@
   .reveal-delay-2 { animation-delay: 240ms; }
   .reveal-delay-3 { animation-delay: 360ms; }
 
+  /* Liquid stat tile — animated emerald/cyan orbs behind the number */
+  .liquid-stat { position: relative; overflow: hidden; isolation: isolate; }
+  .liquid-stat::before {
+    content: "";
+    position: absolute;
+    inset: -40% -20% auto auto;
+    width: 75%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle at 50% 50%, oklch(0.82 0.21 152 / 0.55), oklch(0.78 0.15 220 / 0.25) 45%, transparent 70%);
+    filter: blur(28px);
+    z-index: 0;
+    animation: liquid-orbit 14s ease-in-out infinite;
+  }
+  .liquid-stat::after {
+    content: "";
+    position: absolute;
+    inset: auto auto -50% -30%;
+    width: 80%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle at 50% 50%, oklch(0.78 0.15 220 / 0.45), transparent 70%);
+    filter: blur(32px);
+    z-index: 0;
+    animation: liquid-orbit 18s ease-in-out -6s infinite reverse;
+  }
+  .liquid-stat > * { position: relative; z-index: 1; }
+  @keyframes liquid-orbit {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33%      { transform: translate(-18%, 14%) scale(1.15); }
+    66%      { transform: translate(12%, -10%) scale(0.92); }
+  }
+
+  /* Diagonal shine sweep on hover */
+  .shine-sweep { position: relative; overflow: hidden; }
+  .shine-sweep::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, oklch(1 0 0 / 0.18) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 1100ms cubic-bezier(.2,.8,.2,1);
+    pointer-events: none;
+    z-index: 3;
+  }
+  .shine-sweep:hover::before { transform: translateX(120%); }
+
   .tilt-card { transition: transform 400ms cubic-bezier(.2,.8,.2,1), box-shadow 400ms; }
 
   /* ── JELLY LIQUID GLASS — 3D tabs / pills / orbs ─────────────── */
