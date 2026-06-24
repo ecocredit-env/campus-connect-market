@@ -511,9 +511,13 @@ function SocialProofBar() {
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="liquid-glass rounded-2xl px-5 py-6 text-center">
-      <div className="text-3xl font-bold tracking-tight text-gradient sm:text-4xl">{value}</div>
-      <div className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">{label}</div>
+    <div className="liquid-glass liquid-stat shine-sweep floating-card group rounded-3xl px-6 py-8 sm:px-7 sm:py-10">
+      <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">{label}</div>
+      <div className="mt-3 text-4xl font-bold leading-none tracking-tight text-gradient sm:text-5xl lg:text-6xl">{value}</div>
+      <div className="mt-4 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.2em] text-emerald-300/80">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_oklch(0.82_0.21_152)]" />
+        Live
+      </div>
     </div>
   );
 }
