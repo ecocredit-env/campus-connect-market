@@ -35,6 +35,9 @@ import {
   GraduationCap,
 } from "lucide-react";
 import rintuAsset from "@/assets/rintu-mahapatra.png.asset.json";
+import catCyclesImg from "@/assets/cat-cycles.jpg";
+import catElectronicsImg from "@/assets/cat-electronics.jpg";
+import catCoolersImg from "@/assets/cat-coolers.jpg";
 
 
 const FAQ_ITEMS = [
@@ -262,9 +265,9 @@ function Index() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            <CategoryCard icon={<Bike className="h-10 w-10" strokeWidth={1.2} />} title="Cycles" desc="MTB · Road · BMX · Hybrid" tint="from-emerald-400/20 to-transparent" />
-            <CategoryCard icon={<Laptop className="h-10 w-10" strokeWidth={1.2} />} title="Electronics" desc="Laptops · Phones · Audio · Tablets" tint="from-sky-400/20 to-transparent" />
-            <CategoryCard icon={<Snowflake className="h-10 w-10" strokeWidth={1.2} />} title="Coolers" desc="Portable · Insulated · Mini-fridges" tint="from-cyan-300/20 to-transparent" />
+            <CategoryCard image={catCyclesImg} icon={<Bike className="h-10 w-10" strokeWidth={1.2} />} title="Cycles" desc="MTB · Road · BMX · Hybrid" tint="from-emerald-400/30 to-transparent" accent="oklch(0.82 0.21 152 / 0.6)" />
+            <CategoryCard image={catElectronicsImg} icon={<Laptop className="h-10 w-10" strokeWidth={1.2} />} title="Electronics" desc="Laptops · Phones · Audio · Tablets" tint="from-sky-400/30 to-transparent" accent="oklch(0.78 0.15 220 / 0.6)" />
+            <CategoryCard image={catCoolersImg} icon={<Snowflake className="h-10 w-10" strokeWidth={1.2} />} title="Coolers" desc="Portable · Insulated · Mini-fridges" tint="from-cyan-300/30 to-transparent" accent="oklch(0.85 0.13 210 / 0.6)" />
           </div>
 
         </div>
@@ -508,9 +511,13 @@ function SocialProofBar() {
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="liquid-glass rounded-2xl px-5 py-6 text-center">
-      <div className="text-3xl font-bold tracking-tight text-gradient sm:text-4xl">{value}</div>
-      <div className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">{label}</div>
+    <div className="liquid-glass liquid-stat shine-sweep floating-card group rounded-3xl px-6 py-8 sm:px-7 sm:py-10">
+      <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">{label}</div>
+      <div className="mt-3 text-4xl font-bold leading-none tracking-tight text-gradient sm:text-5xl lg:text-6xl">{value}</div>
+      <div className="mt-4 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.2em] text-emerald-300/80">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_oklch(0.82_0.21_152)]" />
+        Live
+      </div>
     </div>
   );
 }
@@ -969,21 +976,40 @@ function FooterCol({ title, items }: { title: string; items: { label: string; to
   );
 }
 
-function CategoryCard({ icon, title, desc, tint }: { icon: React.ReactNode; title: string; desc: string; tint: string }) {
+function CategoryCard({ image, icon, title, desc, tint, accent }: { image?: string; icon: React.ReactNode; title: string; desc: string; tint: string; accent?: string }) {
   return (
-    <Link to="/browse" className="floating-card liquid-glass group relative block overflow-hidden rounded-3xl">
+    <Link to="/browse" className="floating-card shine-sweep group relative block overflow-hidden rounded-3xl border border-white/10 bg-card">
       <div className={`relative aspect-[4/5] overflow-hidden bg-gradient-to-br ${tint}`}>
-        <div className="absolute inset-0 [background:radial-gradient(circle_at_30%_20%,oklch(1_0_0/0.08),transparent_60%)]" />
-        <div className="absolute inset-0 flex items-start justify-end p-7 text-foreground/80 transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110">
+        {image && (
+          <img
+            src={image}
+            alt={`${title} category`}
+            loading="lazy"
+            width={1024}
+            height={1280}
+            className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-[1400ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-110"
+          />
+        )}
+        {/* liquid color wash */}
+        <div
+          className="absolute -inset-10 opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-100"
+          style={{
+            background: `radial-gradient(60% 50% at 70% 20%, ${accent ?? "oklch(0.82 0.21 152 / 0.5)"}, transparent 70%), radial-gradient(50% 40% at 20% 80%, oklch(0.78 0.15 220 / 0.35), transparent 70%)`,
+            filter: "blur(30px)",
+          }}
+        />
+        {/* icon top-right */}
+        <div className="absolute right-0 top-0 flex items-start justify-end p-7 text-foreground/85 transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:-translate-y-1 group-hover:scale-110">
           {icon}
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+        {/* bottom dark fade for legible text */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/55 to-transparent" />
       </div>
       <div className="absolute inset-x-0 bottom-0 p-7">
         <h3 className="text-3xl font-bold tracking-tight text-gradient">{title}</h3>
         <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-        <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-          Explore <ArrowRight className="h-3 w-3" />
+        <div className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-accent backdrop-blur-xl transition-all duration-500 group-hover:bg-white/[0.12]">
+          Explore <ArrowRight className="h-3 w-3 transition-transform duration-500 group-hover:translate-x-0.5" />
         </div>
       </div>
     </Link>
@@ -1005,15 +1031,15 @@ function HeroStat({
   const display =
     value ?? (target == null ? null : animated.toLocaleString("en-IN"));
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <div className="liquid-stat shine-sweep group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-white/20">
       <div className="flex items-center gap-2 text-accent">
         {icon}
         <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">{label}</span>
       </div>
       {display == null ? (
-        <div className="mt-2 h-8 w-20 animate-pulse rounded-md bg-white/10" />
+        <div className="mt-3 h-9 w-24 animate-pulse rounded-md bg-white/10" />
       ) : (
-        <div className="mt-2 text-2xl font-bold tracking-tight text-gradient sm:text-3xl">{display}</div>
+        <div className="mt-3 text-3xl font-bold leading-none tracking-tight text-gradient sm:text-4xl">{display}</div>
       )}
     </div>
   );
