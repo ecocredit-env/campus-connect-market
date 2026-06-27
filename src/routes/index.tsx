@@ -95,14 +95,6 @@ const SOON_CAMPUSES: Campus[] = [
 const campusLogo = (domain: string) =>
   `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 
-const FALLBACK_TICKER = [
-  "Aarav · IIT Delhi listed a Lenovo Legion 5",
-  "Priya · BITS Pilani bought a Rockrider ST 100",
-  "Rohan · VIT Vellore listed an Instant Pot",
-  "Sneha · NIT Trichy listed a MacBook Air M1",
-  "Kunal · IIT Bombay bought a Logitech G502",
-  "Ananya · DU North listed a mini-fridge",
-];
 
 const homeStatsQuery = queryOptions({
   queryKey: ["home-stats"],
