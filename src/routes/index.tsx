@@ -577,19 +577,19 @@ function CampusCoverage() {
           </div>
 
           <div className="liquid-glass rounded-3xl p-7">
-            <div className="mb-5 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-amber-300">
+            <div className="mb-2 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-amber-300">
               <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_12px_oklch(0.8_0.16_75)]" />
-              Launching soon
+              On the waitlist
             </div>
+            <p className="mb-5 text-xs text-muted-foreground">
+              Campuses students have requested. These are not partnerships yet — we launch when 50 students from a campus sign up.
+            </p>
             <div className="flex flex-wrap gap-2">
               {SOON_CAMPUSES.map((c) => (
                 <span key={c.name} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5 text-sm font-medium text-muted-foreground backdrop-blur-xl">
-                  <img
-                    src={campusLogo(c.domain)}
-                    alt={`${c.name} logo`}
-                    loading="lazy"
-                    className="h-5 w-5 rounded-sm bg-white/80 object-contain p-0.5 opacity-80"
-                  />
+                  <span aria-hidden className="flex h-5 w-5 items-center justify-center rounded-sm bg-white/10 text-[10px] font-semibold text-foreground/70">
+                    {c.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                  </span>
                   {c.name}
                 </span>
               ))}
