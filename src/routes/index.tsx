@@ -472,11 +472,34 @@ function BuiltByStudents() {
 
 function SocialProofBar() {
   const { data } = useSuspenseQuery(homeStatsQuery);
+  const preTraction = data.students < 50 && data.listings < 20;
   const students = useCountUp(data.students);
   const listings = useCountUp(data.listings);
-  const tradedLakhs = useCountUp(Math.round(data.tradedRupees / 10_000)); // tenths of a lakh
+  const tradedLakhs = useCountUp(Math.round(data.tradedRupees / 10_000));
   const campuses = useCountUp(data.campuses);
-  const items = data.ticker.length > 0 ? data.ticker : FALLBACK_TICKER;
+  const hasRealTicker = data.ticker.length > 0;
+
+  if (preTraction) {
+    return (
+      <section className="relative border-y border-white/5 py-10">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="liquid-glass rounded-3xl px-6 py-8 text-center sm:px-10 sm:py-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              Just launched at MNNIT Allahabad
+            </div>
+            <p className="mt-5 text-2xl font-semibold tracking-tight sm:text-3xl">
+              <span className="text-gradient">Be one of the first 50</span>{" "}
+              <span className="text-gradient-accent">verified students.</span>
+            </p>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+              We're onboarding students one campus at a time. Real listings and live activity will show up here as your campus comes online.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative border-y border-white/5 py-10">
@@ -488,22 +511,24 @@ function SocialProofBar() {
           <Stat value={campuses.toString()} label="Campuses live" />
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-full border border-white/10 bg-white/[0.03] py-2.5">
-          <div className="marquee">
-            <div className="marquee-track text-xs text-muted-foreground sm:text-sm">
-              {Array.from({ length: 2 }).map((_, i) => (
-                <span key={i} className="flex shrink-0 items-center gap-10 pr-10">
-                  {items.map((t, j) => (
-                    <span key={j} className="inline-flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      {t}
-                    </span>
-                  ))}
-                </span>
-              ))}
+        {hasRealTicker && (
+          <div className="mt-8 overflow-hidden rounded-full border border-white/10 bg-white/[0.03] py-2.5">
+            <div className="marquee">
+              <div className="marquee-track text-xs text-muted-foreground sm:text-sm">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <span key={i} className="flex shrink-0 items-center gap-10 pr-10">
+                    {data.ticker.map((t, j) => (
+                      <span key={j} className="inline-flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        {t}
+                      </span>
+                    ))}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
