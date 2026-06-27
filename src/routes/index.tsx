@@ -889,7 +889,11 @@ function FAQSection() {
         </div>
 
         <div className="liquid-glass rounded-3xl px-6 py-2 sm:px-8">
-          <Accordion type="single" collapsible defaultValue="item-3" className="w-full">
+          <Accordion
+            type="multiple"
+            defaultValue={FAQ_ITEMS.map((_, i) => `item-${i}`)}
+            className="w-full"
+          >
             {FAQ_ITEMS.map((f, i) => (
               <AccordionItem key={i} value={`item-${i}`} className="border-white/10">
                 <AccordionTrigger className="py-5 text-left text-base font-semibold tracking-tight hover:no-underline sm:text-lg">
