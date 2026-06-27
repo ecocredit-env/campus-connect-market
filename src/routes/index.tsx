@@ -168,6 +168,7 @@ function formatAvgVerification(mins: number | null): string {
 function Index() {
   const { data: stats } = useSuspenseQuery(homeStatsQuery);
   const avgVerify = formatAvgVerification(stats.avgVerificationMinutes);
+  const preTraction = stats.students < 50 && stats.listings < 20;
   return (
     <div className="min-h-screen overflow-hidden">
       <Header />
