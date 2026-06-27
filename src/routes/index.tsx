@@ -657,8 +657,8 @@ function TrustSafety() {
           <div className="inline-flex items-center gap-3 rounded-full border border-amber-300/30 bg-gradient-to-r from-amber-300/10 via-amber-200/5 to-amber-300/10 px-6 py-3 text-sm font-medium text-amber-100 backdrop-blur-xl">
             <ShieldCheck className="h-4 w-4 text-amber-300" />
             <span>
-              <span className="text-amber-200">Zero reported fraud cases in 14 months.</span>
-              <span className="ml-2 text-muted-foreground">Every dispute resolved on-campus, in person.</span>
+              <span className="text-amber-200">Every dispute handled on-campus, in person.</span>
+              <span className="ml-2 text-muted-foreground">Confirmed scammers banned across every campus we run.</span>
             </span>
           </div>
         </div>
