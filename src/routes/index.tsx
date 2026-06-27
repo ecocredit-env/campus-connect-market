@@ -215,33 +215,33 @@ function Index() {
             Free forever for students · No card required · 30-second signup
           </p>
 
-          {/* Hero live stats — no AI product photos */}
-          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-20 max-w-5xl">
-            <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-8 sm:p-10">
-              <div className="flex flex-wrap items-center justify-between gap-6">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-medium text-foreground backdrop-blur-xl">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                  </span>
-                  <span className="text-muted-foreground">137 students online · live</span>
+          {!preTraction && (
+            <div className="reveal reveal-delay-3 ambient relative mx-auto mt-20 max-w-5xl">
+              <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-8 sm:p-10">
+                <div className="flex flex-wrap items-center justify-between gap-6">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-medium text-foreground backdrop-blur-xl">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    </span>
+                    <span className="text-muted-foreground">Live across campus</span>
+                  </div>
+                  <Link to="/browse">
+                    <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
+                      Explore listings <ArrowRight className="ml-1 h-3 w-3" />
+                    </Button>
+                  </Link>
                 </div>
-                <Link to="/browse">
-                  <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
-                    Explore listings <ArrowRight className="ml-1 h-3 w-3" />
-                  </Button>
-                </Link>
-              </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <HeroStat icon={<TrendingUp className="h-4 w-4" />} target={stats.listings} label="Active listings" />
-                <HeroStat icon={<Users className="h-4 w-4" />} target={stats.students} label="Verified students" />
-                <HeroStat icon={<ShieldCheck className="h-4 w-4" />} value="100%" label="ID-verified sellers" />
-                <HeroStat icon={<MapPin className="h-4 w-4" />} target={stats.campuses} label="Campuses live" />
+                <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  <HeroStat icon={<TrendingUp className="h-4 w-4" />} target={stats.listings} label="Active listings" />
+                  <HeroStat icon={<Users className="h-4 w-4" />} target={stats.students} label="Verified students" />
+                  <HeroStat icon={<ShieldCheck className="h-4 w-4" />} value="100%" label="ID-verified sellers" />
+                  <HeroStat icon={<MapPin className="h-4 w-4" />} target={stats.campuses} label="Campuses live" />
+                </div>
               </div>
-
             </div>
-          </div>
+          )}
 
         </div>
       </section>
