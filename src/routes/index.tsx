@@ -55,7 +55,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How does payment work? Is it safe?",
-    a: "Pay in-app via UPI/Razorpay (recommended — your order shows in your profile and the seller can't ghost you) or cash on meetup. We hold no money; payment goes seller-to-buyer directly. If a Razorpay payment doesn't reflect in My Orders within 60 seconds, contact us and we'll trace it.",
+    a: "By default, payment goes directly seller-to-buyer — UPI/Razorpay or cash on meetup — and we never touch the money. For high-value items (₹5,000+) you can opt into UltraProtect escrow: we hold the payment until both buyer and seller confirm the meetup, then release it. Escrow is optional and clearly labelled at checkout.",
   },
   {
     q: "I'm a fresher — how do I know the seller is legit?",
@@ -95,14 +95,6 @@ const SOON_CAMPUSES: Campus[] = [
 const campusLogo = (domain: string) =>
   `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 
-const FALLBACK_TICKER = [
-  "Aarav · IIT Delhi listed a Lenovo Legion 5",
-  "Priya · BITS Pilani bought a Rockrider ST 100",
-  "Rohan · VIT Vellore listed an Instant Pot",
-  "Sneha · NIT Trichy listed a MacBook Air M1",
-  "Kunal · IIT Bombay bought a Logitech G502",
-  "Ananya · DU North listed a mini-fridge",
-];
 
 const homeStatsQuery = queryOptions({
   queryKey: ["home-stats"],
@@ -168,6 +160,7 @@ function formatAvgVerification(mins: number | null): string {
 function Index() {
   const { data: stats } = useSuspenseQuery(homeStatsQuery);
   const avgVerify = formatAvgVerification(stats.avgVerificationMinutes);
+  const preTraction = stats.students < 50 && stats.listings < 20;
   return (
     <div className="min-h-screen overflow-hidden">
       <Header />
@@ -214,33 +207,33 @@ function Index() {
             Free forever for students · No card required · 30-second signup
           </p>
 
-          {/* Hero live stats — no AI product photos */}
-          <div className="reveal reveal-delay-3 ambient relative mx-auto mt-20 max-w-5xl">
-            <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-8 sm:p-10">
-              <div className="flex flex-wrap items-center justify-between gap-6">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-medium text-foreground backdrop-blur-xl">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                  </span>
-                  <span className="text-muted-foreground">137 students online · live</span>
+          {!preTraction && (
+            <div className="reveal reveal-delay-3 ambient relative mx-auto mt-20 max-w-5xl">
+              <div className="liquid-glass glow-ring relative overflow-hidden rounded-[2rem] p-8 sm:p-10">
+                <div className="flex flex-wrap items-center justify-between gap-6">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-medium text-foreground backdrop-blur-xl">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    </span>
+                    <span className="text-muted-foreground">Live across campus</span>
+                  </div>
+                  <Link to="/browse">
+                    <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
+                      Explore listings <ArrowRight className="ml-1 h-3 w-3" />
+                    </Button>
+                  </Link>
                 </div>
-                <Link to="/browse">
-                  <Button size="sm" className="btn-glass h-10 rounded-full bg-white/10 px-5 text-foreground hover:bg-white/15">
-                    Explore listings <ArrowRight className="ml-1 h-3 w-3" />
-                  </Button>
-                </Link>
-              </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <HeroStat icon={<TrendingUp className="h-4 w-4" />} target={stats.listings} label="Active listings" />
-                <HeroStat icon={<Users className="h-4 w-4" />} target={stats.students} label="Verified students" />
-                <HeroStat icon={<ShieldCheck className="h-4 w-4" />} value="100%" label="ID-verified sellers" />
-                <HeroStat icon={<MapPin className="h-4 w-4" />} target={stats.campuses} label="Campuses live" />
+                <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  <HeroStat icon={<TrendingUp className="h-4 w-4" />} target={stats.listings} label="Active listings" />
+                  <HeroStat icon={<Users className="h-4 w-4" />} target={stats.students} label="Verified students" />
+                  <HeroStat icon={<ShieldCheck className="h-4 w-4" />} value="100%" label="ID-verified sellers" />
+                  <HeroStat icon={<MapPin className="h-4 w-4" />} target={stats.campuses} label="Campuses live" />
+                </div>
               </div>
-
             </div>
-          </div>
+          )}
 
         </div>
       </section>
@@ -472,11 +465,34 @@ function BuiltByStudents() {
 
 function SocialProofBar() {
   const { data } = useSuspenseQuery(homeStatsQuery);
+  const preTraction = data.students < 50 && data.listings < 20;
   const students = useCountUp(data.students);
   const listings = useCountUp(data.listings);
-  const tradedLakhs = useCountUp(Math.round(data.tradedRupees / 10_000)); // tenths of a lakh
+  const tradedLakhs = useCountUp(Math.round(data.tradedRupees / 10_000));
   const campuses = useCountUp(data.campuses);
-  const items = data.ticker.length > 0 ? data.ticker : FALLBACK_TICKER;
+  const hasRealTicker = data.ticker.length > 0;
+
+  if (preTraction) {
+    return (
+      <section className="relative border-y border-white/5 py-10">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="liquid-glass rounded-3xl px-6 py-8 text-center sm:px-10 sm:py-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              Just launched at MNNIT Allahabad
+            </div>
+            <p className="mt-5 text-2xl font-semibold tracking-tight sm:text-3xl">
+              <span className="text-gradient">Be one of the first 50</span>{" "}
+              <span className="text-gradient-accent">verified students.</span>
+            </p>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+              We're onboarding students one campus at a time. Real listings and live activity will show up here as your campus comes online.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative border-y border-white/5 py-10">
@@ -488,22 +504,24 @@ function SocialProofBar() {
           <Stat value={campuses.toString()} label="Campuses live" />
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-full border border-white/10 bg-white/[0.03] py-2.5">
-          <div className="marquee">
-            <div className="marquee-track text-xs text-muted-foreground sm:text-sm">
-              {Array.from({ length: 2 }).map((_, i) => (
-                <span key={i} className="flex shrink-0 items-center gap-10 pr-10">
-                  {items.map((t, j) => (
-                    <span key={j} className="inline-flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      {t}
-                    </span>
-                  ))}
-                </span>
-              ))}
+        {hasRealTicker && (
+          <div className="mt-8 overflow-hidden rounded-full border border-white/10 bg-white/[0.03] py-2.5">
+            <div className="marquee">
+              <div className="marquee-track text-xs text-muted-foreground sm:text-sm">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <span key={i} className="flex shrink-0 items-center gap-10 pr-10">
+                    {data.ticker.map((t, j) => (
+                      <span key={j} className="inline-flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        {t}
+                      </span>
+                    ))}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
@@ -559,19 +577,19 @@ function CampusCoverage() {
           </div>
 
           <div className="liquid-glass rounded-3xl p-7">
-            <div className="mb-5 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-amber-300">
+            <div className="mb-2 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-amber-300">
               <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_12px_oklch(0.8_0.16_75)]" />
-              Launching soon
+              On the waitlist
             </div>
+            <p className="mb-5 text-xs text-muted-foreground">
+              Campuses students have requested. These are not partnerships yet — we launch when 50 students from a campus sign up.
+            </p>
             <div className="flex flex-wrap gap-2">
               {SOON_CAMPUSES.map((c) => (
                 <span key={c.name} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5 text-sm font-medium text-muted-foreground backdrop-blur-xl">
-                  <img
-                    src={campusLogo(c.domain)}
-                    alt={`${c.name} logo`}
-                    loading="lazy"
-                    className="h-5 w-5 rounded-sm bg-white/80 object-contain p-0.5 opacity-80"
-                  />
+                  <span aria-hidden className="flex h-5 w-5 items-center justify-center rounded-sm bg-white/10 text-[10px] font-semibold text-foreground/70">
+                    {c.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                  </span>
                   {c.name}
                 </span>
               ))}
@@ -639,8 +657,8 @@ function TrustSafety() {
           <div className="inline-flex items-center gap-3 rounded-full border border-amber-300/30 bg-gradient-to-r from-amber-300/10 via-amber-200/5 to-amber-300/10 px-6 py-3 text-sm font-medium text-amber-100 backdrop-blur-xl">
             <ShieldCheck className="h-4 w-4 text-amber-300" />
             <span>
-              <span className="text-amber-200">Zero reported fraud cases in 14 months.</span>
-              <span className="ml-2 text-muted-foreground">Every dispute resolved on-campus, in person.</span>
+              <span className="text-amber-200">Every dispute handled on-campus, in person.</span>
+              <span className="ml-2 text-muted-foreground">Confirmed scammers banned across every campus we run.</span>
             </span>
           </div>
         </div>
@@ -716,9 +734,13 @@ function Testimonials() {
         <div className="mb-14 max-w-2xl">
           <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ From the campus</span>
           <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
-            <span className="text-gradient">Students who've</span><br />
-            <span className="text-gradient-accent">already traded.</span>
+            <span className="text-gradient">What our beta</span><br />
+            <span className="text-gradient-accent">testers told us.</span>
           </h2>
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/[0.06] px-3.5 py-1.5 text-[11px] font-medium text-amber-200">
+            <Sparkles className="h-3 w-3" />
+            Seed feedback from MNNIT beta testers — real verified-trade reviews will replace these as they come in.
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {TESTIMONIALS.map((t) => (
@@ -867,7 +889,11 @@ function FAQSection() {
         </div>
 
         <div className="liquid-glass rounded-3xl px-6 py-2 sm:px-8">
-          <Accordion type="single" collapsible defaultValue="item-3" className="w-full">
+          <Accordion
+            type="multiple"
+            defaultValue={FAQ_ITEMS.map((_, i) => `item-${i}`)}
+            className="w-full"
+          >
             {FAQ_ITEMS.map((f, i) => (
               <AccordionItem key={i} value={`item-${i}`} className="border-white/10">
                 <AccordionTrigger className="py-5 text-left text-base font-semibold tracking-tight hover:no-underline sm:text-lg">

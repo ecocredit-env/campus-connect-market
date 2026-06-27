@@ -177,11 +177,6 @@ export function Header() {
             </>
           ) : (
             <>
-              <Link to="/admin-login" className="hidden sm:inline-flex">
-                <button className="jelly inline-flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground">
-                  <Shield className="h-3.5 w-3.5" />
-                </button>
-              </Link>
               <Link to="/login">
                 <button className="jelly rounded-full px-4 py-2 text-[13px] font-medium text-foreground">
                   Sign in

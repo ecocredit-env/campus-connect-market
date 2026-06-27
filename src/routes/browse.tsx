@@ -131,8 +131,9 @@ function BrowsePage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border py-24 text-center">
-            <p className="display text-2xl text-primary">No listings yet</p>
-            <p className="mt-2 text-sm text-muted-foreground">Be the first to list — head to Sell.</p>
+            <p className="display text-2xl text-primary">No listings at your campus yet</p>
+            <p className="mt-2 text-sm text-muted-foreground">Be the first to list something — your juniors will thank you.</p>
+            <a href="/sell"><Button className="mt-6">List the first item</Button></a>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
