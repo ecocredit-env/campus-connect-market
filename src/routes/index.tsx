@@ -734,9 +734,13 @@ function Testimonials() {
         <div className="mb-14 max-w-2xl">
           <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">/ From the campus</span>
           <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
-            <span className="text-gradient">Students who've</span><br />
-            <span className="text-gradient-accent">already traded.</span>
+            <span className="text-gradient">What our beta</span><br />
+            <span className="text-gradient-accent">testers told us.</span>
           </h2>
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/[0.06] px-3.5 py-1.5 text-[11px] font-medium text-amber-200">
+            <Sparkles className="h-3 w-3" />
+            Seed feedback from MNNIT beta testers — real verified-trade reviews will replace these as they come in.
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {TESTIMONIALS.map((t) => (
