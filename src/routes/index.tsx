@@ -55,7 +55,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How does payment work? Is it safe?",
-    a: "Pay in-app via UPI/Razorpay (recommended — your order shows in your profile and the seller can't ghost you) or cash on meetup. We hold no money; payment goes seller-to-buyer directly. If a Razorpay payment doesn't reflect in My Orders within 60 seconds, contact us and we'll trace it.",
+    a: "By default, payment goes directly seller-to-buyer — UPI/Razorpay or cash on meetup — and we never touch the money. For high-value items (₹5,000+) you can opt into UltraProtect escrow: we hold the payment until both buyer and seller confirm the meetup, then release it. Escrow is optional and clearly labelled at checkout.",
   },
   {
     q: "I'm a fresher — how do I know the seller is legit?",
