@@ -26,8 +26,9 @@ export function HelpButton() {
             <defs>
               <path
                 id="helpTextPath"
-                d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
+                d="M 50, 50 m -42, 0 a 42,42 0 1,1 84,0 a 42,42 0 1,1 -84,0"
               />
+
             </defs>
             <text className="help-orb-text">
               <textPath href="#helpTextPath" startOffset="0%">
