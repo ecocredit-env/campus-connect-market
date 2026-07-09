@@ -649,10 +649,11 @@
 
   .help-orb-ring {
     position: absolute;
-    inset: -2.25rem;
+    inset: -1.25rem;
     pointer-events: none;
     animation: help-spin 16s linear infinite;
   }
+
   .help-orb:hover .help-orb-ring { animation-play-state: paused; }
   @media (prefers-reduced-motion: reduce) {
     .help-orb-ring { animation: none; }
