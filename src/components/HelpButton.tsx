@@ -14,13 +14,41 @@ export function HelpButton() {
 
   return (
     <>
-      {/* Floating trigger */}
+      {/* Floating trigger — liquid emerald glass orb with circular text */}
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close help panel" : "Open help panel"}
-        className="fixed bottom-6 right-6 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-transform hover:scale-105 active:scale-95"
+        className="help-orb fixed bottom-6 right-6 z-50"
       >
-        {open ? <X className="h-6 w-6" /> : <LifeBuoy className="h-6 w-6" />}
+        {/* Rotating circular text */}
+        <div className="help-orb-ring" aria-hidden="true">
+          <svg viewBox="0 0 100 100" className="h-full w-full">
+            <defs>
+              <path
+                id="helpTextPath"
+                d="M 50, 50 m -42, 0 a 42,42 0 1,1 84,0 a 42,42 0 1,1 -84,0"
+              />
+
+            </defs>
+            <text className="help-orb-text">
+              <textPath href="#helpTextPath" startOffset="0%">
+                Any Help Needed? • Any Help Needed? •
+              </textPath>
+            </text>
+          </svg>
+        </div>
+
+        {/* Glow halo */}
+        <div className="help-orb-glow" aria-hidden="true" />
+
+        {/* Glass body */}
+        <div className="help-orb-body">
+          {open ? (
+            <X className="help-orb-icon h-7 w-7" />
+          ) : (
+            <LifeBuoy className="help-orb-icon h-7 w-7" />
+          )}
+        </div>
       </button>
 
       {/* Panel */}
